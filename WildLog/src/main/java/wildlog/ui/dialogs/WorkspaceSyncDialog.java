@@ -86,6 +86,7 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.UtilsTime;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
@@ -696,7 +697,9 @@ public class WorkspaceSyncDialog extends JDialog {
                                 feedback.flush();
                                 feedback.close();
                                 // Open the summary document
-                                UtilsFileProcessing.openFile(feedbackFile);
+                                if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                                    UtilsFileProcessing.openFile(feedbackFile);
+                                }
                                 // Print summary to the logs
                                 WildLogApp.LOGGER.log(Level.INFO, "Failed Sync Actions          : {}", syncFail);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced DeleteLog Uploads     : {}", syncDeleteUp);
@@ -1284,6 +1287,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
             }
         }
+// TODO: Skryf ook in die logs wanneer die stappe begin
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Verify Files");
         inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 1 of 3 complete
         inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");

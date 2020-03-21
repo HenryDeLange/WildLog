@@ -213,10 +213,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         // Setup visit table after the Location has been setup
         if (locationWL != null) {
-            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID());
+            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID(), false);
         }
         else {
-            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, 0);
+            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, 0, false);
         }
         // Select the visit
         if (visit != null) {
@@ -2283,14 +2283,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (tblLocation.getSelectedRowCount() == 1) {
                 locationWL = app.getDBI().findLocation((Long) tblLocation.getModel().getValueAt(
                         tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2), null, false, Location.class);
-                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID());
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID(), false);
                 btnAddNewVisit.setEnabled(true);
                 visit = null;
                 UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.S0100_SMALL, app);
             }
             else {
                 locationWL = null;
-                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, 0);
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, 0, false);
                 btnAddNewVisit.setEnabled(false);
                 visit = null;
                 lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));

@@ -1,4 +1,4 @@
-package wildlog.ui.panels.bulkupload;
+package wildlog.ui.dialogs;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -22,20 +22,20 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
-public class LocationSelectionDialog extends JDialog {
+public class SelectLocationDialog extends JDialog {
     private WildLogApp app;
     private boolean selectionMade = false;
     private long selectedLocationID;
     private String selectedLocationName;
 
 
-    public LocationSelectionDialog(JFrame inParent, WildLogApp inApp, final long inSelectedLocationID) {
+    public SelectLocationDialog(JFrame inParent, WildLogApp inApp, final long inSelectedLocationID) {
         super(inParent);
-        WildLogApp.LOGGER.log(Level.INFO, "[LocationSelectionDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[SelectLocationDialog]");
         app = inApp;
         initComponents();
         // Setup the escape key
-        final LocationSelectionDialog thisHandler = this;
+        final SelectLocationDialog thisHandler = this;
         thisHandler.getRootPane().registerKeyboardAction(
                 new ActionListener() {
                     @Override
@@ -73,6 +73,9 @@ public class LocationSelectionDialog extends JDialog {
             }
         });
         UtilsImageProcessing.setupFoto(inSelectedLocationID, 0, lblImageLocation, WildLogThumbnailSizes.S0150_MEDIUM_SMALL, app);
+        // Pack and set it as the min size
+        pack();
+        setMinimumSize(getSize());
     }
 
     /** This method is called from within the constructor to
@@ -96,22 +99,18 @@ public class LocationSelectionDialog extends JDialog {
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Location.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
-        setResizable(false);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(233, 239, 244));
         jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Please choose a Place:");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Choose a Place:");
         jLabel2.setName("jLabel2"); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         lblImageLocation.setBackground(new java.awt.Color(0, 0, 0));
         lblImageLocation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -124,7 +123,6 @@ public class LocationSelectionDialog extends JDialog {
                 lblImageLocationMouseReleased(evt);
             }
         });
-        jPanel1.add(lblImageLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 90, 150, 150));
 
         btnSelect.setBackground(new java.awt.Color(230, 237, 220));
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
@@ -136,7 +134,6 @@ public class LocationSelectionDialog extends JDialog {
                 btnSelectActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 150, 70));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
@@ -162,9 +159,52 @@ public class LocationSelectionDialog extends JDialog {
         });
         jScrollPane2.setViewportView(tblLocation);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 340, 530));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblImageLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(lblImageLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(320, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(5, 5, 5)
+                        .addComponent(jScrollPane2)
+                        .addGap(10, 10, 10))))
+        );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 570));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

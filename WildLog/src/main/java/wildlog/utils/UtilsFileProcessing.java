@@ -48,7 +48,7 @@ import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;
 import wildlog.ui.maps.implementations.helpers.UtilsMaps;
-import wildlog.ui.panels.bulkupload.LocationSelectionDialog;
+import wildlog.ui.dialogs.SelectLocationDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 
 public final class UtilsFileProcessing {
@@ -626,7 +626,7 @@ public final class UtilsFileProcessing {
             protected Object doInBackground() throws Exception {
                 setProgress(0);
                 setMessage("Starting the Stash Files Process");
-                LocationSelectionDialog locationDialog = new LocationSelectionDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
+                SelectLocationDialog locationDialog = new SelectLocationDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
                 locationDialog.setVisible(true);
                 if (locationDialog.isSelectionMade()) {
                     // Get the folder to import

@@ -1,4 +1,4 @@
-package wildlog.ui.panels.bulkupload;
+package wildlog.ui.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,7 +42,7 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
-public class ElementSelectionDialog extends JDialog implements PanelNeedsRefreshWhenDataChanges {
+public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhenDataChanges {
     private static int GRID_LIMIT = 30;
     private static long previousElementID = 0;
     private static String previousElementName;
@@ -53,14 +53,14 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     private Dimension originalSize = null;
 
 
-    public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final long inSelectedElementID) {
+    public SelectElementDialog(JFrame inParent, WildLogApp inApp, final long inSelectedElementID) {
         super(inParent);
-        WildLogApp.LOGGER.log(Level.INFO, "[ElementSelectionDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[SelectElementDialog]");
         app = inApp;
         initComponents();
         ComboBoxFixer.configureComboBoxes(cmbElementType);
         // Setup the escape key
-        final ElementSelectionDialog thisHandler = this;
+        final SelectElementDialog thisHandler = this;
         thisHandler.getRootPane().registerKeyboardAction(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -79,6 +79,9 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         // Position the dialog
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        // Pack and set it as the min size
+        pack();
+        setMinimumSize(getSize());
     }
 
     private void setupUI(final long inSelectedElementID) {
@@ -152,7 +155,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(535, 650));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(535, 650));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -413,7 +415,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    protected long getSelectedElementID() {
+    public long getSelectedElementID() {
         return selectedElementID;
     }
 
@@ -421,7 +423,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         return selectedElementName;
     }
 
-    protected Icon getSelectedElementIcon() {
+    public Icon getSelectedElementIcon() {
         return lblElementImage.getIcon();
     }
 

@@ -1,29 +1,37 @@
 package wildlog.ui.dialogs;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.ImageIcon;
 import org.apache.logging.log4j.Level;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
-import wildlog.ui.panels.bulkupload.LocationSelectionDialog;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
 
-public class WelcomeDialog extends JDialog {
+public class WildLogWEIGettingStartedRemoteDialog extends JDialog {
 
-    public WelcomeDialog() {
+    public WildLogWEIGettingStartedRemoteDialog() {
         super();
-        WildLogApp.LOGGER.log(Level.INFO, "[WelcomeDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[WildLogWEIGettingStartedRemoteDialog]");
         initComponents();
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
+        // Set the focus on the process buutton
+        btnBulkImport.requestFocus();
     }
 
     /** This method is called from within the constructor to
@@ -35,8 +43,8 @@ public class WelcomeDialog extends JDialog {
     private void initComponents() {
 
         javax.swing.JLabel lblTitle = new javax.swing.JLabel();
+        btnSync = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
-        btnStash = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -52,29 +60,31 @@ public class WelcomeDialog extends JDialog {
         lblTitle.setToolTipText("");
         lblTitle.setName("lblTitle"); // NOI18N
 
+        btnSync.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SyncButton.png"))); // NOI18N
+        btnSync.setText("<html><b>Sync</b> this workspace with the cloud</html>");
+        btnSync.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSync.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSync.setName("btnSync"); // NOI18N
+        btnSync.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        btnSync.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSync.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSyncActionPerformed(evt);
+            }
+        });
+
         btnBulkImport.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Process.png"))); // NOI18N
-        btnBulkImport.setText("<html>Process new files by starting a new <b>Bulk Import</b> process");
+        btnBulkImport.setText("<html>Process stashed files by starting a new <b>Bulk Import</b> process");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBulkImport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBulkImport.setName("btnBulkImport"); // NOI18N
+        btnBulkImport.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         btnBulkImport.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBulkImportActionPerformed(evt);
-            }
-        });
-
-        btnStash.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnStash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/StashButton.png"))); // NOI18N
-        btnStash.setText("<html>Quickly <b>Stash</b> the files to be processed later</html>");
-        btnStash.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStash.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnStash.setName("btnStash"); // NOI18N
-        btnStash.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnStash.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStashActionPerformed(evt);
             }
         });
 
@@ -84,6 +94,7 @@ public class WelcomeDialog extends JDialog {
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBrowse.setName("btnBrowse"); // NOI18N
+        btnBrowse.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         btnBrowse.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,7 +113,7 @@ public class WelcomeDialog extends JDialog {
                         .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(btnStash, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                        .addComponent(btnSync, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                         .addGap(15, 15, 15)
                         .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                         .addGap(15, 15, 15)
@@ -116,25 +127,26 @@ public class WelcomeDialog extends JDialog {
                 .addComponent(lblTitle)
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                    .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                    .addComponent(btnStash, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                    .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSync, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnStashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStashActionPerformed
+    private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncActionPerformed
         setVisible(false);
         dispose();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                UtilsFileProcessing.doStashFiles();
+                WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                dialog.setVisible(true);
             }
         });
-    }//GEN-LAST:event_btnStashActionPerformed
+    }//GEN-LAST:event_btnSyncActionPerformed
 
     private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
         setVisible(false);
@@ -142,18 +154,28 @@ public class WelcomeDialog extends JDialog {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                LocationSelectionDialog locationDialog = new LocationSelectionDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
+                SelectLocationDialog locationDialog = new SelectLocationDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
                 locationDialog.setVisible(true);
                 if (locationDialog.isSelectionMade()) {
-                    UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
-                        @Override
-                        protected Object doInBackground() throws Exception {
-                            UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(WildLogApp.getApplication(), this, 
-                                    WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, false, Location.class), 
-                                    null, null, null), WildLogApp.getApplication().getMainFrame().getTabbedPane());
-                            return null;
-                        }
-                    });
+                    SelectVisitDialog visitDialog = new SelectVisitDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 
+                            locationDialog.getSelectedLocationID(), 0, Collections.singletonList(VisitType.STASHED));
+                    visitDialog.setVisible(true);
+                    if (visitDialog.isSelectionMade()) {
+                        UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+                            @Override
+                            protected Object doInBackground() throws Exception {
+                                Location location = WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, true, Location.class);
+                                Visit visit = WildLogApp.getApplication().getDBI().findVisit(visitDialog.getSelectedVisitID(), null, true, Visit.class);
+                                List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(
+                                        new File[]{WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).toFile()});
+                                final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
+                                UtilsPanelGenerator.openBulkUploadTab(
+                                        new BulkUploadPanel(WildLogApp.getApplication(), this, location, visit, lstAllFiles, null), 
+                                        WildLogApp.getApplication().getMainFrame().getTabbedPane());
+                                return null;
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -168,6 +190,6 @@ public class WelcomeDialog extends JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnBulkImport;
-    private javax.swing.JButton btnStash;
+    private javax.swing.JButton btnSync;
     // End of variables declaration//GEN-END:variables
 }

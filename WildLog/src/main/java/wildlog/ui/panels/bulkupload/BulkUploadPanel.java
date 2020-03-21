@@ -1,5 +1,7 @@
 package wildlog.ui.panels.bulkupload;
 
+import wildlog.ui.dialogs.SelectLocationDialog;
+import wildlog.ui.dialogs.SelectElementDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
@@ -1393,8 +1395,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     sightingWrapper.setCachedElementName(element.getPrimaryName());
                 }
                 else {
-                    if (sightingWrapper.getElementID() == ElementSelectionDialog.getPreviousElementID()) {
-                        ElementSelectionDialog.setPreviousElementID(0);
+                    if (sightingWrapper.getElementID() == SelectElementDialog.getPreviousElementID()) {
+                        SelectElementDialog.setPreviousElementID(0);
                     }
                     sightingWrapper.setElementID(0);
                     sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
@@ -1456,7 +1458,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         else {
             locationID = 0;
         }
-        LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), app, locationID);
+        SelectLocationDialog dialog = new SelectLocationDialog(app.getMainFrame(), app, locationID);
         dialog.setVisible(true);
         if (dialog.isSelectionMade() && dialog.getSelectedLocationID() > 0) {
             selectedLocation = app.getDBI().findLocation(dialog.getSelectedLocationID(), null, false, Location.class);

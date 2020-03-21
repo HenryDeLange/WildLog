@@ -9,6 +9,7 @@ public enum WildLogUserTypes implements EnumWithKey {
     ADMIN           ("A", "Admin"),
     STUDENT         ("S", "Student"),
     VOLUNTEER       ("V", "Volunteer"),
+    REMOTE          ("R", "Remote"),
     NONE            ("",  "");
 
     private final String key;

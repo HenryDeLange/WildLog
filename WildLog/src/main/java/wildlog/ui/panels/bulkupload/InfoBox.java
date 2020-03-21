@@ -1,5 +1,6 @@
 package wildlog.ui.panels.bulkupload;
 
+import wildlog.ui.dialogs.SelectElementDialog;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -394,7 +395,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnChooseElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseElementActionPerformed
-        ElementSelectionDialog dialog = new ElementSelectionDialog(app.getMainFrame(), app, sightingWrapper.getElementID());
+        SelectElementDialog dialog = new SelectElementDialog(app.getMainFrame(), app, sightingWrapper.getElementID());
         dialog.setVisible(true);
         // Set the label to the selected text
         table.getCellEditor().stopCellEditing();
@@ -427,12 +428,12 @@ public class InfoBox extends JPanel {
 
     private void btnChooseElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseElementMouseReleased
         if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
-            if (ElementSelectionDialog.getPreviousElementID() > 0) {
+            if (SelectElementDialog.getPreviousElementID() > 0) {
                 // Set the label to the selected text
                 table.getCellEditor().stopCellEditing();
-                sightingWrapper.setElementID(ElementSelectionDialog.getPreviousElementID());
-                sightingWrapper.setCachedElementName(ElementSelectionDialog.getPreviousElementName());
-                UtilsImageProcessing.setupFoto(ElementSelectionDialog.getPreviousElementID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
+                sightingWrapper.setElementID(SelectElementDialog.getPreviousElementID());
+                sightingWrapper.setCachedElementName(SelectElementDialog.getPreviousElementName());
+                UtilsImageProcessing.setupFoto(SelectElementDialog.getPreviousElementID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
                 sightingWrapper.setIcon(lblImage.getIcon());
                 evt.consume();
                 // Update the combobox model to keep track of selected elements
@@ -528,8 +529,8 @@ public class InfoBox extends JPanel {
         sightingWrapper.setCachedElementName(selectedElement.getElement().getPrimaryName());
         UtilsImageProcessing.setupFoto(selectedElement.getElement().getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
         sightingWrapper.setIcon(lblImage.getIcon());
-        ElementSelectionDialog.setPreviousElementID(selectedElement.getElement().getID());
-        ElementSelectionDialog.setPreviousElementName(selectedElement.getElement().getPrimaryName());
+        SelectElementDialog.setPreviousElementID(selectedElement.getElement().getID());
+        SelectElementDialog.setPreviousElementName(selectedElement.getElement().getPrimaryName());
         // Update the combobox model to keep track of selected elements
         ((ComboBoxSuggestedElementModel) cmbChooseElement.getModel()).registerElementSelection(selectedElement);
     }//GEN-LAST:event_cmbChooseElementActionPerformed

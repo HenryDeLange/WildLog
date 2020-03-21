@@ -104,9 +104,10 @@ import wildlog.ui.dialogs.MoveVisitDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.SystemMonitorDialog;
 import wildlog.ui.dialogs.UserManagementDialog;
-import wildlog.ui.dialogs.WelcomeDialog;
+import wildlog.ui.dialogs.WildLogWEIGettingStartedDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
 import wildlog.ui.dialogs.WildLogWEIAboutBox;
+import wildlog.ui.dialogs.WildLogWEIGettingStartedRemoteDialog;
 import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
 import wildlog.ui.dialogs.WorkspaceImportDialog;
@@ -124,7 +125,7 @@ import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
-import wildlog.ui.panels.bulkupload.LocationSelectionDialog;
+import wildlog.ui.dialogs.SelectLocationDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -365,8 +366,11 @@ public final class WildLogView extends JFrame {
             mnuCreateGIF.setVisible(false);
             mnuCreateSlideshow.setEnabled(false);
             mnuCreateSlideshow.setVisible(false);
+            importMenu.setEnabled(false);
+            importMenu.setVisible(false);
         }
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             // Show the WEI welcome popup
             showWelcomeDialog();
         }
@@ -2156,7 +2160,7 @@ public final class WildLogView extends JFrame {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    LocationSelectionDialog locationDialog = new LocationSelectionDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
+                    SelectLocationDialog locationDialog = new SelectLocationDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
                     locationDialog.setVisible(true);
                     if (locationDialog.isSelectionMade()) {
                         UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
@@ -3987,13 +3991,23 @@ public final class WildLogView extends JFrame {
     }
     
     public void showWelcomeDialog() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                WelcomeDialog dialog = new WelcomeDialog();
-                dialog.setVisible(true);
-            }
-        });
+        if (!app.isTriggerStartupSync()) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                        WildLogWEIGettingStartedDialog dialog = new WildLogWEIGettingStartedDialog();
+                        dialog.setVisible(true);
+                    }
+                    else
+                    if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                        WildLogWEIGettingStartedRemoteDialog dialog = new WildLogWEIGettingStartedRemoteDialog();
+                        dialog.setVisible(true);
+                    }
+                }
+            });
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

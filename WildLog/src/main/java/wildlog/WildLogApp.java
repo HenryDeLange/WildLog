@@ -99,8 +99,8 @@ public class WildLogApp extends Application {
     private WildLogView view;
     private WildLogOptions wildLogOptions;
     private int threadCount;
-    private boolean triggerSync = false;
-    private long triggerSyncWorkspaceID = 0;
+    private boolean triggerStartupSync = false;
+    private long triggerStartupSyncWorkspaceID = 0;
     /** 
     * Make sure the application uses the same WildLogDBI instance...
     * The WildLogDBI is initialized in startup() and closed in shutdown()
@@ -168,8 +168,8 @@ public class WildLogApp extends Application {
                 exit();
                 return;
             }
-            triggerSync = workspacePicker.isTriggerImmediateSync();
-            triggerSyncWorkspaceID = workspacePicker.getWorkspaceID();
+            triggerStartupSync = workspacePicker.isTriggerImmediateSync();
+            triggerStartupSyncWorkspaceID = workspacePicker.getWorkspaceID();
             // Proceed to open the selected workspace
             WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
             // Get the threadcount
@@ -240,7 +240,7 @@ public class WildLogApp extends Application {
             wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
             WildLogApp.LOGGER.log(Level.INFO, "Workspace opened with ID: {} [{}]", new Object[]{wildLogOptions.getWorkspaceName(), Long.toString(wildLogOptions.getWorkspaceID())});
             // Check whether it is time to upload the logs
-            if (!triggerSync) {
+            if (!triggerStartupSync) {
                 uploadLogs();
             }
         }
@@ -257,7 +257,7 @@ public class WildLogApp extends Application {
     private boolean openWorkspace() {
         try {
             WildLogApp.LOGGER.log(Level.INFO, "Opening Workspace database at: {}", WildLogPaths.getFullWorkspacePrefix().toString());
-            dbi = new WildLogDBI_h2(!triggerSync, useH2AutoServer);
+            dbi = new WildLogDBI_h2(!triggerStartupSync, useH2AutoServer);
             // NOTE:
             // The "!triggerSync" above won't prevent the WildLog Options from being created.
             // It still happens in doUpdates() method.
@@ -473,11 +473,11 @@ public class WildLogApp extends Application {
             @Override
             public void run() {
                 // Check whether the Sync Dialog should be shown on launch
-                if (triggerSync) {
+                if (triggerStartupSync) {
                     // Set the correct workspace ID
                     wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
-                    wildLogOptions.setID(triggerSyncWorkspaceID);
-                    wildLogOptions.setWorkspaceID(triggerSyncWorkspaceID);
+                    wildLogOptions.setID(triggerStartupSyncWorkspaceID);
+                    wildLogOptions.setWorkspaceID(triggerStartupSyncWorkspaceID);
                     wildLogOptions.setAuditTime(-1); // Default is 0, so -1 ensures an update
                     dbi.updateWildLogOptions(wildLogOptions, true);
                     // Show the sync popup
@@ -812,6 +812,10 @@ public class WildLogApp extends Application {
                 executor.shutdown();
             }
         }
+    }
+
+    public boolean isTriggerStartupSync() {
+        return triggerStartupSync;
     }
 
 }

@@ -510,7 +510,7 @@ public final class UtilsTableGenerator {
             }
         });
     }
-
+    
     public static void setupVisitTableSmallWithSightings(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 5);
@@ -626,7 +626,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
+    public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final long inLocationID, boolean inIncludeStashedVisits) {
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
@@ -648,9 +648,11 @@ public final class UtilsTableGenerator {
                 if (inLocationID > 0) {
                     final List<Visit> lstVisits = inApp.getDBI().listVisits(null, inLocationID, null, false, Visit.class);
                     // Remove stashed visits (because this table is only used on the Sighting popup)
-                    for (int t = lstVisits.size() - 1; t >= 0; t--) {
-                        if (VisitType.STASHED  == lstVisits.get(t).getType()) {
-                            lstVisits.remove(t);
+                    if (!inIncludeStashedVisits) {
+                        for (int t = lstVisits.size() - 1; t >= 0; t--) {
+                            if (VisitType.STASHED  == lstVisits.get(t).getType()) {
+                                lstVisits.remove(t);
+                            }
                         }
                     }
                     if (!lstVisits.isEmpty()) {
@@ -663,7 +665,28 @@ public final class UtilsTableGenerator {
                                 @Override
                                 public Object call() throws Exception {
                                     Visit tempVisit = lstVisits.get(finalT);
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID()); // Note: Stashed visits have bee removed above
+                                    if (!inIncludeStashedVisits) {
+                                        // Note: Stashed visits have bee removed above
+                                        data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                    }
+                                    else {
+                                        boolean foundSavedData = false;
+                                        if (VisitType.STASHED != tempVisit.getType()) {
+                                            data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                        }
+                                        else {
+                                            List<ExtraData> lstExtraData = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.WILDLOG, tempVisit.getID(), ExtraData.class);
+                                            for (ExtraData extraData : lstExtraData) {
+                                                if (ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
+                                                    data[finalT][0] = UtilsImageProcessing.getScaledIconForReStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                                                    break;
+                                                }
+                                            }
+                                            if (!foundSavedData) {
+                                                data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                                            }
+                                        }
+                                    }
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
                                     data[finalT][3] = tempVisit.getType();
