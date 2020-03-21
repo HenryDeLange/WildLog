@@ -36,12 +36,14 @@ import javax.swing.tree.TreeSelectionModel;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.dbi.WildLogDBI;
@@ -678,6 +680,7 @@ public class WorkspaceExportDialog extends JDialog {
                     }
                     if (inNewDBI.findLocation(location.getID(), null, false, Location.class) == null) {
                         inNewDBI.createLocation(location, true);
+                        saveExtraData(inNewDBI, location);
                         saveFiles(inNewDBI, inDestinationWorkspace, location);
                     }
                 }
@@ -689,6 +692,7 @@ public class WorkspaceExportDialog extends JDialog {
                     }
                     if (inNewDBI.findVisit(visit.getID(), null, true, Visit.class) == null) {
                         inNewDBI.createVisit(visit, true);
+                        saveExtraData(inNewDBI, visit);
                         if (visit.getType() != VisitType.STASHED) {
                             saveFiles(inNewDBI, inDestinationWorkspace, visit);
                         }
@@ -702,6 +706,7 @@ public class WorkspaceExportDialog extends JDialog {
                     Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getID(), null, false, Element.class);
                     if (inNewDBI.findElement(element.getID(), null, false, Element.class) == null) {
                         inNewDBI.createElement(element, true);
+                        saveExtraData(inNewDBI, element);
                         saveFiles(inNewDBI, inDestinationWorkspace, element);
                     }
                 }
@@ -749,6 +754,7 @@ public class WorkspaceExportDialog extends JDialog {
                         if (inNewDBI.countSightings(sighting.getID(), 0, 0, 0) == 0) {
                             // Note: The sighting ID needs to be the same for the linked images to work...
                             inNewDBI.createSighting(sighting, true);
+                            saveExtraData(inNewDBI, sighting);
                             saveFiles(inNewDBI, inDestinationWorkspace, sighting);
                             // Save ook die iNaturalist linked data
                             INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getID(), 0, INaturalistLinkedData.class);
@@ -769,8 +775,11 @@ public class WorkspaceExportDialog extends JDialog {
         }
     }
     
-    private void saveExtraData() {
-// TODO: ...
+    private void saveExtraData(WildLogDBI inNewDBI, DataObjectWithAudit inDataObjectWithAudit) {
+        List<ExtraData> lstExtraData = app.getDBI().listExtraDatas(null, inDataObjectWithAudit.getID(), ExtraData.class);
+        for (ExtraData extraData : lstExtraData) {
+            inNewDBI.createExtraData(extraData, true);
+        }
     }
 
     private void saveFiles(WildLogDBI inNewDBI, Path inDestinationWorkspace, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
