@@ -47,6 +47,8 @@ import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.GPSAccuracy;
+import wildlog.data.enums.VisitType;
+import wildlog.data.enums.system.WildLogDataType;
 import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -60,6 +62,7 @@ import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
 
@@ -686,7 +689,12 @@ public class WorkspaceExportDialog extends JDialog {
                     }
                     if (inNewDBI.findVisit(visit.getID(), null, true, Visit.class) == null) {
                         inNewDBI.createVisit(visit, true);
-                        saveFiles(inNewDBI, inDestinationWorkspace, visit);
+                        if (visit.getType() != VisitType.STASHED) {
+                            saveFiles(inNewDBI, inDestinationWorkspace, visit);
+                        }
+                        else {
+                            saveStashedFiles(inDestinationWorkspace, visit);
+                        }
                     }
                 }
                 else
@@ -760,6 +768,10 @@ public class WorkspaceExportDialog extends JDialog {
             exportRecords(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter, inUniqueElementsPerVisit, inStartDate, inEndDate);
         }
     }
+    
+    private void saveExtraData() {
+// TODO: ...
+    }
 
     private void saveFiles(WildLogDBI inNewDBI, Path inDestinationWorkspace, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
         if (!rdbExportNoFiles.isSelected()) {
@@ -788,6 +800,43 @@ public class WorkspaceExportDialog extends JDialog {
                 if (rdbExportDefaultImagesOnly.isSelected()) {
                     break;
                 }
+            }
+        }
+    }
+    
+    private void saveStashedFiles(Path inDestinationWorkspace, Visit inVisit) {
+        if (!rdbExportNoFiles.isSelected()) {
+            Path sourceStashFolder = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(inVisit.getName());
+            Path destinationStashFolder = inDestinationWorkspace.resolve(WildLogPaths.WILDLOG_FILES_STASH.getRelativePath()).resolve(inVisit.getName());
+            List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(new File[]{sourceStashFolder.toFile()});
+            final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
+            for (Path path : lstAllFiles) {
+                if (rdbExportImagesOnly.isSelected()) {
+                    if (!WildLogFileExtentions.Images.isKnownExtention(path)) {
+                        continue;
+                    }
+                }
+                Path source = path;
+                Path destination;
+                if (rdbExportThumbnails.isSelected() && WildLogFileExtentions.Images.isKnownExtention(source)) {
+                    WildLogFile wrapperWildLogFile = new WildLogFile();
+                    wrapperWildLogFile.setLinkID(inVisit.getID());
+                    wrapperWildLogFile.setLinkType(WildLogDataType.STASH);
+                    if (WildLogFileExtentions.Images.isKnownExtention(source)) {
+                        wrapperWildLogFile.setFileType(WildLogFileType.IMAGE);
+                    }
+                    else
+                    if (WildLogFileExtentions.Movies.isKnownExtention(source)) {
+                        wrapperWildLogFile.setFileType(WildLogFileType.MOVIE);
+                    }
+                    else {
+                        wrapperWildLogFile.setFileType(WildLogFileType.OTHER);
+                    }
+                    wrapperWildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(source).toString());
+                    source = wrapperWildLogFile.getAbsoluteThumbnailPath((WildLogThumbnailSizes) cmbThumbnailSize.getSelectedItem());
+                }
+                destination = destinationStashFolder.resolve(sourceStashFolder.relativize(path));
+                UtilsFileProcessing.copyFile(source, destination, false, true);
             }
         }
     }
@@ -951,6 +1000,13 @@ public class WorkspaceExportDialog extends JDialog {
                     DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
                     elementNode.add(sightingNode);
                 }
+            }
+            // Also add stashed visits
+            List<Visit> lstStashedVisits = app.getDBI().listVisits(null, location.getID(), VisitType.STASHED, false, Visit.class);
+            for (Visit stashedVisit : lstStashedVisits) {
+                DefaultMutableTreeNode stashedVisitNode = new DefaultMutableTreeNode(
+                        new WorkspaceTreeDataWrapper(app.getDBI().findVisit(stashedVisit.getID(), null, true, Visit.class), false));
+                locationNode.add(stashedVisitNode);
             }
         }
         treWorkspace.setModel(new DefaultTreeModel(root));

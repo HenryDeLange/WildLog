@@ -423,12 +423,13 @@ public final class UtilsTableGenerator {
                                 boolean foundSavedData = false;
                                 if (VisitType.STASHED != tempVisit.getType()) {
                                     data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                    data[finalT][5] = tempVisit.getCachedSightingCount();
+                                    data[finalT][6] = tempVisit.getCachedElementCount();
                                 }
                                 else {
                                     List<ExtraData> lstExtraData = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.WILDLOG, tempVisit.getID(), ExtraData.class);
                                     for (ExtraData extraData : lstExtraData) {
                                         if (ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
-                                            data[finalT][0] = UtilsImageProcessing.getScaledIconForReStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
                                             Gson gson = new Gson();
                                             List<BulkImportStashedTableData> lstStashedData = gson.fromJson(extraData.getDataValue(),
                                                     new TypeToken<List<BulkImportStashedTableData>>(){}.getType());
@@ -441,6 +442,7 @@ public final class UtilsTableGenerator {
                                                     countElements.add(stashedData.getSighting().getElementID());
                                                 }
                                             }
+                                            data[finalT][0] = UtilsImageProcessing.getScaledIconForReStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
                                             data[finalT][5] = countSightings;
                                             data[finalT][6] = countElements.size();
                                             break;
@@ -546,12 +548,12 @@ public final class UtilsTableGenerator {
                                     boolean foundSavedData = false;
                                     if (VisitType.STASHED != tempVisit.getType()) {
                                         data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                        data[finalT][4] = tempVisit.getCachedSightingCount();
                                     }
                                     else {
                                         List<ExtraData> lstExtraData = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.WILDLOG, tempVisit.getID(), ExtraData.class);
                                         for (ExtraData extraData : lstExtraData) {
                                             if (ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
-                                                data[finalT][0] = UtilsImageProcessing.getScaledIconForReStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
                                                 Gson gson = new Gson();
                                                 List<BulkImportStashedTableData> lstStashedData = gson.fromJson(extraData.getDataValue(),
                                                         new TypeToken<List<BulkImportStashedTableData>>(){}.getType());
@@ -562,6 +564,7 @@ public final class UtilsTableGenerator {
                                                         countSightings++;
                                                     }
                                                 }
+                                                data[finalT][0] = UtilsImageProcessing.getScaledIconForReStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
                                                 data[finalT][4] = countSightings;
                                                 break;
                                             }
