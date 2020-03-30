@@ -1,12 +1,15 @@
 package wildlog.utils;
 
+import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.maps.utils.UtilsGPS;
 
 
@@ -46,6 +49,7 @@ public final class UtilsExcel {
         row.createCell(col++).setCellValue("LIFE_STATUS");
         row.createCell(col++).setCellValue("TAG");
         row.createCell(col++).setCellValue("DETAILS");
+        row.createCell(col++).setCellValue("EXTRADATA");
     }
 
     public static void exportSightingToExcel(Sheet sheet, int rowCount, Sighting tempSighting, WildLogApp inApp) {
@@ -117,6 +121,29 @@ public final class UtilsExcel {
         row.createCell(col++).setCellValue(getStringValue(tempSighting.getLifeStatus()));
         row.createCell(col++).setCellValue(getStringValue(tempSighting.getTag()));
         row.createCell(col++).setCellValue(getStringValue(tempSighting.getDetails()));
+        List<ExtraData> lstExtraData = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, tempSighting.getID(), ExtraData.class);
+        if (!lstExtraData.isEmpty()) {
+            StringBuilder extraDataString = new StringBuilder();
+            extraDataString.append("[");
+            int count = 0;
+            for (ExtraData extraData : lstExtraData) {
+                extraDataString.append("{");
+                extraDataString.append("\"key\": \"");
+                extraDataString.append(extraData.getDataKey());
+                extraDataString.append("\",");
+                extraDataString.append("\"value\": \"");
+                extraDataString.append(extraData.getDataValue());
+                extraDataString.append("\"}");
+                if (++count < lstExtraData.size()) {
+                    extraDataString.append(",");
+                }
+            }
+            extraDataString.append("]");
+            row.createCell(col++).setCellValue(extraDataString.toString());
+        }
+        else {
+            row.createCell(col++).setCellValue("");
+        }
     }
     
     private static String getStringValue(Object inValue) {

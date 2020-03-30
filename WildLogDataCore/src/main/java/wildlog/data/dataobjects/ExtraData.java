@@ -3,6 +3,7 @@ package wildlog.data.dataobjects;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.system.WildLogDataType;
 import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
+import wildlog.data.utils.UtilsData;
 
 
 /**
@@ -75,6 +76,20 @@ public class ExtraData extends DataObjectWithAudit {
     @Override
     public String toString() {
         return "[ID: " + id + "; fieldType: " + fieldType + "; linkID: " + linkID + "; linkType: " + linkType + "; dataKey: " + dataKey + "; dataValue: " + dataValue + "]";
+    }
+    
+    public boolean hasTheSameContent(ExtraData inExtraData) {
+        if (inExtraData == null) {
+            return false;
+        }
+        return UtilsData.isTheSame(getID(), inExtraData.getID())
+                && UtilsData.isTheSame(getFieldType(), inExtraData.getFieldType())
+                && UtilsData.isTheSame(getLinkType(), inExtraData.getLinkType())
+                && UtilsData.isTheSame(getLinkID(), inExtraData.getLinkID())
+                && UtilsData.isTheSame(getDataKey(), inExtraData.getDataKey())
+                && UtilsData.isTheSame(getDataValue(), inExtraData.getDataValue())
+                && UtilsData.isTheSame(getAuditTime(), inExtraData.getAuditTime())
+                && UtilsData.isTheSame(getAuditUser(), inExtraData.getAuditUser());
     }
 
 }

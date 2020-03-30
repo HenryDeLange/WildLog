@@ -121,11 +121,11 @@ public final class UtilsGPS {
         if (inDataObjectWithGPS.getLatitude() != null && !Latitudes.NONE.equals(inDataObjectWithGPS.getLatitude())) {
             return inDataObjectWithGPS.getLatitude().getKey() + " " + inDataObjectWithGPS.getLatitude().getSign()
                     + DECIMAL_FORMAT.get().format(
-                            getDecimalDegree(
+                            Math.abs(getDecimalDegree(
                                     Latitudes.NONE,
                                     inDataObjectWithGPS.getLatDegrees(),
                                     inDataObjectWithGPS.getLatMinutes(),
-                                    inDataObjectWithGPS.getLatSeconds()));
+                                    inDataObjectWithGPS.getLatSeconds())));
         }
         else {
             return NO_GPS_POINT;
@@ -136,11 +136,11 @@ public final class UtilsGPS {
         if (inDataObjectWithGPS.getLongitude() != null && !Longitudes.NONE.equals(inDataObjectWithGPS.getLongitude())) {
             return inDataObjectWithGPS.getLongitude().getKey() + " " + inDataObjectWithGPS.getLongitude().getSign()
                     + DECIMAL_FORMAT.get().format(
-                            getDecimalDegree(
+                            Math.abs(getDecimalDegree(
                                     Longitudes.NONE,
                                     inDataObjectWithGPS.getLonDegrees(),
                                     inDataObjectWithGPS.getLonMinutes(),
-                                    inDataObjectWithGPS.getLonSeconds()));
+                                    inDataObjectWithGPS.getLonSeconds())));
         }
         else {
             return NO_GPS_POINT;

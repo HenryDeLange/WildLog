@@ -1140,7 +1140,7 @@ public final class WildLogView extends JFrame {
         });
 
         mnuExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        mnuExportCSVBasic.setText("Export All to CSV (Basic format)");
+        mnuExportCSVBasic.setText("Export Full Data to CSV (Basic format)");
         mnuExportCSVBasic.setToolTipText("Export all data to CSV files using the Basic format. (Open in Excel, ArcGIS, etc.)");
         mnuExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportCSVBasic.setName("mnuExportCSVBasic"); // NOI18N
@@ -1152,7 +1152,7 @@ public final class WildLogView extends JFrame {
         exportMenu.add(mnuExportCSVBasic);
 
         mnuExportCSVFull.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        mnuExportCSVFull.setText("Export All to CSV (WildLog format)");
+        mnuExportCSVFull.setText("Export Full Data to CSV (WildLog format)");
         mnuExportCSVFull.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
         mnuExportCSVFull.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportCSVFull.setName("mnuExportCSVFull"); // NOI18N
@@ -1167,7 +1167,7 @@ public final class WildLogView extends JFrame {
         exportMenu.add(jSeparator18);
 
         mnuExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        mnuExportHTML.setText("Export All to Web Page (Basic)");
+        mnuExportHTML.setText("Export Core Data to Web Page (Basic)");
         mnuExportHTML.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
         mnuExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportHTML.setName("mnuExportHTML"); // NOI18N
@@ -1179,7 +1179,7 @@ public final class WildLogView extends JFrame {
         exportMenu.add(mnuExportHTML);
 
         mnuExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        mnuExportHTMLAdvanced.setText("Export All to Web Page (Advanced)");
+        mnuExportHTMLAdvanced.setText("Export Core Data to Web Page (Advanced)");
         mnuExportHTMLAdvanced.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
         mnuExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportHTMLAdvanced.setName("mnuExportHTMLAdvanced"); // NOI18N
@@ -1194,7 +1194,7 @@ public final class WildLogView extends JFrame {
         exportMenu.add(jSeparator19);
 
         mnuExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
-        mnuExportXML.setText("Export All to XML");
+        mnuExportXML.setText("Export Core Data to XML");
         mnuExportXML.setToolTipText("Export all data to XML files. (Open in text editor, web browser, etc.)");
         mnuExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportXML.setName("mnuExportXML"); // NOI18N
@@ -1209,7 +1209,7 @@ public final class WildLogView extends JFrame {
         exportMenu.add(jSeparator20);
 
         mnuExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
-        mnuExportKML.setText("Export All to KML");
+        mnuExportKML.setText("Export Observations to KML");
         mnuExportKML.setToolTipText("Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)");
         mnuExportKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportKML.setName("mnuExportKML"); // NOI18N
@@ -1224,7 +1224,7 @@ public final class WildLogView extends JFrame {
         exportMenu.add(jSeparator10);
 
         mnuExportExcelBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Excel.png"))); // NOI18N
-        mnuExportExcelBasic.setText("Export All to Excel (Basic format)");
+        mnuExportExcelBasic.setText("Export Observations to Excel (Basic format)");
         mnuExportExcelBasic.setToolTipText("Export all data to Excel files using the Basic format.");
         mnuExportExcelBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportExcelBasic.setName("mnuExportExcelBasic"); // NOI18N
@@ -2228,7 +2228,7 @@ public final class WildLogView extends JFrame {
                         if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
                             excludeWildLogFiles = true;
                         }
-                        app.getDBI().doImportCSV(path, autoResolve, !excludeWildLogFiles);
+                        app.getDBI().doImportFullCSV(path, autoResolve, !excludeWildLogFiles);
                     }
                     setMessage("Done with the CSV WildLog Import");
                     tabHomeComponentShown(null);
@@ -2278,6 +2278,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuDBConsoleActionPerformed
 
     private void mnuExportCSVFullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportCSVFullActionPerformed
+// TODO: Also export a file listing all of the enum keys
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -2289,7 +2290,6 @@ public final class WildLogView extends JFrame {
                 setMessage("Busy with the CSV WildLog Export");
                 app.getDBI().doExportFullCSV(path, true, null, null, null, null, null);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_ALL.getAbsoluteFullPath());
-// TODO: Also export a file listing all of the enum keys
                 setProgress(100);
                 setMessage("Done with the CSV WildLog Export");
                 return null;
@@ -3416,6 +3416,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuImportCSVBasicActionPerformed
 
     private void mnuExportCSVBasicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportCSVBasicActionPerformed
+// TODO: Also export a file listing all of the enum keys
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -3432,10 +3433,10 @@ public final class WildLogView extends JFrame {
                     Path tempPath = path.resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName() + ".csv");
                     Files.createDirectories(tempPath.getParent());
                     app.getDBI().doExportBasicCSV(tempPath, null, null, element, null, null);
-                    setProgress(0 + (int)((t/(double)listElements.size())*25));
+                    setProgress(0 + (int)((t/(double)listElements.size())*20));
                     setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 }
-                setProgress(25);
+                setProgress(20);
                 // Locations
                 setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 List<Location> listLocations = app.getDBI().listLocations(null, false, Location.class);
@@ -3444,27 +3445,28 @@ public final class WildLogView extends JFrame {
                     Path tempPath = path.resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() + ".csv");
                     Files.createDirectories(tempPath.getParent());
                     app.getDBI().doExportBasicCSV(tempPath, location, null, null, null, null);
-                    setProgress(25 + (int)((t/(double)listLocations.size())*25));
+                    setProgress(20 + (int)((t/(double)listLocations.size())*20));
                     setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 }
-                setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                setProgress(40);
                 // Visits
+                setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 List<Visit> listVisits = app.getDBI().listVisits(null, 0, null, true, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     Visit visit = listVisits.get(t);
                     Path tempPath = path.resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName() + ".csv");
                     Files.createDirectories(tempPath.getParent());
                     app.getDBI().doExportBasicCSV(tempPath, null, visit, null, null, null);
-                    setProgress(50 + (int)((t/(double)listVisits.size())*25));
+                    setProgress(40 + (int)((t/(double)listVisits.size())*20));
                     setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 }
-                setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                setProgress(60);
                 // Sightings
+                setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 List<Sighting> listSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 Path tempPath = path.resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("AllObservations.csv");
                 Files.createDirectories(tempPath.getParent());
                 app.getDBI().doExportBasicCSV(tempPath, null, null, null, null, listSightings);
-// TODO: Also export a file listing all of the enum keys
                 setProgress(100);
                 setMessage("Done with the CSV Basic Export");
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath());

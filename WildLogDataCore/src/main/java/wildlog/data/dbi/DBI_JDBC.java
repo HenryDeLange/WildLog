@@ -1627,7 +1627,7 @@ public abstract class DBI_JDBC implements DBI {
         return temp;
     }
 
-    private <T extends ExtraData> void populateExtraData(T inExtraData, ResultSet inResults) throws SQLException {
+    protected <T extends ExtraData> void populateExtraData(T inExtraData, ResultSet inResults) throws SQLException {
         inExtraData.setID(inResults.getLong("ID"));
         inExtraData.setFieldType(WildLogExtraDataFieldTypes.getEnumFromText(inResults.getString("FIELDTYPE")));
         inExtraData.setLinkID(inResults.getLong("LINKID"));

@@ -8,10 +8,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.UtilsTime;
 
 
 public class WorkspaceImportConflictDialog extends JDialog {
@@ -29,9 +32,9 @@ public class WorkspaceImportConflictDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Setup UI
-        txpImport.setText(inImportRecord.toHTML(false, false, false, null, UtilsHTMLExportTypes.ForHTML, null)
+        txpImport.setText(inImportRecord.toHTML(false, false, false, WildLogApp.getApplication(), UtilsHTMLExportTypes.ForHTML, null)
                 .replace("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>", ""));
-        txpWorkspace.setText(inWorkspaceRecord.toHTML(false, false, false, null, UtilsHTMLExportTypes.ForHTML, null)
+        txpWorkspace.setText(inWorkspaceRecord.toHTML(false, false, false, WildLogApp.getApplication(), UtilsHTMLExportTypes.ForHTML, null)
                 .replace("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>", ""));
     }
     
@@ -57,6 +60,45 @@ public class WorkspaceImportConflictDialog extends JDialog {
         }
         txpImport.setBackground(Color.BLACK);
         txpWorkspace.setBackground(Color.BLACK);
+    }
+    
+    public WorkspaceImportConflictDialog(ExtraData inImportRecord, ExtraData inWorkspaceRecord) {
+        super();
+        WildLogApp.LOGGER.log(Level.INFO, "[WorkspaceImportConflictDialog]");
+        initComponents();
+        // Setup the default behavior
+        UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
+        UtilsDialog.addEscapeKeyListener(this);
+        // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
+        UtilsDialog.addModalBackgroundPanel(this, null);
+        // Setup UI
+        txpImport.setText(extraDataToHTML(inImportRecord));
+        txpWorkspace.setText(extraDataToHTML(inWorkspaceRecord));
+    }
+    
+    private String extraDataToHTML(ExtraData inExtraData) {
+        StringBuilder html = new StringBuilder("<head><title>ExtraData: ").append(inExtraData.getDataKey()).append("</title></head>");
+        html.append("<body>");
+        html.append("<table width='100%'>");
+        html.append("<tr><td style='font-size:9px;font-family:verdana;'>");
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Field Type:</b><br/>", inExtraData.getFieldType(), true);
+        html.append("<br/><hr/>");
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Key:</b><br/>", inExtraData.getDataKey(), true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Value:</b><br/>", inExtraData.getDataValue(), true);
+        html.append("<br/><hr/>");
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Link Type:</b><br/>", inExtraData.getLinkType(), true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Link ID:</b><br/>", inExtraData.getLinkID(), true);
+        html.append("<br/><hr/>");
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>ID:</b><br/>", inExtraData.getID(), true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit Time:</b><br/>", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(
+                UtilsTime.getLocalDateTimeFromMilliseconds(inExtraData.getAuditTime())), true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit User:</b><br/>", inExtraData.getAuditUser(), true);
+        html.append("</td></tr>");
+        html.append("</table>");
+        html.append("<br/>");
+        html.append("</body>");
+        return html.toString();
     }
 
     /** This method is called from within the constructor to

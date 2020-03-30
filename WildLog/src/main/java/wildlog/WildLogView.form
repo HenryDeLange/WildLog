@@ -238,7 +238,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Export All to CSV (Basic format)"/>
+                <Property name="text" type="java.lang.String" value="Export Full Data to CSV (Basic format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files using the Basic format. (Open in Excel, ArcGIS, etc.)"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -254,7 +254,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Export All to CSV (WildLog format)"/>
+                <Property name="text" type="java.lang.String" value="Export Full Data to CSV (WildLog format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files. (Open in Excel, ArcGIS, etc.)"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -275,7 +275,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Export All to Web Page (Basic)"/>
+                <Property name="text" type="java.lang.String" value="Export Core Data to Web Page (Basic)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -291,7 +291,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Export All to Web Page (Advanced)"/>
+                <Property name="text" type="java.lang.String" value="Export Core Data to Web Page (Advanced)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -312,7 +312,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/XML.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Export All to XML"/>
+                <Property name="text" type="java.lang.String" value="Export Core Data to XML"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to XML files. (Open in text editor, web browser, etc.)"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -333,7 +333,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/GoogleEarth.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Export All to KML"/>
+                <Property name="text" type="java.lang.String" value="Export Observations to KML"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -354,7 +354,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/Excel.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Export All to Excel (Basic format)"/>
+                <Property name="text" type="java.lang.String" value="Export Observations to Excel (Basic format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to Excel files using the Basic format."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>

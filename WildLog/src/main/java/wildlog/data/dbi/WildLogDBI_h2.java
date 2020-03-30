@@ -22,6 +22,7 @@ import org.h2.jdbc.JdbcSQLNonTransientConnectionException;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -52,6 +53,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
@@ -341,6 +343,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             if (inExportAll) {
                 state.execute("CALL CSVWRITE('" + inPath.getParent().resolve("Files.csv").toAbsolutePath().toString() + "', 'SELECT * FROM FILES')");
             }
+            // Export ExtraData
+            if (inExportAll) {
+                state.execute("CALL CSVWRITE('" + inPath.getParent().resolve("ExtraData.csv").toAbsolutePath().toString() + "', 'SELECT * FROM EXTRA WHERE FIELDTYPE = ''U''')");
+            }
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -376,7 +382,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         " S.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, S.GPSACCURACYVALUE AS OBSERVATION_GPS_ACCURACY_VALUE, " +
                         " ((CASE WHEN S.LATITUDEINDICATOR = ''N'' THEN +1 WHEN S.LATITUDEINDICATOR = ''S'' THEN -1 END) * (S.LatDEGREES + (S.LatMINUTES + S.LatSECONDS /60.0)/60.0)) AS OBSERVATION_LATITUDE, " +
                         " ((CASE WHEN S.LONGITUDEINDICATOR = ''E'' THEN +1 WHEN S.LONGITUDEINDICATOR = ''W'' THEN -1 END) * (S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0)) AS OBSERVATION_LONGITUDE, " +
-                        " S.NUMBEROFELEMENTS AS NUMBER_OF_CREATURES, S.LIFESTATUS AS LIFE_STATUS, S.TAG, S.DETAILS " +
+                        " S.NUMBEROFELEMENTS AS NUMBER_OF_CREATURES, S.LIFESTATUS AS LIFE_STATUS, S.TAG, S.DETAILS, " +
+                        " (SELECT (LISTAGG(CONCAT(DATAKEY, '':'', DATAVALUE), '','') WITHIN GROUP (ORDER BY ID)) FROM EXTRA X WHERE X.LINKID = S.ID AND X.FIELDTYPE = ''U'') EXTRADATA " +
                         " FROM SIGHTINGS S " +
                         " LEFT JOIN ELEMENTS E ON S.ELEMENTID = E.ID " +
                         " LEFT JOIN LOCATIONS L ON S.LOCATIONID = L.ID " +
@@ -425,7 +432,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
-    public void doImportCSV(Path inCSVPath, boolean inAutoResolve, boolean includeWildLogFilesTable) {
+    public void doImportFullCSV(Path inCSVPath, boolean inAutoResolve, boolean includeWildLogFilesTable) {
         WorkspaceImportDialog importDialog = new WorkspaceImportDialog();
         Statement state = null;
         ResultSet results = null;
@@ -482,16 +489,28 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     }
                     results.close();
                 }
+                // Import Files
                 if (includeWildLogFilesTable) {
                     if (Files.exists(inCSVPath.resolve("Files.csv").toAbsolutePath())) {
                         results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
                         while (results.next()) {
                             WildLogFile wildLogFile = new WildLogFile();
                             populateWildLogFile(results, wildLogFile);
-                            createWildLogFile(wildLogFile, true);
+                            importDialog.importWildLogFile(wildLogFile, inAutoResolve, false, feedback);
                         }
                     }
                 }
+                // Import ExtraData
+                if (Files.exists(inCSVPath.resolve("ExtraData.csv").toAbsolutePath())) {
+                    results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("ExtraData.csv").toAbsolutePath().toString() + "')");
+                    while (results.next()) {
+                        ExtraData tempExtraData = new ExtraData();
+                        populateExtraData(tempExtraData, results);
+                        importDialog.importExtraDataRecord(tempExtraData, inAutoResolve, feedback);
+                    }
+                    results.close();
+                }
+                // Write the summary report
                 importDialog.writeImportSummary(feedback);
             }
             catch (Exception ex) {
@@ -570,10 +589,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 int importLocationCreated = 0;
                 int importVisitCreated = 0;
                 int importSightingCreated = 0;
+                int importExtraDataCreated = 0;
                 int importElementUpdated = 0;
                 int importLocationUpdated = 0;
                 int importVisitUpdated = 0;
                 int importSightingUpdated = 0;
+                int importExtraDataUpdated = 0;
                 feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                 feedback.println("---------------------------------------------------");
                 feedback.println("------------- Basic CSV Import Report -------------");
@@ -685,12 +706,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     }
                     // Import Sightings
                     isNew = false;
-                    Sighting sighting = findSighting(resultSet.getLong("OBSERVATION"), false, Sighting.class);
+                    Sighting sighting = findSighting(resultSet.getLong("OBSERVATION"), true, Sighting.class);
                     if (sighting == null) {
                         sighting = new Sighting();
                         isNew = true;
+                        sighting.setID(resultSet.getLong("OBSERVATION"));
                     }
-                    sighting.setID(0); // Indicate a new Sighting ID needs to be created
                     sighting.setElementID(element.getID());
                     sighting.setLocationID(location.getID());
                     sighting.setVisitID(visit.getID());
@@ -749,18 +770,55 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     sighting.setTag(resultSet.getString("TAG"));
                     sighting.setDetails(resultSet.getString("DETAILS"));
                     if (isNew) {
-                        createSighting(sighting, false);
+                        sighting.setCachedLocationName(location.getName());
+                        sighting.setCachedElementName(element.getPrimaryName());
+                        setupAuditInfo(sighting);
+                        createSighting(sighting, true);
                         importSightingCreated++;
-                        feedback.println("Created Observation: " + sighting.getDisplayName() + " [" + sighting.getID() + "]");
+                        feedback.println("Created Observation: " + sighting.getDisplayName());
                     }
                     else {
-                        createSighting(sighting, false);
+                        updateSighting(sighting, false);
                         importSightingUpdated++;
-                        feedback.println("Updated Observation: " + sighting.getDisplayName() + " [" + sighting.getID() + "]");
+                        feedback.println("Updated Observation: " + sighting.getDisplayName());
+                    }
+                    // Import ExtraData
+                    String extraDataString = resultSet.getString("EXTRADATA");
+                    if (extraDataString != null && !extraDataString.isEmpty()) {
+                        List<ExtraData> lstExtraDatas = listExtraDatas(WildLogExtraDataFieldTypes.USER, sighting.getID(), ExtraData.class);
+                        String[] extraDatas = extraDataString.trim().split(",");
+                        for (String importExtraData : extraDatas) {
+                            String key = importExtraData.substring(0, importExtraData.indexOf(':'));
+                            String value = importExtraData.substring(importExtraData.indexOf(':') + 1);
+                            ExtraData extraData = null;
+                            for (ExtraData dbExtraData : lstExtraDatas) {
+                                if (dbExtraData.getDataKey().equalsIgnoreCase(key)) {
+                                    extraData = dbExtraData;
+                                    break;
+                                }
+                            }
+                            if (extraData == null) {
+                                extraData = new ExtraData();
+                                extraData.setFieldType(WildLogExtraDataFieldTypes.USER);
+                                extraData.setLinkType(WildLogDataType.SIGHTING);
+                                extraData.setLinkID(sighting.getID());
+                                extraData.setDataKey(key);
+                                extraData.setDataValue(value);
+                                createExtraData(extraData, false);
+                                importExtraDataCreated++;
+                                feedback.println("Created ExtraData: " + extraData.getDataKey() + ":" + extraData.getDataValue() + " [" + extraData.getLinkID() + "]");
+                            }
+                            else {
+                                extraData.setDataValue(value);
+                                updateExtraData(extraData, false);
+                                importExtraDataUpdated++;
+                                feedback.println("Updated ExtraData: " + extraData.getDataKey() + ":" + extraData.getDataValue() + " [" + extraData.getLinkID() + "]");
+                            }
+                        }
                     }
                 }
-                int importCreates = importElementCreated + importLocationCreated + importVisitCreated + importSightingCreated;
-                int importUpdates = importElementUpdated + importLocationUpdated + importVisitUpdated + importSightingUpdated;
+                int importCreates = importElementCreated + importLocationCreated + importVisitCreated + importSightingCreated + importExtraDataCreated;
+                int importUpdates = importElementUpdated + importLocationUpdated + importVisitUpdated + importSightingUpdated + importExtraDataUpdated;
                 WildLogApp.LOGGER.log(Level.INFO, "Created {} and updated {} records successfully using the Basic CSV Import.", importCreates, importUpdates);
                 feedback.println("");
                 feedback.println("-------------- SUMMARY --------------");
@@ -775,6 +833,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 feedback.println("Creatures updated        : " + importElementUpdated);
                 feedback.println("Observations created     : " + importSightingCreated);
                 feedback.println("Observations updated     : " + importSightingUpdated);
+                feedback.println("ExtraData created        : " + importExtraDataCreated);
+                feedback.println("ExtraData updated        : " + importExtraDataUpdated);
             }
             catch (Exception ex) {
                 if (feedback != null) {

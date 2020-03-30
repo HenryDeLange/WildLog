@@ -7,6 +7,7 @@ import wildlog.data.enums.system.WildLogFileType;
 
 
 public class WildLogFileCore extends DataObjectWithAudit {
+    public static final String WILDLOG_FOLDER_PREFIX = "Files";
     protected long id;
     protected long linkID; // The ID of the linked data object (Element, Location, etc.)
     protected WildLogDataType linkType;
