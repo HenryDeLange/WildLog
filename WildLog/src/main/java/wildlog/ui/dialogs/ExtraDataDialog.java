@@ -23,7 +23,6 @@ public class ExtraDataDialog extends JDialog {
     private final DataObjectWithAudit linkObject;
     private final WildLogDataType linkType;
 
-// TODO: Add to import/export
     
     public ExtraDataDialog(JDialog inParent, DataObjectWithAudit inLinkObject, WildLogDataType inLinkType) {
         super(inParent);

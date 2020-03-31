@@ -2009,7 +2009,13 @@ public final class UtilsTableGenerator {
                 JComboBox comboBox = new JComboBox();
                 comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 comboBox.setFont(comboBox.getFont().deriveFont(Font.BOLD, comboBox.getFont().getSize()*1.2f));
-                comboBox.setEditable(true);
+                if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                    comboBox.setEditable(false);
+                }
+                else {
+                    comboBox.setEditable(true);
+                }
                 if (lstDataKeys != null && !lstDataKeys.isEmpty()) {
                     comboBox.setModel(new DefaultComboBoxModel(lstDataKeys.toArray()));
                 }
