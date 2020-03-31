@@ -3764,49 +3764,54 @@ public final class WildLogView extends JFrame {
                                                             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                                                         }
                                                     });
-                                                    UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                                                        private boolean hasError = false;
-
+                                                    SwingUtilities.invokeLater(new Runnable() {
                                                         @Override
-                                                        protected Object doInBackground() throws Exception {
-                                                            boolean skipSizeComparison = false;
-                                                            if (modeResult == 1) {
-                                                                skipSizeComparison = true;
-                                                            }
-                                                            hasError = UtilsEchoBackup.doEchoBackup(
-                                                                    app, this, fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize(), skipSizeComparison);
-                                                            return null;
-                                                        }
+                                                        public void run() {
+                                                            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                                                                private boolean hasError = false;
 
-                                                        @Override
-                                                        protected void finished() {
-                                                            super.finished();
-                                                            if (!hasError) {
-                                                                // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
-                                                                // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
-                                                                SwingUtilities.invokeLater(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                                                        WLOptionPane.showMessageDialog(app.getMainFrame(), 
-                                                                                "The Echo Backup Workspace process has completed. Please restart the application.", 
-                                                                                "Completed Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
-                                                                        app.quit(null);
+                                                                @Override
+                                                                protected Object doInBackground() throws Exception {
+                                                                    boolean skipSizeComparison = false;
+                                                                    if (modeResult == 1) {
+                                                                        skipSizeComparison = true;
                                                                     }
-                                                                });
-                                                            }
-                                                            else {
-                                                                SwingUtilities.invokeLater(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                                                        WLOptionPane.showMessageDialog(app.getMainFrame(), 
-                                                                                "The Echo Backup Workspace process did NOT complete successfully.", 
-                                                                                "ERROR - Echo Backup Workspace", WLOptionPane.ERROR_MESSAGE);
-                                                                        app.quit(null);
+                                                                    hasError = UtilsEchoBackup.doEchoBackup(
+                                                                            app, this, fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize(), skipSizeComparison);
+                                                                    return null;
+                                                                }
+
+                                                                @Override
+                                                                protected void finished() {
+                                                                    super.finished();
+                                                                    if (!hasError) {
+                                                                        // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                                                                        // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                                                                        SwingUtilities.invokeLater(new Runnable() {
+                                                                            @Override
+                                                                            public void run() {
+                                                                                // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                                                                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                                                                        "The Echo Backup Workspace process has completed. Please restart the application.",
+                                                                                        "Completed Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
+                                                                                app.quit(null);
+                                                                            }
+                                                                        });
                                                                     }
-                                                                });
-                                                            }
+                                                                    else {
+                                                                        SwingUtilities.invokeLater(new Runnable() {
+                                                                            @Override
+                                                                            public void run() {
+                                                                                // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                                                                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                                                                        "The Echo Backup Workspace process did NOT complete successfully.",
+                                                                                        "ERROR - Echo Backup Workspace", WLOptionPane.ERROR_MESSAGE);
+                                                                                app.quit(null);
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+                                                            });
                                                         }
                                                     });
                                                 }
