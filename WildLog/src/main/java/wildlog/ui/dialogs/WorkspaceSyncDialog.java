@@ -123,6 +123,12 @@ public class WorkspaceSyncDialog extends JDialog {
         UtilsUI.attachClipboardPopup(txaSyncToken, false, true);
         // Default to the free token's configuration
         configureFreeToken();
+        // User management
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            btnDelete.setEnabled(false);
+            btnDelete.setVisible(false);
+        }
     }
     
     private void configureFreeToken() {
@@ -231,6 +237,7 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch = new javax.swing.JRadioButton();
         rdbModeSingle = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sync with Cloud Workspace");
@@ -427,7 +434,7 @@ public class WorkspaceSyncDialog extends JDialog {
                                 .addComponent(rdbSyncJpegOnly)
                                 .addGap(5, 5, 5)
                                 .addComponent(rdbSyncNoFiles)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(138, Short.MAX_VALUE))))
         );
         pnlSyncOptionsLayout.setVerticalGroup(
             pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -459,6 +466,17 @@ public class WorkspaceSyncDialog extends JDialog {
                 .addGap(5, 5, 5))
         );
 
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnDelete.setText("<html>Delete from the Cloud</html>");
+        btnDelete.setToolTipText("Delete all data and files associaed with this Workspace from the Cloud.");
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -472,19 +490,24 @@ public class WorkspaceSyncDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlSyncToken, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(10, 10, 10)))
-                .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pnlSyncOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(130, 130, 130))
+                .addComponent(pnlSyncOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(10, 10, 10)
@@ -500,27 +523,7 @@ public class WorkspaceSyncDialog extends JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[SyncWorkspace]");
         // Get the sync keys from the token
-        String syncToken;
-        if (txaSyncToken.getText() == null || txaSyncToken.getText().isEmpty()) {
-            final char[] buffer = new char[450];
-            final StringBuilder builder = new StringBuilder(450);
-            try (Reader in = new BufferedReader(new InputStreamReader(WildLogApp.class.getResourceAsStream("sync/FreeSyncToken"), "UTF-8"))) {
-                int length = 0;
-                while (length >= 0) {
-                    length = in.read(buffer, 0, buffer.length);
-                    if (length > 0) {
-                        builder.append(buffer, 0, length);
-                    }
-                }
-            }
-            catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            }
-            syncToken = TokenEncryptor.decrypt(builder.toString());
-        }
-        else {
-            syncToken = TokenEncryptor.decrypt(txaSyncToken.getText());
-        }
+        String syncToken = getSyncToken();
         // Validate the token
         if (syncToken == null || syncToken.isEmpty() || syncToken.split(" ").length != 4) {
             WLOptionPane.showMessageDialog(this,
@@ -814,6 +817,155 @@ public class WorkspaceSyncDialog extends JDialog {
             }
         }
     }//GEN-LAST:event_btnConfirmSyncTokenActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int result = WLOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete all the data and files associated with this Workspace from the Cloud?",
+                "Delete Cloud Workspace?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (result == JOptionPane.YES_OPTION) {
+            WildLogApp.LOGGER.log(Level.INFO, "[DeleteSyncedWorkspace]");
+            String syncToken = getSyncToken();
+            // Validate the token
+            if (syncToken == null || syncToken.isEmpty() || syncToken.split(" ").length != 4) {
+                WLOptionPane.showMessageDialog(this,
+                        "<html>The provided <i>WildLog Cloud Sync Token</i> could not be read. "
+                        + "<br>Please provide a valid <i>WildLog Cloud Sync Token</i>, or contact <u>support@mywild.co.za</> for help.</html>",
+                        "Invalid Sync Token!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            // Parse the token to get the necessary values
+            String[] syncTokenValues = syncToken.split(" ");
+            WildLogApp.LOGGER.log(Level.INFO, "Sync Mode: {}", syncTokenValues[0]);
+            WildLogApp.LOGGER.log(Level.INFO, "Sync Account: {}", syncTokenValues[1]);
+            final SyncAzure syncAzure = new SyncAzure(syncTokenValues[3], syncTokenValues[1], syncTokenValues[2],
+                    WildLogApp.getApplication().getWildLogOptions().getWorkspaceID(), WildLogApp.getApplication().getWildLogOptions().getDatabaseVersion());
+            // Close this popup
+            setVisible(false);
+            dispose();
+            // Start the sync process
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // Close all tabs and go to the home tab
+                    WildLogApp.getApplication().getMainFrame().getTabbedPane().setSelectedIndex(0);
+                    while (WildLogApp.getApplication().getMainFrame().getTabbedPane().getTabCount() > WildLogView.STATIC_TAB_COUNT) {
+                        WildLogApp.getApplication().getMainFrame().getTabbedPane().remove(WildLogView.STATIC_TAB_COUNT);
+                    }
+                    // Lock the input/display and show busy message
+                    // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+                    WildLogApp.getApplication().getMainFrame().getTabbedPane().setSelectedIndex(0);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            JPanel panel = new JPanel(new AbsoluteLayout());
+                            panel.setPreferredSize(new Dimension(400, 50));
+                            panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                            JLabel label = new JLabel("<html>Busy deleting the Cloud Workspace. Please be patient, this might take a while. <br/>"
+                                    + "Don't close the application until the process is finished.</html>");
+                            label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                            label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                            panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                            JPanel glassPane = (JPanel) WildLogApp.getApplication().getMainFrame().getGlassPane();
+                            glassPane.removeAll();
+                            glassPane.setLayout(new BorderLayout(100, 100));
+                            glassPane.add(panel, BorderLayout.CENTER);
+                            glassPane.addMouseListener(new MouseAdapter() {});
+                            glassPane.addKeyListener(new KeyAdapter() {});
+                            WildLogApp.getApplication().getMainFrame().setGlassPane(glassPane);
+                            WildLogApp.getApplication().getMainFrame().getGlassPane().setVisible(true);
+                            WildLogApp.getApplication().getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        }
+                    });
+                    UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            long startTime = System.currentTimeMillis();
+                            setProgress(0);
+                            setMessage("Start deleting the Cloud Workspace");
+                            // Delete the data
+                            setProgress(1);
+                            setMessage("Busy deleting the Cloud Workspace - Delete Log Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.DELETE_LOG);
+                            setProgress(5);
+                            setMessage("Busy deleting the Cloud Workspace - Option Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.WILDLOG_OPTIONS);
+                            setProgress(10);
+                            setMessage("Busy deleting the Cloud Workspace - Creature Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.ELEMENT);
+                            setProgress(15);
+                            setMessage("Busy deleting the Cloud Workspace - Place Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.LOCATION);
+                            setProgress(20);
+                            setMessage("Busy deleting the Cloud Workspace - Period Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.VISIT);
+                            setProgress(25);
+                            setMessage("Busy deleting the Cloud Workspace - Observation Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.SIGHTING);
+                            setProgress(30);
+                            setMessage("Busy deleting the Cloud Workspace - User Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.WILDLOG_USER);
+                            setProgress(35);
+                            setMessage("Busy deleting the Cloud Workspace - Extra Data Records ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.EXTRA);
+                            setProgress(40);
+                            // Delete the files
+                            setMessage("Busy deleting the Cloud Workspace - Creature Files ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteFiles(WildLogDataType.ELEMENT);
+                            setProgress(50);
+                            setMessage("Busy deleting the Cloud Workspace - Place Files ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteFiles(WildLogDataType.LOCATION);
+                            setProgress(60);
+                            setMessage("Busy deleting the Cloud Workspace - Period Files ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteFiles(WildLogDataType.VISIT);
+                            setProgress(70);
+                            setMessage("Busy deleting the Cloud Workspace - Observation Files ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteFiles(WildLogDataType.SIGHTING);
+                            setProgress(80);
+                            setMessage("Busy deleting the Cloud Workspace - Stashed Files ... " + getProgress() + "%");
+                            syncAzure.workspaceDeleteData(WildLogDataType.STASH);
+                            // Finish
+                            setProgress(100);
+                            setMessage("Done deleting the Cloud Workspace");
+                            long duration = System.currentTimeMillis() - startTime;
+                            int hours = (int) (((double) duration)/(1000.0*60.0*60.0));
+                            int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
+                            int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
+                            WildLogApp.LOGGER.log(Level.INFO, "Delete Cloud Workspace Duration: {} hours, {} minutes, {} seconds", hours, minutes, seconds);
+                            return null;
+                        }
+                    });
+                }
+            });
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private String getSyncToken() {
+        // Get the sync keys from the token
+        String syncToken;
+        if (txaSyncToken.getText() == null || txaSyncToken.getText().isEmpty()) {
+            final char[] buffer = new char[450];
+            final StringBuilder builder = new StringBuilder(450);
+            try (Reader in = new BufferedReader(new InputStreamReader(WildLogApp.class.getResourceAsStream("sync/FreeSyncToken"), "UTF-8"))) {
+                int length = 0;
+                while (length >= 0) {
+                    length = in.read(buffer, 0, buffer.length);
+                    if (length > 0) {
+                        builder.append(buffer, 0, length);
+                    }
+                }
+            }
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            syncToken = TokenEncryptor.decrypt(builder.toString());
+        }
+        else {
+            syncToken = TokenEncryptor.decrypt(txaSyncToken.getText());
+        }
+        return syncToken;
+    }
 
     private void logIfFailed(PrintWriter inFeedback, SyncAction inSyncAction, boolean inResult) {
         if (inResult) {
@@ -1921,6 +2073,7 @@ public class WorkspaceSyncDialog extends JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnConfirmSyncToken;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;

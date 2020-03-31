@@ -36,6 +36,7 @@ public class BlobTest extends JFrame {
         btnSyncListBlobsBatch = new javax.swing.JButton();
         btnSyncListParentsBatch = new javax.swing.JButton();
         btnSyncListChildrenBatch = new javax.swing.JButton();
+        btnDeleteWorkspace = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Azure Sync Tester");
@@ -98,6 +99,15 @@ public class BlobTest extends JFrame {
             }
         });
 
+        btnDeleteWorkspace.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteWorkspace.setText("Delete Workspace");
+        btnDeleteWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteWorkspaceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -112,12 +122,13 @@ public class BlobTest extends JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                                .addGap(25, 25, 25)
-                                .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE))
+                                .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                                .addGap(20, 20, 20)
+                                .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
                             .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
@@ -131,6 +142,8 @@ public class BlobTest extends JFrame {
                     .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                 .addGap(40, 40, 40)
                 .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
@@ -186,6 +199,11 @@ public class BlobTest extends JFrame {
         }
     }//GEN-LAST:event_btnSyncListChildrenBatchActionPerformed
 
+    private void btnDeleteWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteWorkspaceActionPerformed
+        syncAzure.workspaceDeleteFiles(WildLogDataType.ELEMENT);
+        System.out.println("DELETED WORKSPACE");
+    }//GEN-LAST:event_btnDeleteWorkspaceActionPerformed
+
     public static void main(String args[]) {
         // Setup the application
         try {
@@ -213,6 +231,7 @@ public class BlobTest extends JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeleteWorkspace;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnSyncListBlobsBatch;
     private javax.swing.JButton btnSyncListChildrenBatch;

@@ -43,12 +43,12 @@
             <artifactId>azure-storage-blob</artifactId>
             <version>12.5.0</version>
         </dependency>
-        <!--<dependency>
-            https://github.com/Azure/azure-sdk-for-java/blob/master/sdk/storage/azure-storage-blob-batch/README.md
+        <dependency>
+            <!--https://github.com/Azure/azure-sdk-for-java/blob/master/sdk/storage/azure-storage-blob-batch/README.md-->
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob-batch</artifactId>
             <version>12.4.0</version>
-        </dependency>-->
+        </dependency>
     </dependencies>
     
 </project>

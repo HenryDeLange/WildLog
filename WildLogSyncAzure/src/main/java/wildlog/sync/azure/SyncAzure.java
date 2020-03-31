@@ -3,10 +3,15 @@ package wildlog.sync.azure;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.batch.BlobBatchClient;
+import com.azure.storage.blob.batch.BlobBatchClientBuilder;
 import com.azure.storage.blob.models.BlobErrorCode;
 import com.azure.storage.blob.models.BlobItem;
 import com.azure.storage.blob.models.BlobProperties;
 import com.azure.storage.blob.models.BlobStorageException;
+import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.models.ListBlobsOptions;
 import com.azure.storage.common.StorageSharedKeyCredential;
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -52,8 +57,6 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
 public final class SyncAzure {
     private static final int BATCH_LIMIT = 50;
     private static final int URL_LIMIT = 15000; // Ek dog dis "32684 characters", maar ek kry steeds errors, so ek kies maar iets randomly kleiner
-    private static final int MAX_BLOB_SIZE = 1*1024*1024; // bytes (1MB)
-    private static final int MAX_BLOB_UPLOAD_SIZE = 5*1024*1024; // bytes (5MB)
     private String storageConnectionString;
     private String accountName;
     private String accountKey;
@@ -351,6 +354,10 @@ public final class SyncAzure {
         return lstSyncTableEntries;
     }
     
+    public boolean workspaceDeleteData(WildLogDataType inDataType) {
+        return deleteDataBatch(inDataType, null);
+    }
+    
     // SYNC LIST - DATA
     
     public List<SyncTableEntry> getSyncListDataBatch(WildLogDataType inDataType, long inAfterTimestamp) {
@@ -393,7 +400,7 @@ public final class SyncAzure {
     
     // FILES
     
-    private BlobContainerClient getContainerURL(WildLogDataType inDataType) 
+    private BlobContainerClient getBlobContainer(WildLogDataType inDataType) 
             throws InvalidKeyException, MalformedURLException {
         BlobContainerClient blobContainerClient = mapBlobContainers.get(inDataType);
         if (blobContainerClient == null) {
@@ -423,7 +430,7 @@ public final class SyncAzure {
     public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID, 
             String inDate, String inLatitude, String inLongitude) {
         try {
-            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
+            BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
             BlobClient blobClient = blobContainerClient.getBlobClient(calculateFullBlobID(inParentID, inRecordID, inFilePath));
             // Set the EXIF values on the blob
             Map<String, String> metadata = new HashMap<>();
@@ -455,7 +462,7 @@ public final class SyncAzure {
         SyncBlobMetadata syncBlobMetadata = new SyncBlobMetadata();
         String blobID = calculateFullBlobID(inParentID, inRecordID, inFilePath);
         try {
-            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
+            BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
             BlobClient blobClient = blobContainerClient.getBlobClient(calculateFullBlobID(inParentID, inRecordID, inFilePath));
             // Download the file
             if (!Files.exists(inFilePath)) {
@@ -493,7 +500,7 @@ public final class SyncAzure {
     
     public boolean deleteFile(WildLogDataType inDataType, String inFullBlobName) {
         try {
-            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
+            BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
             BlobClient blobClient = blobContainerClient.getBlobClient(inFullBlobName);
             blobClient.delete();
             return true;
@@ -504,12 +511,39 @@ public final class SyncAzure {
         return false;
     }
     
+    public boolean workspaceDeleteFiles(WildLogDataType inDataType) {
+        try {
+            // Setup the service client (note: not the container client)
+            StorageSharedKeyCredential credential = new StorageSharedKeyCredential(accountName, accountKey);
+            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+                    .endpoint("https://" + accountName + ".blob.core.windows.net")
+                    .credential(credential)
+                    .buildClient();
+            BlobBatchClient blobBatchClient = new BlobBatchClientBuilder(blobServiceClient).buildClient();
+            List<SyncBlobEntry> lstBlobs = getSyncListFilesBatch(inDataType);
+            List<String> lstBlobURLs = new ArrayList<>(lstBlobs.size());
+            for (SyncBlobEntry syncBlobEntry : lstBlobs) {
+                lstBlobURLs.add(blobServiceClient.getBlobContainerClient(inDataType.getDescription().toLowerCase()).getBlobContainerUrl()
+                        + "/" + syncBlobEntry.getFullBlobID());
+            }
+            blobBatchClient.deleteBlobs(lstBlobURLs, DeleteSnapshotsOptionType.INCLUDE);
+            return true;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        return false;
+    }
+    
     // SYNC LIST - FILES
     
+    /**
+     * Lists all the blobs in associated with the workspace
+     */
     public List<SyncBlobEntry> getSyncListFilesBatch(WildLogDataType inDataType) {
         List<SyncBlobEntry> lstSyncBlobEntries = new ArrayList<>();
         try {
-            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
+            BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
             ListBlobsOptions options = new ListBlobsOptions();
             options.setPrefix(Long.toString(workspaceID));
             for (BlobItem blobItem : blobContainerClient.listBlobs(options, null)) {
@@ -536,6 +570,9 @@ public final class SyncAzure {
         return lstSyncBlobEntries;
     }
     
+    /**
+     * Lists all the parents (Elements, Locations, etc.) that have blobs, without needing to list all the blobs underneath each parent.
+     */
     public List<SyncBlobEntry> getSyncListFileParentsBatch(WildLogDataType inDataType) {
         ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
         try {
@@ -564,6 +601,9 @@ public final class SyncAzure {
         return lstParents;
     }
     
+    /**
+     * Lists all the blobs under the specified parent (Element, Location, etc.), without listing the blobs from other parents.
+     */
     public List<SyncBlobEntry> getSyncListFileChildrenBatch(WildLogDataType inDataType, long inParentID) {
         ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
         try {
