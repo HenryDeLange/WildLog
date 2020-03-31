@@ -57,49 +57,52 @@ public class UtilsImageProcessing {
     }
     
     public static ImageProperties getImageProperties(Path inAbsolutePathToScale, Metadata inMetadata) {
-        ImageProperties properties = new ImageProperties();
-        // Load the image
-        properties.image = Toolkit.getDefaultToolkit().createImage(inAbsolutePathToScale.toAbsolutePath().normalize().toString());
-        // Get the image size
-        ImageReader imageReader = null;
-        FileImageInputStream inputStream = null;
-        try {
-            inputStream = new FileImageInputStream(inAbsolutePathToScale.toFile());
-            Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
-            imageReader = imageReaderList.next();
-            imageReader.setInput(inputStream);
-            properties.imageWidth = imageReader.getWidth(imageReader.getMinIndex());
-            properties.imageHeight = imageReader.getHeight(imageReader.getMinIndex());
-        }
-        catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-        }
-        finally {
-            if (imageReader != null) {
-                imageReader.dispose();
+        if (Files.exists(inAbsolutePathToScale)) {
+            ImageProperties properties = new ImageProperties();
+            // Load the image
+            properties.image = Toolkit.getDefaultToolkit().createImage(inAbsolutePathToScale.toAbsolutePath().normalize().toString());
+            // Get the image size
+            ImageReader imageReader = null;
+            FileImageInputStream inputStream = null;
+            try {
+                inputStream = new FileImageInputStream(inAbsolutePathToScale.toFile());
+                Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
+                imageReader = imageReaderList.next();
+                imageReader.setInput(inputStream);
+                properties.imageWidth = imageReader.getWidth(imageReader.getMinIndex());
+                properties.imageHeight = imageReader.getHeight(imageReader.getMinIndex());
             }
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            finally {
+                if (imageReader != null) {
+                    imageReader.dispose();
                 }
-                catch (IOException ex) {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            }
+            // Get metadata
+            if (inMetadata != null) {
+                properties.metadata = inMetadata;
+            }
+            else {
+                try {
+                    properties.metadata = ImageMetadataReader.readMetadata(inAbsolutePathToScale.toFile());
+                }
+                catch (IOException | ImageProcessingException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
             }
+            return properties;
         }
-        // Get metadata
-        if (inMetadata != null) {
-            properties.metadata = inMetadata;
-        }
-        else {
-            try {
-                properties.metadata = ImageMetadataReader.readMetadata(inAbsolutePathToScale.toFile());
-            }
-            catch (IOException | ImageProcessingException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            }
-        }
-        return properties;
+        return null;
     }
 
     public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate) {
@@ -115,6 +118,17 @@ public class UtilsImageProcessing {
     public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate, ImageProperties inImageProperties) {
         if (inImageProperties == null) {
             inImageProperties = getImageProperties(inAbsolutePathToScale, null);
+        }
+        if (inImageProperties == null) {
+            // If we still couldn't load the image properties, then return a broken image icon instead
+            WildLogThumbnailSizes thumbnailSize = WildLogThumbnailSizes.S0300_NORMAL;
+            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                if (inSize == size.getSize()) {
+                    thumbnailSize = size;
+                    break;
+                }
+            }
+            return getScaledIconForBrokenFiles(thumbnailSize);
         }
         try {
             // Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou,
@@ -245,6 +259,7 @@ public class UtilsImageProcessing {
 
     private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
         
+        
 // FIXME: Hierdie werk nie vir sync downloaded files nie???
 //java.lang.IllegalArgumentException: Width (0) and height (260) must be non-zero
 //	at java.awt.image.ReplicateScaleFilter.<init>(ReplicateScaleFilter.java:102) ~[?:?]
@@ -256,6 +271,7 @@ public class UtilsImageProcessing {
 //	at wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper.getIcon(BulkUploadImageFileWrapper.java:38) ~[classes/:?]
 //	at wildlog.ui.panels.bulkupload.ImageBox.populateUI(ImageBox.java:56) ~[classes/:?]
 //	at wildlog.ui.panels.bulkupload.ImageBox.<init>(ImageBox.java:51) ~[classes/:?]
+
 
         return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_SMOOTH);
     }
