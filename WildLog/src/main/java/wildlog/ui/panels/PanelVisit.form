@@ -81,7 +81,7 @@
                       <Component id="pnlFiles" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="pnlSelectedFiles" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -750,7 +750,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
-                                              <Component id="txtName" pref="309" max="32767" attributes="0"/>
+                                              <Component id="txtName" pref="307" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel52" min="-2" max="-2" attributes="0"/>
@@ -992,7 +992,7 @@
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="lblNumberOfSightings" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" pref="575" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="573" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>

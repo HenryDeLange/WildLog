@@ -188,8 +188,8 @@ public class WorkspacePickerDialog extends JDialog {
         btnRemove.setBackground(new java.awt.Color(59, 91, 59));
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
-        btnRemove.setText("Remove Workspace");
-        btnRemove.setToolTipText("Remove the selected Workspace from the list.");
+        btnRemove.setText("Forget Workspace");
+        btnRemove.setToolTipText("Remove the selected Workspace from the list. (Does not delete the Workspace, just removes it from the picker.)");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnRemove.addActionListener(new java.awt.event.ActionListener() {

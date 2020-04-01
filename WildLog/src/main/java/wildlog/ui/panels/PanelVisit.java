@@ -971,7 +971,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addGap(71, 71, 71)
-                                        .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
+                                        .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE))
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addComponent(jLabel52)
                                         .addGap(311, 311, 311)))
@@ -1114,7 +1114,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
             .addComponent(jSeparator5)
         );
@@ -1287,7 +1287,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlFiles, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnlSelectedFiles, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5))
+                .addGap(7, 7, 7))
         );
         visitIncludesLayout.setVerticalGroup(
             visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
