@@ -515,7 +515,7 @@ public class UtilsCheckAndClean {
                 int fileProcessCounter = 0;
                 for (WildLogFile wildLogFile : allFiles) {
                     try {
-                        LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
+                        LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFile(wildLogFile.getAbsolutePath()));
                         long actualFileSize = Files.size(wildLogFile.getAbsolutePath());
                         if (actualFileDate != null) {
                             if (wildLogFile.getFileDate() == null || !actualFileDate.isEqual(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()))) {

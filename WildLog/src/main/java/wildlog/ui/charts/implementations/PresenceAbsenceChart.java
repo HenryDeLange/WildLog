@@ -66,7 +66,7 @@ public class PresenceAbsenceChart extends AbstractChart<Sighting> {
         chkUseTotals.setCursor(Cursor.HAND);
         chkUseTotals.setSelected(false);
         lstCustomButtons.add(chkUseTotals);
-        lstCustomButtons.add(new Label("Interval size:"));
+        lstCustomButtons.add(new Label("Interval size"));
         cmbInterval = new ComboBox<>(FXCollections.observableArrayList(options));
         cmbInterval.setCursor(Cursor.HAND);
         cmbInterval.setVisibleRowCount(7);

@@ -56,6 +56,7 @@ import wildlog.ui.charts.implementations.DayAndNightChart;
 import wildlog.ui.charts.implementations.DurationChart;
 import wildlog.ui.charts.implementations.ElementsChart;
 import wildlog.ui.charts.implementations.EventTimelineChart;
+import wildlog.ui.charts.implementations.FileChart;
 import wildlog.ui.charts.implementations.LocationChart;
 import wildlog.ui.charts.implementations.MoonphaseChart;
 import wildlog.ui.charts.implementations.PresenceAbsenceChart;
@@ -174,6 +175,9 @@ public class ChartsBaseDialog extends JFrame {
             reports.add(new AbundanceRichnessChart(lstFilteredData, lblReportDescription, this));
             reports.add(new PresenceAbsenceChart(lstFilteredData, lblReportDescription, this));
             reports.add(new TextReports(lstFilteredData, lblReportDescription, this));
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+            reports.add(new FileChart(lstFilteredData, lblReportDescription, this));
         }
         // Add the reports
         for (final AbstractChart<Sighting> report : reports) {

@@ -846,7 +846,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             }
                             // Delete old DB file enrty and save new one
                             app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                            newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
+                            newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFile(newWildLogFile.getAbsolutePath()));
                             newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
                             app.getDBI().createWildLogFile(newWildLogFile, false);
                             // Cleanup

@@ -42,7 +42,7 @@ public class DurationChart extends AbstractChart<Sighting> {
     
     public DurationChart(List<Sighting> inLstData, JLabel inChartDescLabel, ChartsBaseDialog inReportsBaseDialog) {
         super("Duration Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(4);
+        lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Duration for All Observations");
         btnLineChart.setToggleGroup(BUTTON_GROUP);
@@ -67,8 +67,10 @@ public class DurationChart extends AbstractChart<Sighting> {
             }
         });
         lstCustomButtons.add(btnStackedLineChart);
+        // Chart options
+        lstCustomButtons.add(new Label("Chart Options:"));
         // Time interval size
-        lstCustomButtons.add(new Label("Duration interval size:"));
+        lstCustomButtons.add(new Label("Duration interval size"));
         cmbIntervalSize = new ComboBox<>(FXCollections.observableArrayList(options));
         cmbIntervalSize.setCursor(Cursor.HAND);
         cmbIntervalSize.setVisibleRowCount(10);

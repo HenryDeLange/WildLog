@@ -304,7 +304,7 @@ public final class UtilsFileProcessing {
                 WildLogPaths.getFullWorkspacePrefix().relativize(toFile).toString(),
                 inFileType,
                 Calendar.getInstance().getTime(),
-                UtilsImageProcessing.getDateFromFileDate(inFromFile),
+                UtilsImageProcessing.getDateFromFile(inFromFile),
                 fileSize);
         inApp.getDBI().createWildLogFile(wildLogFile, false);
         return wildLogFile;

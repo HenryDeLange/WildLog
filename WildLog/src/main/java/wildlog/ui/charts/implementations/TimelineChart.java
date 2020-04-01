@@ -43,7 +43,7 @@ public class TimelineChart extends AbstractChart<Sighting> {
     
     public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel, ChartsBaseDialog inReportsBaseDialog) {
         super("Timeline Charts (Time Interval)", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(4);
+        lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations");
         btnLineChart.setToggleGroup(BUTTON_GROUP);
@@ -70,8 +70,10 @@ public class TimelineChart extends AbstractChart<Sighting> {
             }
         });
         lstCustomButtons.add(btnStackedBarChart);
+        // Chart options
+        lstCustomButtons.add(new Label("Chart Options:"));
         // Time interval size
-        lstCustomButtons.add(new Label("Timeline interval size:"));
+        lstCustomButtons.add(new Label("Timeline interval size"));
         cmbIntervalSize = new ComboBox<>(FXCollections.observableArrayList(options));
         cmbIntervalSize.setCursor(Cursor.HAND);
         cmbIntervalSize.setVisibleRowCount(10);
