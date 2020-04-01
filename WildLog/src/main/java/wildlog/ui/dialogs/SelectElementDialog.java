@@ -79,9 +79,6 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         // Position the dialog
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
-        // Pack and set it as the min size
-        pack();
-        setMinimumSize(getSize());
     }
 
     private void setupUI(final long inSelectedElementID) {
@@ -116,7 +113,10 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         // Hide the info panel
         pnlInfo.setVisible(false);
         pack();
-        originalSize = getPreferredSize();
+        originalSize = new Dimension(getPreferredSize().width - pnlInfo.getPreferredSize().width, getPreferredSize().height);
+        setMinimumSize(originalSize);
+        setPreferredSize(originalSize);
+        setSize(originalSize);
         // Refresh the grid
         generateGrid();
     }
@@ -153,7 +153,6 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         setTitle("Select a Creature");
         setBackground(new java.awt.Color(230, 237, 220));
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif")).getImage());
-        setMinimumSize(new java.awt.Dimension(535, 650));
         setModal(true);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -290,7 +289,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                         .addGap(230, 230, 230)
                         .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -387,7 +386,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         pnlWrapperLayout.setHorizontalGroup(
             pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWrapperLayout.createSequentialGroup()
-                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))

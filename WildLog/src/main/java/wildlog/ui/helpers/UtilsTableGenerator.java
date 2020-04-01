@@ -629,7 +629,8 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final long inLocationID, boolean inIncludeStashedVisits) {
+    public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final long inLocationID, 
+            boolean inIncludeStashedVisits, List<VisitType> inLstVisitTypes) {
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
@@ -658,6 +659,21 @@ public final class UtilsTableGenerator {
                             }
                         }
                     }
+                    // Remove visit types not in the specified list
+                    if (inLstVisitTypes != null) {
+                        for (int t = lstVisits.size() - 1; t >= 0; t--) {
+                            boolean found = false;
+                            for (VisitType visitType : inLstVisitTypes) {
+                                if (visitType  == lstVisits.get(t).getType()) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                lstVisits.remove(t);
+                            }
+                        }
+                    }
                     if (!lstVisits.isEmpty()) {
                         Collection<Callable<Object>> listCallables = new ArrayList<>(lstVisits.size());
                         // Setup new table data
@@ -682,6 +698,7 @@ public final class UtilsTableGenerator {
                                             for (ExtraData extraData : lstExtraData) {
                                                 if (ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
                                                     data[finalT][0] = UtilsImageProcessing.getScaledIconForReStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                                                    foundSavedData = true;
                                                     break;
                                                 }
                                             }

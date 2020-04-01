@@ -56,7 +56,7 @@ public class SelectVisitDialog extends JDialog {
         // Attach listeners etc.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
         // Setup the table
-        UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, inLocationID, true);
+        UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, inLocationID, true, lstVisitTypes);
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         SwingUtilities.invokeLater(new Runnable() {
@@ -98,7 +98,7 @@ public class SelectVisitDialog extends JDialog {
         tblVisit = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Select a Place");
+        setTitle("Select a Period");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N

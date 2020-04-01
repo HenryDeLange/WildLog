@@ -983,7 +983,7 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
         mnuChangeWorkspaceName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuChangeWorkspaceName.setText("Rename Active Workspace");
+        mnuChangeWorkspaceName.setText("Rename Workspace");
         mnuChangeWorkspaceName.setToolTipText("Change the name associated with this Workspace.");
         mnuChangeWorkspaceName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuChangeWorkspaceName.setName("mnuChangeWorkspaceName"); // NOI18N

@@ -211,11 +211,11 @@ public class WorkspaceListSyncDialog extends JDialog {
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void btnConfirmSyncTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSyncTokenActionPerformed
-        if (txaSyncToken.getText() != null && !txaSyncToken.getText().isEmpty()) {
+        if (txaSyncToken.getText() != null && !txaSyncToken.getText().trim().isEmpty()) {
             // Parse the token
             String syncToken = null;
             try {
-                syncToken = TokenEncryptor.decrypt(txaSyncToken.getText());
+                syncToken = TokenEncryptor.decrypt(txaSyncToken.getText().trim());
             }
             catch (Exception ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -234,21 +234,31 @@ public class WorkspaceListSyncDialog extends JDialog {
                         "<html>The provide the <i>WildLog ID</i> to use.</html>",
                         "Workspace ID", JOptionPane.QUESTION_MESSAGE,  
                         null, null, 0);
-                if (workspaceIDString == null || workspaceIDString.isEmpty()) {
-                    WLOptionPane.showMessageDialog(this,
-                        "<html>The provided <i>WildLog ID</i> could not be read."
-                                + "<br>Please provide a valid <i>WildLog ID</i>, or contact <u>support@mywild.co.za</> for help.</html>",
-                        "Invalid Workspace ID!", JOptionPane.ERROR_MESSAGE);
+                if (workspaceIDString == null || workspaceIDString.trim().isEmpty()) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            WLOptionPane.showMessageDialog(WorkspaceListSyncDialog.this,
+                                    "<html>The provided <i>WildLog ID</i> could not be read."
+                                            + "<br>Please provide a valid <i>WildLog ID</i>, or contact <u>support@mywild.co.za</> for help.</html>",
+                                    "Invalid Workspace ID!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
                     return;
                 }
                 try {
-                    filterWorkspaceID = Long.parseLong(workspaceIDString);
+                    filterWorkspaceID = Long.parseLong(workspaceIDString.trim());
                 }
                 catch (NumberFormatException ex) {
-                    WLOptionPane.showMessageDialog(this,
-                        "<html>The provided <i>WildLog ID</i> could not be read."
-                                + "<br>Please provide a valid <i>WildLog ID</i>, or contact <u>support@mywild.co.za</> for help.</html>",
-                        "Invalid Workspace ID!", JOptionPane.ERROR_MESSAGE);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            WLOptionPane.showMessageDialog(WorkspaceListSyncDialog.this,
+                                    "<html>The provided <i>WildLog ID</i> could not be read."
+                                            + "<br>Please provide a valid <i>WildLog ID</i>, or contact <u>support@mywild.co.za</> for help.</html>",
+                                    "Invalid Workspace ID!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
                     return;
                 }
             }

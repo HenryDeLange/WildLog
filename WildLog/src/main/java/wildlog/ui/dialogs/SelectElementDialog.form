@@ -10,9 +10,6 @@
     <Property name="iconImage" type="java.awt.Image" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new ImageIcon(WildLogApp.class.getResource(&quot;resources/icons/Element.gif&quot;)).getImage()" type="code"/>
     </Property>
-    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[535, 650]"/>
-    </Property>
     <Property name="modal" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
@@ -69,7 +66,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="pnlMain" max="32767" attributes="0"/>
+                  <Component id="pnlMain" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                   <Component id="pnlInfo" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
@@ -107,7 +104,7 @@
                               <Component id="cmbElementType" min="-2" pref="135" max="-2" attributes="0"/>
                           </Group>
                           <Component id="txtSearch" min="-2" pref="230" max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" min="-2" pref="365" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">

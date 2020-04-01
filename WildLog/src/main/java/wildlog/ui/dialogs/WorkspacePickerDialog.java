@@ -25,6 +25,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.utils.DummyTaskbarFrame;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
 
 
@@ -189,7 +190,7 @@ public class WorkspacePickerDialog extends JDialog {
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemove.setText("Forget Workspace");
-        btnRemove.setToolTipText("Remove the selected Workspace from the list. (Does not delete the Workspace, just removes it from the picker.)");
+        btnRemove.setToolTipText("Remove the selected Workspace from the list. (Does not delete the Workspace, just removes it from the list.)");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
@@ -264,6 +265,10 @@ public class WorkspacePickerDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmWorkspaceActionPerformed
+        if (evt != null && btnCloudSync.isEnabled() && WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            btnCloudSyncActionPerformed(evt);
+            return;
+        }
         if (workspacePath != null) {
             // Write the workspaces in the wildloghome file
             writeWildLogHome();
@@ -303,7 +308,7 @@ public class WorkspacePickerDialog extends JDialog {
         if (workspaceDialog.getWorkspaceID() > 0) {
             workspaceID = workspaceDialog.getWorkspaceID();
             triggerImmediateSync = true;
-            btnConfirmWorkspaceActionPerformed(evt);
+            btnConfirmWorkspaceActionPerformed(null);
         }
     }//GEN-LAST:event_btnCloudSyncActionPerformed
 
@@ -332,8 +337,14 @@ public class WorkspacePickerDialog extends JDialog {
     private void activeWorkspacePathChanged(String inPath) {
         workspacePath = Path.of(inPath).toAbsolutePath().normalize();
         if (Files.notExists(workspacePath)) {
-            btnConfirmWorkspace.setText("CREATE WORKSPACE");
-            btnCloudSync.setEnabled(true);
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                btnConfirmWorkspace.setText("CREATE WORKSPACE");
+                btnCloudSync.setEnabled(true);
+            }
+            else {
+                btnConfirmWorkspace.setText("SYNC NEW WORKSPACE");
+                btnCloudSync.setEnabled(true);
+            }
         }
         else {
             if (Files.exists(workspacePath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
@@ -342,8 +353,14 @@ public class WorkspacePickerDialog extends JDialog {
                 btnCloudSync.setEnabled(false);
             }
             else {
-                btnConfirmWorkspace.setText("CREATE WORKSPACE");
-                btnCloudSync.setEnabled(true);
+                if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                    btnConfirmWorkspace.setText("SYNC WORKSPACE");
+                    btnCloudSync.setEnabled(true);
+                }
+                else {
+                    btnConfirmWorkspace.setText("SYNC NEW WORKSPACE");
+                    btnCloudSync.setEnabled(true);
+                }
             }
         }
     }

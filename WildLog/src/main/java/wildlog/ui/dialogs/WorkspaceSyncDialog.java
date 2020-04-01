@@ -624,6 +624,7 @@ public class WorkspaceSyncDialog extends JDialog {
                             setMessage("Busy with the Cloud Sync - Syncing DeleteLogs ... " + getProgress() + "%");
                             syncDeleteLogs(feedback, syncAzure, this, (int) (8 * adjustForNoFiles));
                             // SYNC - Data
+// FIXME: Met die Remote se eerste download het die options twee keer gesync, selfde workspaceID...
                             setProgress((int) (9 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Options ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_OPTIONS, this, (int) (1 * adjustForNoFiles));
@@ -790,13 +791,13 @@ public class WorkspaceSyncDialog extends JDialog {
     }//GEN-LAST:event_rdbSyncThumbnailsActionPerformed
 
     private void btnConfirmSyncTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSyncTokenActionPerformed
-        if (txaSyncToken.getText() == null || txaSyncToken.getText().isEmpty()) {
+        if (txaSyncToken.getText() == null || txaSyncToken.getText().trim().isEmpty()) {
             configureFreeToken();
         }
         else {
             String syncToken = null;
             try {
-                syncToken = TokenEncryptor.decrypt(txaSyncToken.getText());
+                syncToken = TokenEncryptor.decrypt(txaSyncToken.getText().trim());
             }
             catch (Exception ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -944,7 +945,7 @@ public class WorkspaceSyncDialog extends JDialog {
     private String getSyncToken() {
         // Get the sync keys from the token
         String syncToken;
-        if (txaSyncToken.getText() == null || txaSyncToken.getText().isEmpty()) {
+        if (txaSyncToken.getText() == null || txaSyncToken.getText().trim().isEmpty()) {
             final char[] buffer = new char[450];
             final StringBuilder builder = new StringBuilder(450);
             try (Reader in = new BufferedReader(new InputStreamReader(WildLogApp.class.getResourceAsStream("sync/FreeSyncToken"), "UTF-8"))) {
@@ -962,7 +963,7 @@ public class WorkspaceSyncDialog extends JDialog {
             syncToken = TokenEncryptor.decrypt(builder.toString());
         }
         else {
-            syncToken = TokenEncryptor.decrypt(txaSyncToken.getText());
+            syncToken = TokenEncryptor.decrypt(txaSyncToken.getText().trim());
         }
         return syncToken;
     }
@@ -1795,6 +1796,7 @@ public class WorkspaceSyncDialog extends JDialog {
                         // Only movies or images can be stashed
                         continue;
                     }
+// FIME: Hier moet die oorspronklikke naam gebruik word, andersins werk die restashed extra data nie want die file naam is anders...
                     wrapperWildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(sourcePath).toString());
                     lstSyncActions.add(new SyncAction("CLOUD_UPLOAD", WildLogDataType.STASH, wrapperWildLogFile.getID(), 
                             Long.toString(workspaceVisit.getID()), wrapperWildLogFile));
@@ -1914,8 +1916,8 @@ public class WorkspaceSyncDialog extends JDialog {
                                         }
                                         catch (IOException | LLJTranException ex) {
                                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                            logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, fileBlobEntry.getRecordID(), 
-                                                    "Unable to set the file metadata [" + visit.getID() + "]", null), false);
+                                            logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, visit.getID(), 
+                                                    "Unable to set the file metadata [" + workspacePath + "]", visit), false);
                                         }
                                     }
                                     // Update progess
@@ -1926,6 +1928,19 @@ public class WorkspaceSyncDialog extends JDialog {
                                     syncStashDown.incrementAndGet();
                                 }
                             });
+                        }
+                        // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
+                        try {
+                            syncExecutor.shutdown();
+                            if (!syncExecutor.awaitTermination(3, TimeUnit.DAYS)) {
+                                WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown timeout!!!");
+                                logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "TIMEOUT", null), false);
+                            }
+                        }
+                        catch (InterruptedException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown failed!!!");
+                            logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "ERROR", null), false);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                     }
                     else {
