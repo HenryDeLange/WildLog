@@ -347,14 +347,13 @@ public class WorkspacePickerDialog extends JDialog {
             }
         }
         else {
-            if (Files.exists(workspacePath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
-                    && Files.exists(workspacePath.resolve(WildLogPaths.WILDLOG_FILES.getRelativePath()))) {
+            if (Files.exists(workspacePath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))) {
                 btnConfirmWorkspace.setText("OPEN WORKSPACE");
                 btnCloudSync.setEnabled(false);
             }
             else {
                 if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
-                    btnConfirmWorkspace.setText("SYNC WORKSPACE");
+                    btnConfirmWorkspace.setText("CREATE WORKSPACE");
                     btnCloudSync.setEnabled(true);
                 }
                 else {

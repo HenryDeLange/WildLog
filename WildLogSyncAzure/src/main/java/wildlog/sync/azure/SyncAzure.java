@@ -3,15 +3,10 @@ package wildlog.sync.azure;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
-import com.azure.storage.blob.BlobServiceClient;
-import com.azure.storage.blob.BlobServiceClientBuilder;
-import com.azure.storage.blob.batch.BlobBatchClient;
-import com.azure.storage.blob.batch.BlobBatchClientBuilder;
 import com.azure.storage.blob.models.BlobErrorCode;
 import com.azure.storage.blob.models.BlobItem;
 import com.azure.storage.blob.models.BlobProperties;
 import com.azure.storage.blob.models.BlobStorageException;
-import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.models.ListBlobsOptions;
 import com.azure.storage.common.StorageSharedKeyCredential;
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -427,7 +422,7 @@ public final class SyncAzure {
         return blobContainerClient;
     }
     
-    public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID, 
+    public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, String inRecordID, 
             String inDate, String inLatitude, String inLongitude) {
         try {
             BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
@@ -458,7 +453,7 @@ public final class SyncAzure {
         return false;
     }
     
-    public SyncBlobMetadata downloadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
+    public SyncBlobMetadata downloadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, String inRecordID) {
         SyncBlobMetadata syncBlobMetadata = new SyncBlobMetadata();
         String blobID = calculateFullBlobID(inParentID, inRecordID, inFilePath);
         try {
@@ -488,10 +483,13 @@ public final class SyncAzure {
         return syncBlobMetadata;
     }
     
-    public String calculateFullBlobID(long inParentID, long inRecordID, Path inFilePath) {
+    // Note:
+    // RecordID is String want stashed files moet die oorspronklikke naam gebruik, 
+    // maar normale files moet hulle Long ID gebruik.
+    public String calculateFullBlobID(long inParentID, String inRecordID, Path inFilePath) {
         String blobPath = Long.toString(workspaceID) + "/"
                 + Long.toString(inParentID) + "/"
-                + Long.toString(inRecordID) + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.'));
+                + inRecordID + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.'));
         if (blobPath.endsWith(".jpeg")) {
             blobPath = blobPath.substring(0, blobPath.length() - 4) + "jpg";
         }
@@ -513,21 +511,27 @@ public final class SyncAzure {
     
     public boolean workspaceDeleteFiles(WildLogDataType inDataType) {
         try {
-            // Setup the service client (note: not the container client)
-            StorageSharedKeyCredential credential = new StorageSharedKeyCredential(accountName, accountKey);
-            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                    .endpoint("https://" + accountName + ".blob.core.windows.net")
-                    .credential(credential)
-                    .buildClient();
-            BlobBatchClient blobBatchClient = new BlobBatchClientBuilder(blobServiceClient).buildClient();
+// TODO: Batch deleting werk nie lekker nie (soms werk dit en soms nie...)
+//            // Setup the service client (note: not the container client)
+//            StorageSharedKeyCredential credential = new StorageSharedKeyCredential(accountName, accountKey);
+//            BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
+//                    .endpoint("https://" + accountName + ".blob.core.windows.net")
+//                    .credential(credential)
+//                    .buildClient();
+//            BlobBatchClient blobBatchClient = new BlobBatchClientBuilder(blobServiceClient).buildClient();
+//            List<SyncBlobEntry> lstBlobs = getSyncListFilesBatch(inDataType);
+//            List<String> lstBlobURLs = new ArrayList<>(lstBlobs.size());
+//            for (SyncBlobEntry syncBlobEntry : lstBlobs) {
+//                lstBlobURLs.add(blobServiceClient.getBlobContainerClient(inDataType.getDescription().toLowerCase()).getBlobContainerUrl()
+//                        + "/" + syncBlobEntry.getFullBlobID());
+//            }
+//            blobBatchClient.deleteBlobs(lstBlobURLs, DeleteSnapshotsOptionType.INCLUDE);
+//            return true;
+            // Delete maar die blobs een vir een...
             List<SyncBlobEntry> lstBlobs = getSyncListFilesBatch(inDataType);
-            List<String> lstBlobURLs = new ArrayList<>(lstBlobs.size());
             for (SyncBlobEntry syncBlobEntry : lstBlobs) {
-                lstBlobURLs.add(blobServiceClient.getBlobContainerClient(inDataType.getDescription().toLowerCase()).getBlobContainerUrl()
-                        + "/" + syncBlobEntry.getFullBlobID());
+                deleteFile(inDataType, syncBlobEntry.getFullBlobID());
             }
-            blobBatchClient.deleteBlobs(lstBlobURLs, DeleteSnapshotsOptionType.INCLUDE);
-            return true;
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
