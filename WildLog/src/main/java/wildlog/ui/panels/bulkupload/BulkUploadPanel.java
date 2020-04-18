@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -222,7 +221,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             chkForceLocationGPSCoordinates.setVisible(false);
         }
         // Do WEI volunteer specific stuff
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             // Set the image box size to the largest
             cmbImageBoxSize.setSelectedIndex(2);
@@ -283,7 +283,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     @Override
     public boolean closeTab() {
-        ((JTabbedPane)getParent()).remove(this);
+System.out.println("getParent() = " + getParent());
+        ((JTabbedPane) getParent()).remove(this);
         return true;
     }
 
@@ -347,29 +348,41 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Load the table using the previously saved data
         List<BulkImportStashedTableData> lstStashedData = gson.fromJson(extraDataTableModel.getDataValue(),
                 new TypeToken<List<BulkImportStashedTableData>>(){}.getType());
-        Object[][] modelData = new Object[lstStashedData.size()][2];
-        int row = 0;
-        for (BulkImportStashedTableData stashedTableData : lstStashedData) {
-            BulkUploadImageListWrapper imageListWrapper = new BulkUploadImageListWrapper(stashedTableData.getImageBoxSize());
-            for (BulkImportStashedTableData.FileData stashedFileData : stashedTableData.getLstFileData()) {
-                BulkUploadImageFileWrapper fileWrapper = new BulkUploadImageFileWrapper(
-                        stashPath.resolve(stashedFileData.path).normalize(), null, stashedTableData.getImageBoxSize(),
-                        UtilsTime.getDateFromLocalDateTime(LocalDateTime.parse(stashedFileData.date, UtilsTime.EXIF_DATE_FORMAT)),
-                        stashedFileData.dataObjectWithGPS);
-                imageListWrapper.getImageList().add(fileWrapper);
+        Object[][] modelData;
+        if (lstStashedData != null) {
+            modelData = new Object[lstStashedData.size()][2];
+            int row = 0;
+            for (BulkImportStashedTableData stashedTableData : lstStashedData) {
+                BulkUploadImageListWrapper imageListWrapper = new BulkUploadImageListWrapper(stashedTableData.getImageBoxSize());
+                for (BulkImportStashedTableData.FileData stashedFileData : stashedTableData.getLstFileData()) {
+                    BulkUploadImageFileWrapper fileWrapper = new BulkUploadImageFileWrapper(
+                            stashPath.resolve(stashedFileData.path).normalize(), null, stashedTableData.getImageBoxSize(),
+                            UtilsTime.getDateFromLocalDateTime(LocalDateTime.parse(stashedFileData.date, UtilsTime.EXIF_DATE_FORMAT)),
+                            stashedFileData.dataObjectWithGPS);
+                    imageListWrapper.getImageList().add(fileWrapper);
+                }
+                // Add the row to the model
+                modelData[row][0] = stashedTableData.getSighting().cloneShallow(BulkUploadSightingWrapper.class);
+                modelData[row][1] = imageListWrapper;
+                row++;
             }
-            // Add the row to the model
-            modelData[row][0] = stashedTableData.getSighting().cloneShallow(BulkUploadSightingWrapper.class);
-            modelData[row][1] = imageListWrapper;
-            row++;
+        }
+        else {
+            WildLogApp.LOGGER.log(Level.ERROR, "Error loading saved Extra Data (WL_BULK_IMPORT_TABLE_MODEL)");
+            modelData = new Object[0][2];
         }
         // Set the visit file based on the previously saved data
         ExtraData extraDataVisitFiles = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG,
                 existingVisit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_VISIT_FILES.toString(), ExtraData.class);
-        List<String> lstStashedVisitFiles = gson.fromJson(extraDataVisitFiles.getDataValue(),
-                new TypeToken<List<String>>(){}.getType());
-        for (String visitFile : lstStashedVisitFiles) {
-            lstVisitFiles.add(stashPath.resolve(visitFile).normalize());
+        if (extraDataVisitFiles != null) {
+            List<String> lstStashedVisitFiles = gson.fromJson(extraDataVisitFiles.getDataValue(),
+                    new TypeToken<List<String>>(){}.getType());
+            for (String visitFile : lstStashedVisitFiles) {
+                lstVisitFiles.add(stashPath.resolve(visitFile).normalize());
+            }
+        }
+        else {
+            WildLogApp.LOGGER.log(Level.ERROR, "Error loading saved Extra Data (WL_BULK_IMPORT_VISIT_FILES)");
         }
         // Fetch the icon now, during loading, to prevent the UI hanging later if it needs to find many icons at once
         ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BulkImport(StashLoad)"));
@@ -1053,7 +1066,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
         // You can only use a task once, hence for the saving we need to create a new task
-        final Container thisParentHandle = getParent();
+System.out.println("getParent() = " + getParent());
+        final JTabbedPane thisParentHandle = (JTabbedPane) getParent();
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -1357,7 +1371,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(originalVisitName).toFile());
                     }
                     // Saving is done, now open the visits's tab
-                    openVisitTab(visit, (JTabbedPane) thisParentHandle);
+                    openVisitTab(visit, thisParentHandle);
                     setMessage("Saving the Bulk Import: Finished");
                     setTaskProgress(100);
                 }
@@ -1511,7 +1525,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_chkSmoothScrollActionPerformed
 
     private void btnStashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStashActionPerformed
-        final Container thisParentHandle = getParent();
+System.out.println("getParent() = " + getParent());
+        final JTabbedPane thisParentHandle = (JTabbedPane) getParent();
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -1529,11 +1544,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             stashedVisitName = stashedVisitName + " - File Stash";
                         }
                     }
-                    else {
-                        if (!stashedVisitName.startsWith("File Stash - ")) {
-                            stashedVisitName = "File Stash - " + stashedVisitName;
-                        }
-                    }
+//                    else {
+//                        if (!stashedVisitName.startsWith("File Stash - ")) {
+//                            stashedVisitName = "File Stash - " + stashedVisitName;
+//                        }
+//                    }
                     // Validate the visit is OK
                     Visit visit = getValidatedVisit(stashedVisitName);
                     if (visit == null) {
@@ -1683,7 +1698,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     // Save the Visit's files
                     List<String> lstVisitFilePaths = new ArrayList<>(lstVisitFiles.size());
                     for (Path path : lstVisitFiles) {
-                        lstVisitFilePaths.add(destinationPath.relativize(path).normalize().toString());
+                        lstVisitFilePaths.add(path.getFileName().toString());
                     }
                     setTaskProgress(99);
                     setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
@@ -1702,7 +1717,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Finished saving ExtraData for the Visit");
                     if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
                             && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
-                        openVisitTab(visit, (JTabbedPane) thisParentHandle);
+                        openVisitTab(visit, thisParentHandle);
                     }
                     setMessage("Stashing the Bulk Import: Finished");
                     setTaskProgress(100);

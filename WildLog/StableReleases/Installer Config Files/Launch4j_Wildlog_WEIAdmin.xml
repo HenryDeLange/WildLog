@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>.\WildLog-WEIAdmin.jar</jar>
+  <jar>.\WildLogWEI-Admin.jar</jar>
   <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLogWEI Admin.exe</outfile>
   <errTitle>WildLog Startup Error</errTitle>
   <cmdLine>properties=./wildlog-wei.properties</cmdLine>
@@ -15,10 +15,10 @@
   <manifest></manifest>
   <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WEI-Admin.ico</icon>
   <jre>
-    <path>jre-13.0.2</path>
+    <path>jre-14-full</path>
     <bundledJre64Bit>true</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
-    <minVersion>13</minVersion>
+    <minVersion>14</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
@@ -33,12 +33,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>6.1.2.0</fileVersion>
-    <txtFileVersion>WildLog v6.1.2 Launcher</txtFileVersion>
+    <fileVersion>6.2.0.0</fileVersion>
+    <txtFileVersion>WildLog v6.2.0 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
     <copyright>2020</copyright>
-    <productVersion>6.1.2.0</productVersion>
-    <txtProductVersion>WildLog v6.1.2</txtProductVersion>
+    <productVersion>6.2.0.0</productVersion>
+    <txtProductVersion>WildLog v6.2.0</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>

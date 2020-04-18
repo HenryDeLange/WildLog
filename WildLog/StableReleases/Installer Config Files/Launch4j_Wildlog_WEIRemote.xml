@@ -2,18 +2,18 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>.\WildLog.jar</jar>
-  <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog.exe</outfile>
+  <jar>.\WildLogWEI-Remote.jar</jar>
+  <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLogWEI Remote.exe</outfile>
   <errTitle>WildLog Startup Error</errTitle>
-  <cmdLine>properties=./wildlog.properties</cmdLine>
+  <cmdLine>properties=./wildlog-wei.properties</cmdLine>
   <chdir></chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl>http://www.mywild.co.za</supportUrl>
-  <stayAlive>false</stayAlive>
+  <stayAlive>true</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WildLog.ico</icon>
+  <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WEI-Remote.ico</icon>
   <jre>
     <path>jre-14-full</path>
     <bundledJre64Bit>true</bundledJre64Bit>

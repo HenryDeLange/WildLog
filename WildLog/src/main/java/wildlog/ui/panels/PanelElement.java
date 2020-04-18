@@ -83,6 +83,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             btnUploadImage.setEnabled(false);
             rdbLocations.setEnabled(false);
             rdbSightings.setEnabled(false);
+            btnCompare.setEnabled(false);
         }
     }
 

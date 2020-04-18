@@ -128,7 +128,12 @@ public class WorkspaceSyncDialog extends JDialog {
                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnDelete.setEnabled(false);
             btnDelete.setVisible(false);
+            pnlSyncOptions.setVisible(false);
+            setPreferredSize(new Dimension(getSize().width, getSize().height - pnlSyncOptions.getPreferredSize().height));
+            setSize(getPreferredSize());
         }
+        setMinimumSize(getPreferredSize());
+        pack();
     }
     
     private void configureFreeToken() {
@@ -516,8 +521,8 @@ public class WorkspaceSyncDialog extends JDialog {
                         .addGap(10, 10, 10)
                         .addComponent(pnlSyncToken, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10)
-                .addComponent(pnlSyncOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
+                .addComponent(pnlSyncOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

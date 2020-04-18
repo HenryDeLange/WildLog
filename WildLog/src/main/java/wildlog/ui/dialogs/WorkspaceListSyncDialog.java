@@ -231,7 +231,7 @@ public class WorkspaceListSyncDialog extends JDialog {
             long filterWorkspaceID = 0;
             if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                 String workspaceIDString = (String) WLOptionPane.showInputDialog(this,
-                        "<html>The provide the <i>WildLog ID</i> to use.</html>",
+                        "<html>Provide the <i>WildLog ID</i> to use.</html>",
                         "Workspace ID", JOptionPane.QUESTION_MESSAGE,  
                         null, null, 0);
                 if (workspaceIDString == null || workspaceIDString.trim().isEmpty()) {
