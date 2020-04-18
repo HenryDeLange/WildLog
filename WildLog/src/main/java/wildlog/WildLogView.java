@@ -126,6 +126,7 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.dialogs.SelectLocationDialog;
+import wildlog.ui.dialogs.WorkspaceCloudExportDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -267,6 +268,11 @@ public final class WildLogView extends JFrame {
             mnuStash.setVisible(false);
             btnGettingStarted.setVisible(false);
             lblWorkspaceUser.setVisible(false);
+            sprSync.setVisible(false);
+            mnuSyncExport.setEnabled(false);
+            mnuSyncExport.setVisible(false);
+            mnuSyncImport.setEnabled(false);
+            mnuSyncImport.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -354,6 +360,11 @@ public final class WildLogView extends JFrame {
             restoreMenu.setVisible(false);
             workspaceMenu.setEnabled(false);
             workspaceMenu.setVisible(false);
+            sprSync.setVisible(false);
+            mnuSyncExport.setEnabled(false);
+            mnuSyncExport.setVisible(false);
+            mnuSyncImport.setEnabled(false);
+            mnuSyncImport.setVisible(false);
         }
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             mnuBackupDatabase.setEnabled(false);
@@ -540,6 +551,9 @@ public final class WildLogView extends JFrame {
         mnuBulkImport = new javax.swing.JMenuItem();
         syncMenu = new javax.swing.JMenu();
         mnuSyncWorkspace = new javax.swing.JMenuItem();
+        sprSync = new javax.swing.JPopupMenu.Separator();
+        mnuSyncExport = new javax.swing.JMenuItem();
+        mnuSyncImport = new javax.swing.JMenuItem();
         reportsMenu = new javax.swing.JMenu();
         mnuReportVisitDates = new javax.swing.JMenuItem();
         mnuReportOccupancyModel = new javax.swing.JMenuItem();
@@ -1406,7 +1420,7 @@ public final class WildLogView extends JFrame {
 
         mnuSyncWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sync.png"))); // NOI18N
         mnuSyncWorkspace.setText("Sync with Cloud Workspace");
-        mnuSyncWorkspace.setToolTipText("Synchronise the content of this Workspace with that of a cloud backup.");
+        mnuSyncWorkspace.setToolTipText("Synchronise the content of this Workspace with that of a Cloud backup.");
         mnuSyncWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuSyncWorkspace.setName("mnuSyncWorkspace"); // NOI18N
         mnuSyncWorkspace.addActionListener(new java.awt.event.ActionListener() {
@@ -1415,6 +1429,33 @@ public final class WildLogView extends JFrame {
             }
         });
         syncMenu.add(mnuSyncWorkspace);
+
+        sprSync.setName("sprSync"); // NOI18N
+        syncMenu.add(sprSync);
+
+        mnuSyncExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SyncUp.png"))); // NOI18N
+        mnuSyncExport.setText("Export to new Cloud Workspace");
+        mnuSyncExport.setToolTipText("Export a selection of data from this Workspace to a new Cloud Workspace.");
+        mnuSyncExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mnuSyncExport.setName("mnuSyncExport"); // NOI18N
+        mnuSyncExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSyncExportActionPerformed(evt);
+            }
+        });
+        syncMenu.add(mnuSyncExport);
+
+        mnuSyncImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SyncDown.png"))); // NOI18N
+        mnuSyncImport.setText("Import from Cloud Workspace");
+        mnuSyncImport.setToolTipText("Import the data from a Cloud Workspace into this Workspace.");
+        mnuSyncImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mnuSyncImport.setName("mnuSyncImport"); // NOI18N
+        mnuSyncImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSyncImportActionPerformed(evt);
+            }
+        });
+        syncMenu.add(mnuSyncImport);
 
         menuBar.add(syncMenu);
 
@@ -3959,6 +4000,15 @@ public final class WildLogView extends JFrame {
         report.setVisible(true);
     }//GEN-LAST:event_mnuReportOccupancyModelActionPerformed
 
+    private void mnuSyncExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncExportActionPerformed
+        WorkspaceCloudExportDialog dialog = new WorkspaceCloudExportDialog(app);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_mnuSyncExportActionPerformed
+
+    private void mnuSyncImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncImportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnuSyncImportActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4120,6 +4170,8 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuStash;
     private javax.swing.JMenuItem mnuSunAndMoon;
     private javax.swing.JMenuItem mnuSwitchElementNames;
+    private javax.swing.JMenuItem mnuSyncExport;
+    private javax.swing.JMenuItem mnuSyncImport;
     private javax.swing.JMenuItem mnuSyncWorkspace;
     private javax.swing.JMenuItem mnuSystemMonitor;
     private javax.swing.JMenuItem mnuUserGuide;
@@ -4140,6 +4192,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator sprImport3;
     private javax.swing.JPopupMenu.Separator sprImport4;
     private javax.swing.JPopupMenu.Separator sprImport5;
+    private javax.swing.JPopupMenu.Separator sprSync;
     private javax.swing.JPopupMenu.Separator sprWorkspace2;
     private javax.swing.JPopupMenu.Separator sprWorkspaceUsers;
     private javax.swing.JLabel statusAnimationLabel;

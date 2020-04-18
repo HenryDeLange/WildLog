@@ -558,7 +558,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     + WildLogApp.getApplication().getDBI().countUsers()
                     + WildLogApp.getApplication().getDBI().countVisits(null, 0)) > 1000) {
                 WLOptionPane.showMessageDialog(this,
-                    "<html>This WildLog Workspace exceeds the restrictions of the limted free <i>WildLog Cloud Sync Token</i>. "
+                    "<html>This WildLog Workspace exceeds the restrictions of the limited free <i>WildLog Cloud Sync Token</i>. "
                             + "<br>Please contact <u>support@mywild.co.za</> for help.</html>",
                     "Free Token Exceeded!", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -624,7 +624,7 @@ public class WorkspaceSyncDialog extends JDialog {
                             }
                             feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                             feedback.println("-------------------------------------------------");
-                            feedback.println("---------- Cloud Sync Report ----------");
+                            feedback.println("--------------- Cloud Sync Report ---------------");
                             feedback.println("-------------------------------------------------");
                             feedback.println("");
                             // SYNC - Delete Logs
@@ -638,19 +638,19 @@ public class WorkspaceSyncDialog extends JDialog {
                             setProgress((int) (10 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Creatures ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.ELEMENT, this, (int) (8 * adjustForNoFiles));
-                            setProgress((int) (20 * adjustForNoFiles));
+                            setProgress((int) (18 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Places ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.LOCATION, this, (int) (6 * adjustForNoFiles));
-                            setProgress((int) (30 * adjustForNoFiles));
+                            setProgress((int) (24 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Periods ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.VISIT, this, (int) (12 * adjustForNoFiles));
-                            setProgress((int) (40 * adjustForNoFiles));
+                            setProgress((int) (36 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Observations ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.SIGHTING, this, (int) (18 * adjustForNoFiles));
-                            setProgress((int) (50 * adjustForNoFiles));
+                            setProgress((int) (54 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Users ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_USER, this, (int) (3 * adjustForNoFiles));
-                            setProgress((int) (50 * adjustForNoFiles));
+                            setProgress((int) (57 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Extra Data ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.EXTRA, this, (int) (3 * adjustForNoFiles));
                             // SYNC - Files
@@ -1511,7 +1511,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     public void run() {
                         WildLogFile wildLogFile = (WildLogFile) syncAction.data;
                         syncAction.details = wildLogFile.getLinkType().getDescription() + "_FILE";
-                        uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
+                        uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile, false);
                         syncAction.details = wildLogFile.getLinkType().getDescription() + "_DATA";
                         logIfFailed(inFeedback, syncAction, inSyncAzure.uploadData(WildLogDataType.FILE, syncAction.data));
                         syncFileUp.incrementAndGet();
@@ -1622,8 +1622,8 @@ public class WorkspaceSyncDialog extends JDialog {
                             logIfFailed(inFeedback, syncAction, 
                                     inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), 
                                             cloudWildLogFile.getLinkID(), Long.toString(cloudWildLogFile.getID())).isSuccess());
-                            // Note: Ek stel nie die metadata hier in die EXIF nie want dit verander die file size en kan soms die image corrupt
                             // Check the file size
+                            // Note: Ek stel nie die metadata hier in die EXIF nie want dit verander die file size en kan soms die image corrupt
                             long cloudFileSize = cloudWildLogFile.getSyncIndicator();
                             calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
                             if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
@@ -1755,7 +1755,7 @@ public class WorkspaceSyncDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Ended: Download Files Update");
     }
 
-    private void uploadWildLogFile(PrintWriter inFeedback, SyncAzure inSyncAzure, SyncAction syncAction, WildLogFile wildLogFile) {
+    private void uploadWildLogFile(PrintWriter inFeedback, SyncAzure inSyncAzure, SyncAction syncAction, WildLogFile wildLogFile, boolean isStashedFile) {
         String date = "";
         String latitude = "";
         String longitude = "";
@@ -1772,10 +1772,17 @@ public class WorkspaceSyncDialog extends JDialog {
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
-        String filename = wildLogFile.getRelativePath().getFileName().toString();
+        String recordID;
+        if (!isStashedFile) {
+            recordID = Long.toString(wildLogFile.getID());
+        }
+        else {
+            String filename = wildLogFile.getRelativePath().getFileName().toString();
+            recordID = filename.substring(0, filename.lastIndexOf('.'));
+        }
         logIfFailed(inFeedback, syncAction,
                 inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFilePath(wildLogFile), wildLogFile.getLinkID(), 
-                        filename.substring(0, filename.lastIndexOf('.')), date, latitude, longitude));
+                        recordID, date, latitude, longitude));
     }
     
     private void syncStashedFileRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
@@ -1842,7 +1849,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     @Override
                     public void run() {
                         WildLogFile wildLogFile = (WildLogFile) syncAction.data;
-                        uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
+                        uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile, true);
                         syncStashUp.incrementAndGet();
                         inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
                                 / 3.0 * (double) threadLoopCount.incrementAndGet() / threadTotalSize)));
@@ -2110,7 +2117,6 @@ public class WorkspaceSyncDialog extends JDialog {
             details = inDetails;
             data = inData;
         }
-        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

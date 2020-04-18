@@ -215,5 +215,11 @@ public final class UtilsDialog {
             }
         }
     }
+    
+    public static void setupMinimumSize(Window in​Window) {
+        in​Window.pack();
+        in​Window.setSize(in​Window.getPreferredSize());
+        in​Window.setMinimumSize(in​Window.getPreferredSize());
+    }
 
 }

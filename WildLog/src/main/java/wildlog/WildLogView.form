@@ -588,7 +588,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Sync.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Sync with Cloud Workspace"/>
-                <Property name="toolTipText" type="java.lang.String" value="Synchronise the content of this Workspace with that of a cloud backup."/>
+                <Property name="toolTipText" type="java.lang.String" value="Synchronise the content of this Workspace with that of a Cloud backup."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
@@ -596,6 +596,43 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSyncWorkspaceActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprSync">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="sprSync" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSyncExport">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/SyncUp.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Export to new Cloud Workspace"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export a selection of data from this Workspace to a new Cloud Workspace."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="mnuSyncExport" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSyncExportActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSyncImport">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/SyncDown.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Import from Cloud Workspace"/>
+                <Property name="toolTipText" type="java.lang.String" value="Import the data from a Cloud Workspace into this Workspace."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="mnuSyncImport" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSyncImportActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
