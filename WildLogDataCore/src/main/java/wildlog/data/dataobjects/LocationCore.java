@@ -1,5 +1,6 @@
 package wildlog.data.dataobjects;
 
+import java.util.Objects;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.GameViewRating;
@@ -29,6 +30,22 @@ public class LocationCore extends DataObjectWithGPS implements DataObjectWithWil
     @Override
     public String toString() {
         return name;
+    }
+    
+    @Override
+    public boolean equals(Object inObject) {
+        if (inObject == null || !(inObject instanceof ElementCore)) {
+            return false;
+        }
+        return id == ((ElementCore) inObject).getID();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 47 * hash + Objects.hashCode(name);
+        return hash;
     }
 
     @Override

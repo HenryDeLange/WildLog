@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mywild</groupId>
     <artifactId>WildLogDataCore</artifactId>
-    <version>1.16</version> <!--Remember to also update the poms in WildLog and WildLogSyncAzure-->
+    <version>1.17</version> <!--Remember to also update the poms in WildLog and WildLogSyncAzure-->
     <packaging>jar</packaging>
     
     <properties>

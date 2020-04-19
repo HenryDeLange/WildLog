@@ -16,9 +16,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -146,7 +148,6 @@ public class WorkspaceCloudExportDialog extends JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         chkIncludeAllElements = new javax.swing.JCheckBox();
-        chkIncludeAllLocations = new javax.swing.JCheckBox();
         pnlSyncToken = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -259,10 +260,6 @@ public class WorkspaceCloudExportDialog extends JDialog {
         chkIncludeAllElements.setToolTipText("If selected, in addition to the selected Creatures, all remaining Creatures (but not their Observations) will also be exported to the new Workspace.");
         chkIncludeAllElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        chkIncludeAllLocations.setText("Include All Places");
-        chkIncludeAllLocations.setToolTipText("If selected, in addition to the selected Places, all remaining Places (but not their Observations) will also be exported to the new Workspace.");
-        chkIncludeAllLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
         javax.swing.GroupLayout pnlSyncOptionsLayout = new javax.swing.GroupLayout(pnlSyncOptions);
         pnlSyncOptions.setLayout(pnlSyncOptionsLayout);
         pnlSyncOptionsLayout.setHorizontalGroup(
@@ -290,9 +287,7 @@ public class WorkspaceCloudExportDialog extends JDialog {
                                 .addGap(0, 0, 0)
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chkIncludeAllElements)
-                                .addGap(10, 10, 10)
-                                .addComponent(chkIncludeAllLocations))
+                                .addComponent(chkIncludeAllElements))
                             .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(10, 10, 10)
@@ -328,8 +323,7 @@ public class WorkspaceCloudExportDialog extends JDialog {
                 .addGap(6, 6, 6)
                 .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(chkIncludeAllElements)
-                    .addComponent(chkIncludeAllLocations))
+                    .addComponent(chkIncludeAllElements))
                 .addGap(5, 5, 5))
         );
 
@@ -483,13 +477,6 @@ public class WorkspaceCloudExportDialog extends JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[ExportCloudWorkspace]");
-        
-// TODO: Add validation for the workspace name
-
-// TODO: Validation as niks gekies was nie
-
-// TODO: handle the "all elements" and "all locations" options
-        
         // Get the sync keys from the token
         String syncToken = getSyncToken();
         // Validate the token
@@ -513,6 +500,21 @@ public class WorkspaceCloudExportDialog extends JDialog {
         }
         final SyncAzure syncAzure = new SyncAzure(syncTokenValues[3], syncTokenValues[1], syncTokenValues[2], 
                 Long.parseLong(lblWorkspaceID.getText()), WildLogApp.getApplication().getWildLogOptions().getDatabaseVersion());
+        // Validate workspace name
+        if (txtWorkspaceName.getText() == null || txtWorkspaceName.getText().trim().isEmpty()) {
+            WLOptionPane.showMessageDialog(this,
+                    "<html>Please provide a valid Workspace Name.</html>",
+                    "Invalid Workspace Name!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // Validate selection
+        int totalSelectedNodes = getNumberOfSelectedNodes(treWorkspace.getModel(), (DefaultMutableTreeNode) treWorkspace.getModel().getRoot());
+        if (totalSelectedNodes == 0) {
+            WLOptionPane.showMessageDialog(this,
+                    "<html>Please select records to be exported.</html>",
+                    "No Records Selected!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         // Close this popup
         setVisible(false);
         dispose();
@@ -542,48 +544,53 @@ public class WorkspaceCloudExportDialog extends JDialog {
                             // Get selected records
                             setProgress(1);
                             setMessage("Busy with the Cloud Export - Calculating ... " + getProgress() + "%");
-                            int totalSelectedNodes = getNumberOfSelectedNodes(treWorkspace.getModel(), (DefaultMutableTreeNode) treWorkspace.getModel().getRoot());
                             setProgress(2);
-                            List<Location> lstLocations = new ArrayList<>();
-                            List<Visit> lstVisits = new ArrayList<>();
-                            List<Element> lstElements = new ArrayList<>();
-                            List<Sighting> lstSightings = new ArrayList<>();
+                            Set<Location> locations = new HashSet<>();
+                            Set<Visit> visits = new HashSet<>();
+                            Set<Element> elements = new HashSet<>();
+                            Set<Sighting> sightings = new HashSet<>();
+                            if (chkIncludeAllElements.isSelected()) {
+                                List<Element> lstAllElements = app.getDBI().listElements(null, null, null, false, Element.class);
+                                for (Element element : lstAllElements) {
+                                    elements.add(element);
+                                }
+                            }
                             getRecordsToExport((DefaultMutableTreeNode) treWorkspace.getModel().getRoot(), totalSelectedNodes, this, new ProgressCounter(),
-                                    lstLocations, lstVisits, lstElements, lstSightings);
-                            List<WildLogOptions> lstWildLogOptions = new ArrayList<>(1);
-                            WildLogOptions wildLogOptions = app.getDBI().findWildLogOptions(WildLogOptions.class);
-                            wildLogOptions.setWorkspaceID(Long.parseLong(lblWorkspaceID.getText()));
-                            wildLogOptions.setWorkspaceName(txtWorkspaceName.getText());
-                            lstWildLogOptions.add(wildLogOptions);
+                                    locations, visits, elements, sightings);
+                            Set<WildLogOptions> wildLogOptions = new HashSet<>(1);
+                            WildLogOptions workspaceWildLogOptions = app.getDBI().findWildLogOptions(WildLogOptions.class);
+                            workspaceWildLogOptions.setWorkspaceID(Long.parseLong(lblWorkspaceID.getText()));
+                            workspaceWildLogOptions.setWorkspaceName(txtWorkspaceName.getText());
+                            wildLogOptions.add(workspaceWildLogOptions);
                             // SYNC - Data
                             setProgress(10);
                             setMessage("Busy with the Cloud Export - Syncing Options ... " + getProgress() + "%");
-                            syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_OPTIONS, lstWildLogOptions);
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_OPTIONS, wildLogOptions);
                             setProgress(11);
                             setMessage("Busy with the Cloud Export - Syncing Creatures ... " + getProgress() + "%");
-                            syncDataRecords(feedback, syncAzure, WildLogDataType.ELEMENT, lstElements);
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.ELEMENT, elements);
                             setProgress(20);
                             setMessage("Busy with the Cloud Export - Syncing Places ... " + getProgress() + "%");
-                            syncDataRecords(feedback, syncAzure, WildLogDataType.LOCATION, lstLocations);
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.LOCATION, locations);
                             setProgress(25);
                             setMessage("Busy with the Cloud Export - Syncing Periods ... " + getProgress() + "%");
-                            syncDataRecords(feedback, syncAzure, WildLogDataType.VISIT, lstVisits);
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.VISIT, visits);
                             setProgress(35);
                             setMessage("Busy with the Cloud Export - Syncing Observations ... " + getProgress() + "%");
-                            syncDataRecords(feedback, syncAzure, WildLogDataType.SIGHTING, lstSightings);
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.SIGHTING, sightings);
                             // SYNC - Files
                             if (!rdbSyncNoFiles.isSelected()) {
                                 List<WildLogFile> lstWildLogFiles = new ArrayList<>();
-                                for (Element element : lstElements) {
+                                for (Element element : elements) {
                                     lstWildLogFiles.addAll(app.getDBI().listWildLogFiles(element.getID(), null, WildLogFile.class));
                                 }
-                                for (Location location : lstLocations) {
+                                for (Location location : locations) {
                                     lstWildLogFiles.addAll(app.getDBI().listWildLogFiles(location.getID(), null, WildLogFile.class));
                                 }
-                                for (Visit visit : lstVisits) {
+                                for (Visit visit : visits) {
                                     lstWildLogFiles.addAll(app.getDBI().listWildLogFiles(visit.getID(), null, WildLogFile.class));
                                 }
-                                for (Sighting sighting : lstSightings) {
+                                for (Sighting sighting : sightings) {
                                     lstWildLogFiles.addAll(app.getDBI().listWildLogFiles(sighting.getID(), null, WildLogFile.class));
                                 }
                                 setProgress(50);
@@ -591,7 +598,7 @@ public class WorkspaceCloudExportDialog extends JDialog {
                                 syncFileRecords(feedback, syncAzure, this, 20, lstWildLogFiles);
                                 setProgress(70);
                                 setMessage("Busy with the Cloud Export - Syncing Stashed Files ... " + getProgress() + "%");
-                                syncStashedFileRecords(feedback, syncAzure, this, 29, lstVisits);
+                                syncStashedFileRecords(feedback, syncAzure, this, 29, visits);
                             }
                         }
                         // Finish the report
@@ -677,28 +684,28 @@ public class WorkspaceCloudExportDialog extends JDialog {
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void getRecordsToExport(DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter, 
-            List<Location> inLstLocations, List<Visit> inLstVisits, List<Element> inLstElements, List<Sighting> inLstSightings) {
+            Set<Location> inLocations, Set<Visit> inVisits, Set<Element> inElements, Set<Sighting> inSightings) {
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
                 if (dataWrapper.getDataObject() instanceof Location) {
                     Location location = app.getDBI().findLocation(((Location) dataWrapper.getDataObject()).getID(), null, false, Location.class);
-                    inLstLocations.add(location);
+                    inLocations.add(location);
                 }
                 else
                 if ( dataWrapper.getDataObject() instanceof Visit) {
                     Visit visit = app.getDBI().findVisit(((Visit) dataWrapper.getDataObject()).getID(), null, true, Visit.class);
-                    inLstVisits.add(visit);
+                    inVisits.add(visit);
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Element) {
                     Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getID(), null, false, Element.class);
-                    inLstElements.add(element);
+                    inElements.add(element);
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof SightingWrapper) {
                     Sighting sighting = app.getDBI().findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getID(), true, Sighting.class);
-                    inLstSightings.add(sighting);
+                    inSightings.add(sighting);
                 }
                 inCounter.counter++;
             }
@@ -707,16 +714,16 @@ public class WorkspaceCloudExportDialog extends JDialog {
         }
         for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
-            getRecordsToExport(childNode, inTotalNodes, inProgressbarTask, inCounter, inLstLocations, inLstVisits, inLstElements, inLstSightings);
+            getRecordsToExport(childNode, inTotalNodes, inProgressbarTask, inCounter, inLocations, inVisits, inElements, inSightings);
         }
     }
     
-    private void syncDataRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, WildLogDataType inDataType, List<? extends DataObjectWithAudit> inLstWorkspaceEntries) {
-        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + inDataType.getDescription() + " - Workspace Entries: " + inLstWorkspaceEntries.size());
+    private void syncDataRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, WildLogDataType inDataType, Set<? extends DataObjectWithAudit> inWorkspaceEntries) {
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + inDataType.getDescription() + " - Workspace Entries: " + inWorkspaceEntries.size());
         // UP: Upload the workspace records
         List<SyncAction> lstSyncActions = new ArrayList<>();
         List<SyncAction> lstExtraDataSyncActions = new ArrayList<>();
-        for (DataObjectWithAudit workspaceEntry : inLstWorkspaceEntries) {
+        for (DataObjectWithAudit workspaceEntry : inWorkspaceEntries) {
             lstSyncActions.add(new SyncAction("CLOUD_UPLOAD", inDataType, workspaceEntry.getID(), "", workspaceEntry));
             // As daar ExtraData is dan moet dit ook gesync word
             if (workspaceEntry instanceof DataObjectWithWildLogFile) {
@@ -886,10 +893,10 @@ public class WorkspaceCloudExportDialog extends JDialog {
     }
     
     private void syncStashedFileRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize,
-            List<Visit> inLstVisits) {
+            Set<Visit> inVisits) {
         int baseProgress = inProgressbar.getProgress();
         List<Visit> lstWorkspaceStashedVisits = new ArrayList<>();
-        for (Visit visit : inLstVisits) {
+        for (Visit visit : inVisits) {
             if (visit.getType() == VisitType.STASHED) {
                 lstWorkspaceStashedVisits.add(visit);
             }
@@ -1262,7 +1269,6 @@ public class WorkspaceCloudExportDialog extends JDialog {
     private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnConfirmSyncToken;
     private javax.swing.JCheckBox chkIncludeAllElements;
-    private javax.swing.JCheckBox chkIncludeAllLocations;
     private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;

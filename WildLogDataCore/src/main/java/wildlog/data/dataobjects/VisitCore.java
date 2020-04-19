@@ -1,6 +1,7 @@
 package wildlog.data.dataobjects;
 
 import java.util.Date;
+import java.util.Objects;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.GameWatchIntensity;
@@ -40,6 +41,22 @@ public class VisitCore extends DataObjectWithAudit implements DataObjectWithWild
     @Override
     public String toString() {
         return name;
+    }
+    
+    @Override
+    public boolean equals(Object inObject) {
+        if (inObject == null || !(inObject instanceof ElementCore)) {
+            return false;
+        }
+        return id == ((ElementCore) inObject).getID();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.name);
+        return hash;
     }
 
     @Override

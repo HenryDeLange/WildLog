@@ -164,8 +164,6 @@
                                   <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="chkIncludeAllElements" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="chkIncludeAllLocations" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -215,7 +213,6 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="chkIncludeAllElements" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkIncludeAllLocations" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               </Group>
@@ -351,15 +348,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Include All Creatures"/>
             <Property name="toolTipText" type="java.lang.String" value="If selected, in addition to the selected Creatures, all remaining Creatures (but not their Observations) will also be exported to the new Workspace."/>
-            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Hand Cursor"/>
-            </Property>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkIncludeAllLocations">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Include All Places"/>
-            <Property name="toolTipText" type="java.lang.String" value="If selected, in addition to the selected Places, all remaining Places (but not their Observations) will also be exported to the new Workspace."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>

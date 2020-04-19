@@ -1,5 +1,6 @@
 package wildlog.data.dataobjects;
 
+import java.util.Objects;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ElementType;
@@ -37,6 +38,22 @@ public class ElementCore extends DataObjectWithAudit implements DataObjectWithWi
     @Override
     public String toString() {
         return primaryName;
+    }
+
+    @Override
+    public boolean equals(Object inObject) {
+        if (inObject == null || !(inObject instanceof ElementCore)) {
+            return false;
+        }
+        return id == ((ElementCore) inObject).getID();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 71 * hash + Objects.hashCode(primaryName);
+        return hash;
     }
 
     @Override

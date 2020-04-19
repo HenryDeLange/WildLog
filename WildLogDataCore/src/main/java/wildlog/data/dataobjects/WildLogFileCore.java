@@ -41,6 +41,22 @@ public class WildLogFileCore extends DataObjectWithAudit {
     public String toString() {
         return "[WildLogFile=" + originalFileLocation + "]";
     }
+    
+    @Override
+    public boolean equals(Object inObject) {
+        if (inObject == null || !(inObject instanceof WildLogFileCore)) {
+            return false;
+        }
+        return id == ((WildLogFileCore) inObject).getID();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 59 * hash + (int) (this.linkID ^ (this.linkID >>> 32));
+        return hash;
+    }
 
     public Date getUploadDate() {
         return uploadDate;
