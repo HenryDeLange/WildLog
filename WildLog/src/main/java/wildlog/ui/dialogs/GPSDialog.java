@@ -56,6 +56,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.GPSAccuracy;
@@ -108,6 +109,7 @@ public class GPSDialog extends JDialog {
     private boolean markerWasMovedButNotYetRead = false;
     private boolean showingOnlineMap = false;
     private boolean showingOfflineMap = false;
+    private Visit visit;
 
     
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
@@ -1347,6 +1349,21 @@ public class GPSDialog extends JDialog {
                     }
                 }
             }
+            else
+            // Is a Visit
+            if (visit != null) {
+                Location location = app.getDBI().findLocation(visit.getLocationID(), null, false, Location.class);
+                if (UtilsGPS.hasGPSData(location)) {
+                    showNothingFoundDialog = false;
+                    loadUIValues(location);
+                    if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
+                }
+                else {
+                    showNothingFoundDialog = false;
+                }
+            }
         }
         if (showNothingFoundDialog) {
             WLOptionPane.showMessageDialog(this, 
@@ -1876,6 +1893,10 @@ public class GPSDialog extends JDialog {
                 WildLogApp.getApplication().getWildLogOptions().getDefaultLatitude(), 
                 WildLogApp.getApplication().getWildLogOptions().getDefaultLongitude(), 
                 WildLogApp.getApplication().getWildLogOptions().getDefaultZoom());
+    }
+
+    public void setVisit(Visit inVisit) {
+        visit = inVisit;
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

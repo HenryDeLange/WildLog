@@ -742,17 +742,17 @@ public class WorkspaceSyncDialog extends JDialog {
                                 WLOptionPane.showMessageDialog(null, // Using null to prevent the glasspane from being used (it will remove the existing one)
                                         "<html>The Cloud Sync process has completed. Please restart the application."
                                                 + "<br/><br/><hr/>"
-                                                + "<br/><b>Failed Sync Actions   : " + syncFail + "</b>"
+                                                + "<br/><b>Failed Sync Actions  : " + syncFail + "</b>"
                                                 + "<br/>"
-                                                + "<br/>DeleteLog Uploads     : " + syncDeleteUp
-                                                + "<br/>DeleteLog Downloads   : " + syncDeleteDown
-                                                + "<br/>Data Uploads          : " + syncDataUp
-                                                + "<br/>Data Downloads        : " + syncDataDown
-                                                + "<br/>File Uploads          : " + syncFileUp.get()
-                                                + "<br/>File Downloads        : " + syncFileDown.get()
-                                                + "<br/>Stash Uploads         : " + syncStashUp.get()
-                                                + "<br/>Stash Downloads       : " + syncStashDown.get()
-                                                + "<br/>Stash Cloud Deletes   : " + syncDeleteStashUp
+                                                + "<br/>DeleteLog Uploads       : " + syncDeleteUp
+                                                + "<br/>DeleteLog Downloads     : " + syncDeleteDown
+                                                + "<br/>Data Uploads            : " + syncDataUp
+                                                + "<br/>Data Downloads          : " + syncDataDown
+                                                + "<br/>File Uploads            : " + syncFileUp.get()
+                                                + "<br/>File Downloads          : " + syncFileDown.get()
+                                                + "<br/>Stash Uploads           : " + syncStashUp.get()
+                                                + "<br/>Stash Downloads         : " + syncStashDown.get()
+                                                + "<br/>Stash Cloud Deletes     : " + syncDeleteStashUp
                                                 + "<br/><br/><hr/><br/></html>",
                                         "Completed Cloud Sync", WLOptionPane.INFORMATION_MESSAGE);
                                 WildLogApp.getApplication().quit(null);

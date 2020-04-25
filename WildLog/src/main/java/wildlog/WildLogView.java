@@ -127,6 +127,7 @@ import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.dialogs.SelectLocationDialog;
 import wildlog.ui.dialogs.WorkspaceCloudExportDialog;
+import wildlog.ui.dialogs.WorkspaceCloudImportDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -1406,7 +1407,7 @@ public final class WildLogView extends JFrame {
 
         menuBar.add(importMenu);
 
-        syncMenu.setText("Sync");
+        syncMenu.setText("Cloud");
         syncMenu.setName("syncMenu"); // NOI18N
         syncMenu.addMenuListener(new javax.swing.event.MenuListener() {
             public void menuCanceled(javax.swing.event.MenuEvent evt) {
@@ -4006,7 +4007,8 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuSyncExportActionPerformed
 
     private void mnuSyncImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncImportActionPerformed
-        // TODO add your handling code here:
+        WorkspaceCloudImportDialog dialog = new WorkspaceCloudImportDialog(app);
+        dialog.setVisible(true);
     }//GEN-LAST:event_mnuSyncImportActionPerformed
 
     public void browseSelectedElement(Element inElement) {

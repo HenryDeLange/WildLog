@@ -162,7 +162,7 @@ public class WorkspaceCloudExportDialog extends JDialog {
         txtWorkspaceName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Export To A New  Cloud Workspace");
+        setTitle("Export To A New Cloud Workspace");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small.gif")).getImage());
         setModal(true);
 
@@ -284,7 +284,6 @@ public class WorkspaceCloudExportDialog extends JDialog {
                     .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                         .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
-                                .addGap(0, 0, 0)
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(chkIncludeAllElements))
@@ -640,9 +639,7 @@ public class WorkspaceCloudExportDialog extends JDialog {
                                 feedback.flush();
                                 feedback.close();
                                 // Open the summary document
-                                if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
-                                    UtilsFileProcessing.openFile(feedbackFile);
-                                }
+                                UtilsFileProcessing.openFile(feedbackFile);
                                 // Print summary to the logs
                                 WildLogApp.LOGGER.log(Level.INFO, "Failed Sync Actions          : {}", syncFail);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Data Uploads          : {}", syncDataUp);
@@ -665,14 +662,14 @@ public class WorkspaceCloudExportDialog extends JDialog {
                                 WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                                         "<html>The Cloud Export process has completed."
                                                 + "<br/><br/><hr/>"
-                                                + "<br/>Workspace ID          : " + lblWorkspaceID.getText()
-                                                + "<br/>Workspace Name        : " + txtWorkspaceName.getText()
+                                                + "<br/>Workspace ID           : " + lblWorkspaceID.getText()
+                                                + "<br/>Workspace Name         : " + txtWorkspaceName.getText()
                                                 + "<br/><br/><hr/>"
-                                                + "<br/><b>Failed Sync Actions   : " + syncFail + "</b>"
+                                                + "<br/><b>Failed Sync Actions : " + syncFail + "</b>"
                                                 + "<br/>"
-                                                + "<br/>Data Uploads          : " + syncDataUp
-                                                + "<br/>File Uploads          : " + syncFileUp.get()
-                                                + "<br/>Stash Uploads         : " + syncStashUp.get()
+                                                + "<br/>Data Uploads           : " + syncDataUp
+                                                + "<br/>File Uploads           : " + syncFileUp.get()
+                                                + "<br/>Stash Uploads          : " + syncStashUp.get()
                                                 + "<br/><br/><hr/><br/></html>",
                                         "Completed Cloud Export", WLOptionPane.INFORMATION_MESSAGE);
                             }

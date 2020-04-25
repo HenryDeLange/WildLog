@@ -207,11 +207,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             dtpEndDate.setDate(existingVisit.getEndDate());
         }
         // Setup the setting for forcing location's GPS on all observations
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
-            chkForceLocationGPSCoordinates.setSelected(false);
-        }
-        else
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             chkForceLocationGPSCoordinates.setSelected(true);
         }
@@ -923,9 +920,9 @@ System.out.println("getParent() = " + getParent());
         });
 
         btnStash.setBackground(new java.awt.Color(153, 180, 115));
-        btnStash.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnStash.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnStash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Stash Icon Small.png"))); // NOI18N
-        btnStash.setText("ReStash");
+        btnStash.setText("Stash");
         btnStash.setToolTipText("Stash these files in the Workspace and save all assigned values. Stashed Periods can be Bulk Imported at a later stage.");
         btnStash.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnStash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

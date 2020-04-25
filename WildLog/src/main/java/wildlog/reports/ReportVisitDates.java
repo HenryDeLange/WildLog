@@ -242,12 +242,13 @@ public class ReportVisitDates {
                     row.createCell(4).setCellValue("End Date");
                     row.createCell(5).setCellValue("Period Type");
                     row.createCell(6).setCellValue("Days");
-                    row.createCell(7).setCellValue("Observations");
-                    row.createCell(8).setCellValue("Files");
-                    row.createCell(9).setCellValue("Missing Files");
-                    row.createCell(10).setCellValue("Missing GPS");
-                    row.createCell(11).setCellValue("Period Overlap");
-                    row.createCell(12).setCellValue("Incorrect Dates");
+                    row.createCell(7).setCellValue("Missing Days");
+                    row.createCell(8).setCellValue("Observations");
+                    row.createCell(9).setCellValue("Files");
+                    row.createCell(10).setCellValue("Missing Files");
+                    row.createCell(11).setCellValue("Missing GPS");
+                    row.createCell(12).setCellValue("Period Overlap");
+                    row.createCell(13).setCellValue("Incorrect Dates");
                     row.getCell(0).setCellStyle(styleHeader);
                     row.getCell(1).setCellStyle(styleHeader);
                     row.getCell(2).setCellStyle(styleHeader);
@@ -261,6 +262,7 @@ public class ReportVisitDates {
                     row.getCell(10).setCellStyle(styleHeader);
                     row.getCell(11).setCellStyle(styleHeader);
                     row.getCell(12).setCellStyle(styleHeader);
+                    row.getCell(13).setCellStyle(styleHeader);
                     List<ReportData> lstReportData = mapReportData.get(key);
                     for (int r = 0; r < lstReportData.size(); r++) {
                         ReportData reportData = lstReportData.get(r);
@@ -291,30 +293,41 @@ public class ReportVisitDates {
                         if (reportData.visitType != null) {
                             row.createCell(5).setCellValue(reportData.visitType.toString());
                         }
-                        row.createCell(6).setCellValue(reportData.days);
-                        row.createCell(7).setCellValue(reportData.sigtingCount);
-                        if (reportData.fileCount >= 0) {
-                            row.createCell(8).setCellValue(reportData.fileCount);
+                        if (!reportData.visitName.equals("MISSING")) {
+                            row.createCell(6).setCellValue(reportData.days);
                         }
                         else {
-                            row.createCell(8).setCellValue("MISSING");
-                            row.getCell(8).setCellStyle(styleWarning);
+                            row.createCell(6).setCellValue(0);
                         }
-                        if (reportData.missingFileCount > 0) {
-                            row.createCell(9).setCellValue(reportData.missingFileCount);
+                        if (reportData.visitName.equals("MISSING")) {
+                            row.createCell(7).setCellValue(reportData.days);
+                        }
+                        else {
+                            row.createCell(7).setCellValue(0);
+                        }
+                        row.createCell(8).setCellValue(reportData.sigtingCount);
+                        if (reportData.fileCount >= 0) {
+                            row.createCell(9).setCellValue(reportData.fileCount);
+                        }
+                        else {
+                            row.createCell(9).setCellValue("MISSING");
                             row.getCell(9).setCellStyle(styleWarning);
                         }
-                        if (reportData.missingGPSCount > 0) {
-                            row.createCell(10).setCellValue(reportData.missingGPSCount);
+                        if (reportData.missingFileCount > 0) {
+                            row.createCell(10).setCellValue(reportData.missingFileCount);
                             row.getCell(10).setCellStyle(styleWarning);
                         }
-                        if (reportData.isOverlapping) {
-                            row.createCell(11).setCellValue("OVERLAPPING");
+                        if (reportData.missingGPSCount > 0) {
+                            row.createCell(11).setCellValue(reportData.missingGPSCount);
                             row.getCell(11).setCellStyle(styleWarning);
                         }
-                        if (reportData.observationsDateRange != null && !reportData.observationsDateRange.isEmpty()) {
-                            row.createCell(12).setCellValue(reportData.observationsDateRange.trim());
+                        if (reportData.isOverlapping) {
+                            row.createCell(12).setCellValue("OVERLAPPING");
                             row.getCell(12).setCellStyle(styleWarning);
+                        }
+                        if (reportData.observationsDateRange != null && !reportData.observationsDateRange.isEmpty()) {
+                            row.createCell(13).setCellValue(reportData.observationsDateRange.trim());
+                            row.getCell(13).setCellStyle(styleWarning);
                         }
                     }
                     sheet.autoSizeColumn(0);
@@ -330,6 +343,7 @@ public class ReportVisitDates {
                     sheet.autoSizeColumn(10);
                     sheet.autoSizeColumn(11);
                     sheet.autoSizeColumn(12);
+                    sheet.autoSizeColumn(13);
                 }
                 try (FileOutputStream out = new FileOutputStream(path.toFile())) {
                     workbook.write(out);

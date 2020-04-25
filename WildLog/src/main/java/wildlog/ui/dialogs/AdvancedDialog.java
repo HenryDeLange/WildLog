@@ -263,6 +263,7 @@ public class AdvancedDialog extends JDialog {
     private void btnSetAllGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetAllGPSActionPerformed
         DataObjectWithGPS dataObjectWithGPS = new DataObjectWithGPS() {};
         GPSDialog dialog = new GPSDialog(app, this, dataObjectWithGPS);
+        dialog.setVisit(visit);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             List<Sighting> listSightings = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);

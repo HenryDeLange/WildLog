@@ -575,7 +575,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="syncMenu">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Sync"/>
+            <Property name="text" type="java.lang.String" value="Cloud"/>
             <Property name="name" type="java.lang.String" value="syncMenu" noResource="true"/>
           </Properties>
           <Events>
