@@ -280,7 +280,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     @Override
     public boolean closeTab() {
-System.out.println("getParent() = " + getParent());
         ((JTabbedPane) getParent()).remove(this);
         return true;
     }

@@ -72,23 +72,24 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
         return cachedLocationName + " (" + cachedElementName + ") [" + id + "]";
     }
     
-    @Override
-    public boolean equals(Object inObject) {
-        if (inObject == null || !(inObject instanceof SightingCore)) {
-            return false;
-        }
-        return id == ((SightingCore) inObject).getID();
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 83 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 83 * hash + (int) (this.elementID ^ (this.elementID >>> 32));
-        hash = 83 * hash + (int) (this.locationID ^ (this.locationID >>> 32));
-        hash = 83 * hash + (int) (this.visitID ^ (this.visitID >>> 32));
-        return hash;
-    }
+// TODO: Dink weer oor of die ander data objects veilig die methods kan overwrite. Die op SightingCore breek Bulk Import...
+//    @Override
+//    public boolean equals(Object inObject) {
+//        if (inObject == null || !(inObject instanceof SightingCore)) {
+//            return false;
+//        }
+//        return id == ((SightingCore) inObject).getID();
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 83 * hash + (int) (this.id ^ (this.id >>> 32));
+//        hash = 83 * hash + (int) (this.elementID ^ (this.elementID >>> 32));
+//        hash = 83 * hash + (int) (this.locationID ^ (this.locationID >>> 32));
+//        hash = 83 * hash + (int) (this.visitID ^ (this.visitID >>> 32));
+//        return hash;
+//    }
 
     @Override
     public int compareTo(Object inSighting) {
