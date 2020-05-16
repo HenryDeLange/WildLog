@@ -200,6 +200,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
     @Override
     public void doBackup(Path inDestinationFolder) {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting Backup: {}", inDestinationFolder.toString());
         Statement state = null;
         try {
             state = conn.createStatement();
@@ -228,6 +229,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 printSQLException(sqle);
             }
         }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished Backup: {}", inDestinationFolder.toString());
     }
 
     

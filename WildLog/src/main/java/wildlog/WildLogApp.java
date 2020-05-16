@@ -353,6 +353,7 @@ public class WildLogApp extends Application {
                     UtilsConcurency.kickoffProgressbarTask(WildLogApp.this, new ProgressbarTask(WildLogApp.this) {
                         @Override
                         protected Object doInBackground() throws Exception {
+                            WildLogApp.LOGGER.log(Level.INFO, "Starting Daily Backup...");
                             setMessage("Starting the Database Backup (Daily)");
                             // First clean out empty folders (for example failed backups)
                             try {
