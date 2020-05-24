@@ -309,7 +309,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         btnUpdateActionPerformed(null);
                     }
                 }, 
-                app, true, null, true, true);
+                app, true, null, true, true, null);
     }
 
     public void setVisit(Visit inVisit) {

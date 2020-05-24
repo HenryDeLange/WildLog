@@ -2968,7 +2968,7 @@ public final class WildLogView extends JFrame {
                                         Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()), WildLogDataType.SIGHTING, 
                                         lstFiles.toArray(new File[lstFiles.size()]),
                                         null, 
-                                        app, false, null, true, true);
+                                        app, false, null, true, true, null);
                             }
                             setTaskProgress(25 + (int)(t/(double)listSightings.size()*70));
                             setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");

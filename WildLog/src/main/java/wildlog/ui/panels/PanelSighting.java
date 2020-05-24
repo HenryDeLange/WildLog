@@ -408,7 +408,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         btnUpdateSightingActionPerformed(null);
                     }
                 }, 
-                app, true, this, true, true);
+                app, true, this, true, true, null);
     }
 
     private void setupSightingInfo() {
@@ -2381,7 +2381,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sighting.getCachedElementName() + uniqueIdentifier), WildLogDataType.ELEMENT,
                     new File[] {wildLogFile.getAbsolutePath().toFile()},
                     null,
-                    app, true, null, true, true);
+                    app, true, null, true, true, null);
                 WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null,
                         WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
                                 sighting.getCachedElementName() + uniqueIdentifier).resolve(wildLogFile.getFilename())).toString(),

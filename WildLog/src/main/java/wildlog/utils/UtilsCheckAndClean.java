@@ -1040,7 +1040,7 @@ public class UtilsCheckAndClean {
                         inExpectedPrefix, inLinkType,
                         new File[]{inWildLogFile.getAbsolutePath().toFile()},
                         null,
-                        app, false, null, false, true);
+                        app, false, null, false, true, null);
                 // Delete the wrong entry
                 app.getDBI().deleteWildLogFile(inWildLogFile.getID());
                 fileCount.counter++;

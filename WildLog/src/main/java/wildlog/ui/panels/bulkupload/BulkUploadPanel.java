@@ -1222,13 +1222,14 @@ System.out.println("getParent() = " + getParent());
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()), WildLogDataType.VISIT, 
                             visitFiles,
                             null, 
-                            app, false, null, true, false);
+                            app, false, null, true, false, null);
                     setTaskProgress(1);
                     setMessage("Saving the Bulk Import: Saving the Period... " + getProgress() + "%");
                     // Processs the sightings
                     final Visit visitHandle = visit;
                     final Object saveSightingLock = new Object();
                     String executorServiceName = "WL_BulkImport(Save)";
+                    final Map<String, Object> mapSyncLocks = new HashMap<>(model.getRowCount() * 2);
                     ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory(executorServiceName));
                     final AtomicInteger counter = new AtomicInteger();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
@@ -1267,7 +1268,7 @@ System.out.println("getParent() = " + getParent());
                                 // Get a list of File objects from the BulkUploadImageFileWrapper and prepare for the duration calculations
                                 Date startDate = listWrapper.getImageList().get(0).getDate();
                                 Date endDate = listWrapper.getImageList().get(listWrapper.getImageList().size()-1).getDate();
-                                List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
+                                List<File> files = new ArrayList<>(listWrapper.getImageList().size());
                                 boolean uploadListContainsDuplicates = true;
                                 for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
                                     // Confirm the correct start and end times
@@ -1334,7 +1335,7 @@ System.out.println("getParent() = " + getParent());
                                         Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()), WildLogDataType.SIGHTING, 
                                         files.toArray(new File[files.size()]),
                                         null, 
-                                        app, false, null, true, uploadListContainsDuplicates);
+                                        app, false, null, true, uploadListContainsDuplicates, mapSyncLocks);
                                 // Update the progress
                                 try {
                                     progressbarHandle.setTaskProgress(counter.getAndIncrement(), 0, model.getRowCount());
@@ -1521,7 +1522,6 @@ System.out.println("getParent() = " + getParent());
     }//GEN-LAST:event_chkSmoothScrollActionPerformed
 
     private void btnStashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStashActionPerformed
-System.out.println("getParent() = " + getParent());
         final JTabbedPane thisParentHandle = (JTabbedPane) getParent();
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override

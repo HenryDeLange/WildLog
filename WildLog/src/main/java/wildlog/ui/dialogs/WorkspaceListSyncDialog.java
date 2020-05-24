@@ -1,10 +1,14 @@
 package wildlog.ui.dialogs;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
@@ -16,6 +20,7 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsUI;
+import static wildlog.ui.utils.UtilsUI.doClipboardCopy;
 import wildlog.utils.WildLogApplicationTypes;
 
 
@@ -138,6 +143,11 @@ public class WorkspaceListSyncDialog extends JDialog {
         lstWorkspaces.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lstWorkspaces.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstWorkspaces.setSelectionBackground(new java.awt.Color(56, 87, 9));
+        lstWorkspaces.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lstWorkspacesMouseReleased(evt);
+            }
+        });
         lstWorkspaces.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstWorkspacesValueChanged(evt);
@@ -307,6 +317,26 @@ public class WorkspaceListSyncDialog extends JDialog {
     private void lstWorkspacesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstWorkspacesValueChanged
         btnConfirm.setEnabled(!lstWorkspaces.getSelectionModel().isSelectionEmpty());
     }//GEN-LAST:event_lstWorkspacesValueChanged
+
+    private void lstWorkspacesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstWorkspacesMouseReleased
+        if (!lstWorkspaces.getSelectionModel().isSelectionEmpty() && (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt))) {
+            JPopupMenu clipboardPopup = new JPopupMenu();
+            // Build the copy popup
+            JMenuItem copyItem = new JMenuItem("Copy Workspace ID", new ImageIcon(WildLogApp.class.getResource("resources/icons/copy.png")));
+            copyItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    long selectedWorkspaceID = Long.parseLong(lstWorkspaces.getSelectedValue().substring(0, lstWorkspaces.getSelectedValue().indexOf(" - ")).trim());
+                    doClipboardCopy(Long.toString(selectedWorkspaceID));
+                }
+            });
+            clipboardPopup.add(copyItem);
+            // Wrap up and show up the popup
+            clipboardPopup.pack();
+            clipboardPopup.show(evt.getComponent(), evt.getPoint().x, evt.getPoint().y);
+            clipboardPopup.setVisible(true);
+        }
+    }//GEN-LAST:event_lstWorkspacesMouseReleased
 
     public long getWorkspaceID() {
         return workspaceID;

@@ -481,6 +481,10 @@ public class WildLogApp extends Application {
                     wildLogOptions.setWorkspaceID(triggerStartupSyncWorkspaceID);
                     wildLogOptions.setAuditTime(-1); // Default is 0, so -1 ensures an update
                     dbi.updateWildLogOptions(wildLogOptions, true);
+                    // Reset the triggerStartupSync for Remote users, because for them the app isn't closed afterwards
+                    if (WILDLOG_USER_TYPE == WildLogUserTypes.REMOTE) {
+                        triggerStartupSync = false;
+                    }
                     // Show the sync popup
                     WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
                     dialog.setVisible(true);

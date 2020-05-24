@@ -1065,7 +1065,7 @@ public class INatSightingDialog extends JDialog {
                                         // Laai die nuwe inligitng op die UI
                                         setupUI();
                                     }
-                                }, app, false, INatSightingDialog.this, true, false);
+                                }, app, false, INatSightingDialog.this, true, false, null);
                             }
                             catch (IOException ex) {
                                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

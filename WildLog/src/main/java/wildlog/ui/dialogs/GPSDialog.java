@@ -1581,7 +1581,7 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_spnAccuracyStateChanged
 
     private void cmbAccuracyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAccuracyActionPerformed
-        double tempAccuracy = 0;
+        double tempAccuracy = 0.0;
         if (spnAccuracy.getValue() instanceof Double) {
             tempAccuracy = (double) spnAccuracy.getValue();
         }
@@ -1590,8 +1590,8 @@ public class GPSDialog extends JDialog {
             tempAccuracy = (double) (int) spnAccuracy.getValue();
         }
         if (cmbAccuracy.getSelectedItem() != null) {
-            if (tempAccuracy < ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMinMeters()
-                    || tempAccuracy > ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMaxMeters()) {
+            if ((tempAccuracy <= ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMinMeters())
+                    || (tempAccuracy > ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMaxMeters())) {
                 tempAccuracy = (double) ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMaxMeters();
             }
         }

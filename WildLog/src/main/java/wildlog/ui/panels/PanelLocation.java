@@ -227,7 +227,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         btnUpdateActionPerformed(null);
                     }
                 }, 
-                app, true, null, true, true);
+                app, true, null, true, true, null);
     }
 
     public void setLocationWL(Location inLocation) {

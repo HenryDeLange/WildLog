@@ -125,9 +125,9 @@ public final class UtilsFileProcessing {
         public int counter = 1;
     }
 
-    public static void performFileUpload(final DataObjectWithWildLogFile inDAOWithID, final Path inPrefixFolder, WildLogDataType inLinkType, 
-            final File[] inFiles, final Runnable inRunWhenDone, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, 
-            final boolean inCreateThumbnails, final boolean inHandleSyncIssuesForPossibleDuplicatesInList) {
+    public static void performFileUpload(final DataObjectWithWildLogFile inDAOWithID, final Path inPrefixFolder, final WildLogDataType inLinkType, 
+            final File[] inFiles, final Runnable inRunWhenDone, final WildLogApp inApp, final boolean inWithSlowProcessPopup, final JDialog inParent, 
+            final boolean inCreateThumbnails, final boolean inHandleSyncIssuesForPossibleDuplicatesInList, final Map<String, Object> inMapSyncLock) {
         // Get the date of the first file 
         // (if files already exist in the workspace then use those, otherwise use the list of files being uploaded)
         LocalDateTime firstFileDate = null;
@@ -168,6 +168,23 @@ public final class UtilsFileProcessing {
         for (File file : inFiles) {
             if (file != null) {
                 final File fromFile = file;
+                final Object syncLock;
+                // The sync map is used during bulk import when the same file can be in different sightings that get processed concurrently
+                if (inMapSyncLock != null) {
+                    synchronized (inMapSyncLock) {
+                        String key = fromFile.toPath().toAbsolutePath().normalize().toString();
+                        if (inMapSyncLock.containsKey(key)) {
+                            syncLock = inMapSyncLock.get(key);
+                        }
+                        else {
+                            syncLock = new Object();
+                            inMapSyncLock.put(key, syncLock);
+                        }
+                    }
+                }
+                else {
+                    syncLock = theLock;
+                }
                 listCallables.add(new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
@@ -177,17 +194,17 @@ public final class UtilsFileProcessing {
                             // Is an image
                             if (WildLogFileExtentions.Images.isKnownExtention(fromPath)) {
                                 saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, inLinkType, fromPath, 
-                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, theLock, finalFirstFileDate);
+                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, syncLock, finalFirstFileDate);
                             }
                             else
                             // Is a movie
                             if (WildLogFileExtentions.Movies.isKnownExtention(fromPath)) {
                                 saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, inLinkType, fromPath, 
-                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, theLock, finalFirstFileDate);
+                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, syncLock, finalFirstFileDate);
                             }
                             else {
                                 saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, inLinkType, fromPath, 
-                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, theLock, finalFirstFileDate);
+                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, syncLock, finalFirstFileDate);
                             }
                         }
                         return null;
@@ -232,18 +249,18 @@ public final class UtilsFileProcessing {
         // (Dit sal dan hopelik 'n beter user experience gee as die thumbnails klaar daar is teen die tyd dat mens dit in die app view...)
         if (inCreateThumbnails) {
             if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                if (inTheLock != null) {
-                    synchronized (inTheLock) {
-                        // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
-                        UtilsImageProcessing.ImageProperties imageProperties = UtilsImageProcessing.getImageProperties(wildLogFile.getAbsolutePath(), null);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL, imageProperties);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL, imageProperties);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL, imageProperties);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM, imageProperties);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL, imageProperties);
-                    }
-                }
-                else {
+//                if (inTheLock != null) {
+//                    synchronized (inTheLock) {
+//                        // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
+//                        UtilsImageProcessing.ImageProperties imageProperties = UtilsImageProcessing.getImageProperties(wildLogFile.getAbsolutePath(), null);
+//                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL, imageProperties);
+//                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL, imageProperties);
+//                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL, imageProperties);
+//                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM, imageProperties);
+//                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL, imageProperties);
+//                    }
+//                }
+//                else {
                     // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
                     UtilsImageProcessing.ImageProperties imageProperties = UtilsImageProcessing.getImageProperties(wildLogFile.getAbsolutePath(), null);
                     wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL, imageProperties);
@@ -251,7 +268,7 @@ public final class UtilsFileProcessing {
                     wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL, imageProperties);
                     wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM, imageProperties);
                     wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL, imageProperties);
-                }
+//                }
             }
         }
     }

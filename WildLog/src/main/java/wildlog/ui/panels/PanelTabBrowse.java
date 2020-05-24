@@ -1528,7 +1528,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName() + uniqueIdentifier), WildLogDataType.ELEMENT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, true);
+                            app, true, null, true, true, null);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
@@ -1569,7 +1569,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName() + uniqueIdentifier), WildLogDataType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, true);
+                            app, true, null, true, true, null);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
@@ -1606,7 +1606,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName() + uniqueIdentifier), WildLogDataType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, true);
+                            app, true, null, true, true, null);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
@@ -1647,7 +1647,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName() + uniqueIdentifier), WildLogDataType.VISIT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, true);
+                            app, true, null, true, true, null);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(
@@ -1792,7 +1792,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 doTheRefresh(null);
                             }
                         }, 
-                        app, true, null, true, true);
+                        app, true, null, true, true, null);
                 }
             }
         }

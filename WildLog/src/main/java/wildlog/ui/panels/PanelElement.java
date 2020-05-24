@@ -210,7 +210,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         btnUpdateActionPerformed(null);
                     }
                 },
-                app, true, null, true, true);
+                app, true, null, true, true, null);
     }
 
     public Element getElement() {

@@ -755,7 +755,20 @@ public class WorkspaceSyncDialog extends JDialog {
                                                 + "<br/>Stash Cloud Deletes     : " + syncDeleteStashUp
                                                 + "<br/><br/><hr/><br/></html>",
                                         "Completed Cloud Sync", WLOptionPane.INFORMATION_MESSAGE);
-                                WildLogApp.getApplication().quit(null);
+                                if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                                    WildLogApp.getApplication().quit(null);
+                                }
+                                else {
+                                    JPanel glassPane = (JPanel) WildLogApp.getApplication().getMainFrame().getGlassPane();
+                                    glassPane.removeAll();
+                                    UtilsDialog.setupGlassPaneOnMainFrame(WildLogApp.getApplication().getMainFrame());
+                                    WildLogApp.getApplication().getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                                    WildLogApp.getApplication().getMainFrame().getGlassPane().setVisible(false);
+                                    WildLogApp.getApplication().getMainFrame().refreshHomeTab();
+                                    WildLogApp.getApplication().getMainFrame().invalidate();
+                                    WildLogApp.getApplication().getMainFrame().repaint();
+                                    WildLogApp.getApplication().getMainFrame().showWelcomeDialog();
+                                }
                             }
                         });
                     }

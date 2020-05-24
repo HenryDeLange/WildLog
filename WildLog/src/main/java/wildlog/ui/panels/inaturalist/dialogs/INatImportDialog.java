@@ -665,7 +665,7 @@ public class INatImportDialog extends JDialog {
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                     }
-                }, app, false, INatImportDialog.this, true, false);
+                }, app, false, INatImportDialog.this, true, false, null);
             }
         }
     }
