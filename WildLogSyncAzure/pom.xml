@@ -24,7 +24,7 @@
             <!--https://github.com/Azure/azure-storage-java-->
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-storage</artifactId>
-            <version>8.6.0</version>
+            <version>8.6.2</version>
             <exclusions>
                 <!--Newer versions provided (needed) by azure-storage-blob-->
                 <exclusion>

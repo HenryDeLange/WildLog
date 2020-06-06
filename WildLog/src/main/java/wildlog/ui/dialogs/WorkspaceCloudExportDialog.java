@@ -490,6 +490,7 @@ public class WorkspaceCloudExportDialog extends JDialog {
         String[] syncTokenValues = syncToken.split(" ");
         WildLogApp.LOGGER.log(Level.INFO, "Sync Mode: {}", syncTokenValues[0]);
         WildLogApp.LOGGER.log(Level.INFO, "Sync Account: {}", syncTokenValues[1]);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync Workspace: {}", lblWorkspaceID.getText());
         if (syncTokenValues[0].equals("FREE")) {
             WLOptionPane.showMessageDialog(this,
                 "<html>This feature is not available using the limited free <i>WildLog Cloud Sync Token</i>. "
@@ -539,6 +540,8 @@ public class WorkspaceCloudExportDialog extends JDialog {
                             feedback.println("-------------------------------------------------");
                             feedback.println("-------------- Cloud Export Report --------------");
                             feedback.println("-------------------------------------------------");
+                            feedback.println("");
+                            feedback.println("Workspace " + syncAzure.getWorkspaceID());
                             feedback.println("");
                             // Get selected records
                             setProgress(1);

@@ -56,6 +56,7 @@ public class BulkUploadTipsDialog extends JDialog {
         lblTip.setBackground(new java.awt.Color(255, 255, 255));
         lblTip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/BulkImportTip1.png"))); // NOI18N
+        lblTip.setDoubleBuffered(true);
         lblTip.setName("lblTip"); // NOI18N
         lblTip.setOpaque(true);
         jPanel1.add(lblTip);

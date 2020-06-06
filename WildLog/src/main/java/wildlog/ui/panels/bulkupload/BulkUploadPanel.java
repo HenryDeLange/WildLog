@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -59,6 +60,7 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.mediaplayer.VideoController;
 import wildlog.mediaplayer.VideoPanel;
 import wildlog.ui.dialogs.GPSDialog;
+import wildlog.ui.dialogs.WorkspaceSyncDialog;
 import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.CustomMouseWheelScroller;
@@ -227,9 +229,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             chkSmoothScrollActionPerformed(null);
         }
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
-            // Don't allow remote volunteers to actually do the processing, they should re-stash
-            btnProcess.setEnabled(false);
-            btnProcess.setVisible(false);
+            btnProcess.setIcon(new ImageIcon(WildLogApp.class.getResource("/wildlog/resources/icons/SyncButton.png")));
             btnGPSForAll.setEnabled(false);
             btnGPSForAll.setVisible(false);
         }
@@ -1061,8 +1061,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnReloadActionPerformed
 
     private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
+        // Remote users don't save, they Stash and then get asked to Sync instead
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            Visit visit = validateRecords();
+            if (visit == null) {
+                return;
+            }
+            btnStashActionPerformed(null);
+            return;
+        }
+        // Normal users will do the normal Save
         // You can only use a task once, hence for the saving we need to create a new task
-System.out.println("getParent() = " + getParent());
         final JTabbedPane thisParentHandle = (JTabbedPane) getParent();
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
@@ -1073,111 +1082,10 @@ System.out.println("getParent() = " + getParent());
                 setMessage("Saving the Bulk Import: Validating...");
                 // Make sure the location is OK
                 if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().trim().isEmpty()) {
-                    // Validate the visit is OK
-                    Visit visit = getValidatedVisit(txtVisitName.getText().trim());
+                    // Validate the data
+                    Visit visit = validateRecords();
                     if (visit == null) {
                         return null;
-                    }
-                    visit.setLocationID(selectedLocation.getID());
-                    visit.setCachedLocationName(app.getDBI().findLocation(visit.getLocationID(), null, false, Location.class).getName());
-                    visit.setStartDate(dtpStartDate.getDate());
-                    visit.setEndDate(dtpEndDate.getDate());
-                    visit.setType((VisitType) cmbVisitType.getSelectedItem());
-                    // Validate all sightings have a creature set
-                    final DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
-                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
-                        if (sightingWrapper.getElementID() == 0) {
-                            final int finalRowCount = rowCount;
-                            SwingUtilities.invokeLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
-                                }
-                            });
-                            WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "Please assign a Creature to each of the Observations.",
-                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
-                            return null;
-                        }
-                    }
-                    // Validate the certainty is set
-                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
-                        if (sightingWrapper.getCertainty() == null || sightingWrapper.getCertainty().equals(Certainty.NONE)) {
-                            final int finalRowCount = rowCount;
-                            SwingUtilities.invokeLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
-                                }
-                            });
-                            WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "Please assign a Certainty to each of the Observations.",
-                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
-                            return null;
-                        }
-                    }
-                    // Validate (warning) if any sighting doesn't have a GPS coordinate
-                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
-                        if (sightingWrapper.getLatitude() == null || Latitudes.NONE.equals(sightingWrapper.getLatitude())
-                                || sightingWrapper.getLongitude() == null || Longitudes.NONE.equals(sightingWrapper.getLongitude())) {
-                            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                                    "There are Observations without GPS Coordinates. Are you sure you want to save?",
-                                    "Missing GPS Coordinates", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                            if (result == JOptionPane.YES_OPTION) {
-                                break;
-                            }
-                            else {
-                                final int finalRowCount = rowCount;
-                                SwingUtilities.invokeLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
-                                    }
-                                });
-                                return null;
-                            }
-                        }
-                    }
-                    // Validate (warning) all Sightings fall inside the Visit's dates
-                    LocalDate startDate;
-                    if (visit.getStartDate() != null) {
-                        startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
-                    }
-                    else {
-                        startDate = null;
-                    }
-                    LocalDate endDate;
-                    if (visit.getEndDate() != null) {
-                        endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
-                    }
-                    else {
-                        endDate = null;
-                    }
-                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
-                        LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sightingWrapper.getDate());
-                        if ((startDate != null && sightingDate.isBefore(startDate))
-                                || (endDate != null && sightingDate.isAfter(endDate))) {
-                            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                                    "There are Observations that fall outside of the specified date range of the Perios. Are you sure you want to save?",
-                                    "Invalid Period Date Range", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                            if (result == JOptionPane.YES_OPTION) {
-                                break;
-                            }
-                            else {
-                                final int finalRowCount = rowCount;
-                                SwingUtilities.invokeLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
-                                    }
-                                });
-                                return null;
-                            }
-                        }
                     }
                     // Everything seems fine, start saving and close the tab to prevent new edits
                     WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnProcessActionPerformed() - The data will be saved to the workspace.");
@@ -1229,6 +1137,7 @@ System.out.println("getParent() = " + getParent());
                     final Visit visitHandle = visit;
                     final Object saveSightingLock = new Object();
                     String executorServiceName = "WL_BulkImport(Save)";
+                    final DefaultTableModel model = (DefaultTableModel) tblBulkImport.getModel();
                     final Map<String, Object> mapSyncLocks = new HashMap<>(model.getRowCount() * 2);
                     ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory(executorServiceName));
                     final AtomicInteger counter = new AtomicInteger();
@@ -1383,6 +1292,116 @@ System.out.println("getParent() = " + getParent());
         });
     }//GEN-LAST:event_btnProcessActionPerformed
 
+    private Visit validateRecords() {
+        // Validate the visit is OK
+        Visit visit = getValidatedVisit(txtVisitName.getText().trim());
+        if (visit == null) {
+            return visit;
+        }
+        visit.setLocationID(selectedLocation.getID());
+        visit.setCachedLocationName(app.getDBI().findLocation(visit.getLocationID(), null, false, Location.class).getName());
+        visit.setStartDate(dtpStartDate.getDate());
+        visit.setEndDate(dtpEndDate.getDate());
+        visit.setType((VisitType) cmbVisitType.getSelectedItem());
+        // Validate all sightings have a creature set
+        final DefaultTableModel model = (DefaultTableModel) tblBulkImport.getModel();
+        for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+            BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
+            if (sightingWrapper.getElementID() == 0) {
+                final int finalRowCount = rowCount;
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
+                    }
+                });
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Please assign a Creature to each of the Observations.",
+                        "Can't Save", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
+        // Validate the certainty is set
+        for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+            BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
+            if (sightingWrapper.getCertainty() == null || sightingWrapper.getCertainty().equals(Certainty.NONE)) {
+                final int finalRowCount = rowCount;
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
+                    }
+                });
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Please assign a Certainty to each of the Observations.",
+                        "Can't Save", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
+        // Validate (warning) if any sighting doesn't have a GPS coordinate
+        for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+            BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
+            if (sightingWrapper.getLatitude() == null || Latitudes.NONE.equals(sightingWrapper.getLatitude())
+                    || sightingWrapper.getLongitude() == null || Longitudes.NONE.equals(sightingWrapper.getLongitude())) {
+                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "There are Observations without GPS Coordinates. Are you sure you want to save?",
+                        "Missing GPS Coordinates", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (result == JOptionPane.YES_OPTION) {
+                    break;
+                }
+                else {
+                    final int finalRowCount = rowCount;
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
+                        }
+                    });
+                    return null;
+                }
+            }
+        }
+        // Validate (warning) all Sightings fall inside the Visit's dates
+        LocalDate startDate;
+        if (visit.getStartDate() != null) {
+            startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
+        }
+        else {
+            startDate = null;
+        }
+        LocalDate endDate;
+        if (visit.getEndDate() != null) {
+            endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+        }
+        else {
+            endDate = null;
+        }
+        for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+            BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
+            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sightingWrapper.getDate());
+            if ((startDate != null && sightingDate.isBefore(startDate))
+                    || (endDate != null && sightingDate.isAfter(endDate))) {
+                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "There are Observations that fall outside of the specified date range of the Perios. Are you sure you want to save?",
+                        "Invalid Period Date Range", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (result == JOptionPane.YES_OPTION) {
+                    break;
+                }
+                else {
+                    final int finalRowCount = rowCount;
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                        }
+                    });
+                    return null;
+                }
+            }
+        }
+        return visit;
+    }
+    
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // Reload the location (espesially the image) as it might have changed
         if (selectedLocation != null) {
@@ -1562,7 +1581,7 @@ System.out.println("getParent() = " + getParent());
                     closeTab();
                     // For volunteers redirect to the home tab and then show the welcome dialog again
                     if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
-                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                            || (evt != null && WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE)) {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -1725,6 +1744,21 @@ System.out.println("getParent() = " + getParent());
                 }
                 WildLogApp.LOGGER.log(Level.INFO, "Finished BulkUploadPanel.btnStashActionPerformed() - The process took {} seconds.", (System.currentTimeMillis() - time) / 1000);
                 return null;
+            }
+
+            @Override
+            protected void finished() {
+                super.finished();
+                // Remote users don't save, they Stash and then get asked to Sync instead
+                if (evt == null && WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                            dialog.setVisible(true);
+                        }
+                    });
+                }
             }
         });
     }//GEN-LAST:event_btnStashActionPerformed

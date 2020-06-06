@@ -257,6 +257,7 @@ public class WorkspaceCloudImportDialog extends JDialog {
         }
         // Setup Azure Sync
         long workspaceID = Long.parseLong(lstWorkspaces.getSelectedValue().substring(0, lstWorkspaces.getSelectedValue().indexOf(" - ")).trim());
+        WildLogApp.LOGGER.log(Level.INFO, "Sync Workspace: {}", workspaceID);
         final SyncAzure syncAzure = new SyncAzure(syncTokenValues[3], syncTokenValues[1], syncTokenValues[2], 
                 workspaceID, WildLogApp.getApplication().getWildLogOptions().getDatabaseVersion());
         // Close this popup
@@ -284,6 +285,8 @@ public class WorkspaceCloudImportDialog extends JDialog {
                             feedback.println("-------------------------------------------------");
                             feedback.println("-------------- Cloud Import Report --------------");
                             feedback.println("-------------------------------------------------");
+                            feedback.println("");
+                            feedback.println("Workspace " + syncAzure.getWorkspaceID());
                             feedback.println("");
                             // Get selected records
                             setProgress(1);

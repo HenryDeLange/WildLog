@@ -643,5 +643,9 @@ public final class SyncAzure {
         }
         return lstParents;
     }
+
+    public long getWorkspaceID() {
+        return workspaceID;
+    }
     
 }

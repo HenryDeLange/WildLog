@@ -544,6 +544,7 @@ public class WorkspaceSyncDialog extends JDialog {
         String[] syncTokenValues = syncToken.split(" ");
         WildLogApp.LOGGER.log(Level.INFO, "Sync Mode: {}", syncTokenValues[0]);
         WildLogApp.LOGGER.log(Level.INFO, "Sync Account: {}", syncTokenValues[1]);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync Workspace: {}", WildLogApp.getApplication().getWildLogOptions().getWorkspaceID());
         if (syncTokenValues[0].equals("FREE")) {
             WLOptionPane.showMessageDialog(this,
                     "<html>You are currently using the limited free <i>WildLog Cloud Sync Token</i>. "
@@ -626,6 +627,8 @@ public class WorkspaceSyncDialog extends JDialog {
                             feedback.println("-------------------------------------------------");
                             feedback.println("--------------- Cloud Sync Report ---------------");
                             feedback.println("-------------------------------------------------");
+                            feedback.println("");
+                            feedback.println("Workspace " + syncAzure.getWorkspaceID());
                             feedback.println("");
                             // SYNC - Delete Logs
                             setProgress((int) (1 * adjustForNoFiles));
@@ -739,8 +742,12 @@ public class WorkspaceSyncDialog extends JDialog {
                             @Override
                             public void run() {
                                 // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                String restartText = "";
+                                if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                                    restartText = " Please restart the application.";
+                                }
                                 WLOptionPane.showMessageDialog(null, // Using null to prevent the glasspane from being used (it will remove the existing one)
-                                        "<html>The Cloud Sync process has completed. Please restart the application."
+                                        "<html>The Cloud Sync process has completed." + restartText
                                                 + "<br/><br/><hr/>"
                                                 + "<br/><b>Failed Sync Actions  : " + syncFail + "</b>"
                                                 + "<br/>"
@@ -858,6 +865,7 @@ public class WorkspaceSyncDialog extends JDialog {
             String[] syncTokenValues = syncToken.split(" ");
             WildLogApp.LOGGER.log(Level.INFO, "Sync Mode: {}", syncTokenValues[0]);
             WildLogApp.LOGGER.log(Level.INFO, "Sync Account: {}", syncTokenValues[1]);
+            WildLogApp.LOGGER.log(Level.INFO, "Sync Workspace: {}", WildLogApp.getApplication().getWildLogOptions().getWorkspaceID());
             final SyncAzure syncAzure = new SyncAzure(syncTokenValues[3], syncTokenValues[1], syncTokenValues[2],
                     WildLogApp.getApplication().getWildLogOptions().getWorkspaceID(), WildLogApp.getApplication().getWildLogOptions().getDatabaseVersion());
             // Close this popup
@@ -1928,19 +1936,60 @@ public class WorkspaceSyncDialog extends JDialog {
                                     logIfFailed(inFeedback, syncAction, syncBlobMetadata.isSuccess());
                                     // Set the metadata (needed to do the bulk import
                                     if (syncBlobMetadata.isSuccess()) {
-                                        try {
-                                            String dateTime = syncBlobMetadata.getDatetime();
-                                            LLJTran lljTran = new LLJTran(workspacePath.toFile());
-                                            lljTran.read(LLJTran.READ_ALL, true);
-                                            //lljTran.read(LLJTran.READ_INFO, true);
-                                            lljTran.addAppx(LLJTran.dummyExifHeader, 0, LLJTran.dummyExifHeader.length, true);
-                                            Exif exif = (Exif) lljTran.getImageInfo();
-                                            if (dateTime != null && !dateTime.trim().isEmpty()) {
-                                                Entry entry = new Entry(Exif.ASCII);
-                                                entry.setValue(0, dateTime.replace('.', ':'));
-                                                exif.setTagValue(Exif.DATETIME, 0, entry, true);
+                                        if (Files.exists(workspacePath) && Files.isWritable(workspacePath)) {
+                                            try {
+                                                setImageExifData(syncBlobMetadata, workspacePath);
                                             }
+                                            catch (IOException | LLJTranException ex) {
+                                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                                // Wait a short time and then try again
+                                                try {
+                                                    Thread.sleep(1000);
+                                                    setImageExifData(syncBlobMetadata, workspacePath);
+                                                }
+                                                catch (IOException | LLJTranException | InterruptedException ex2) {
+                                                    WildLogApp.LOGGER.log(Level.ERROR, ex2.toString(), ex2);
+                                                    // If it failed again then give up
+                                                    logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, visit.getID(), 
+                                                            "Unable to set the file metadata [" + workspacePath + "]", visit), false);
+//                                                    // Delete the failed file (so that it can be redownloaded if Sync is ran again
+//                                                    try {
+//                                                        WildLogApp.LOGGER.log(Level.ERROR, "Delete stashed file that failed to download correctly: " + workspacePath);
+//                                                        Files.deleteIfExists(workspacePath);
+//                                                    }
+//                                                    catch (IOException ex3) {
+//                                                        WildLogApp.LOGGER.log(Level.ERROR, ex3.toString(), ex3);
+//                                                    }
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, visit.getID(), 
+                                                    "Unable to write metadata to downloaded file [" + workspacePath + "]", visit), false);
+                                        }
+                                    }
+                                    // Update progess
+                                    inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
+                                            / 3.0 * (double) threadLoopCount.get() / threadFolderTotalSize
+                                            * (double) threadSubLoopCount.incrementAndGet() / threadTotalSize)));
+                                    inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+                                    syncStashDown.incrementAndGet();
+                                }
+
+                                private void setImageExifData(SyncBlobMetadata syncBlobMetadata, Path workspacePath) throws LLJTranException, IOException {
+                                    String dateTime = syncBlobMetadata.getDatetime();
+                                    LLJTran lljTran = new LLJTran(workspacePath.toFile());
+                                    lljTran.read(LLJTran.READ_ALL, true);
+                                    //lljTran.read(LLJTran.READ_INFO, true);
+                                    lljTran.addAppx(LLJTran.dummyExifHeader, 0, LLJTran.dummyExifHeader.length, true);
+                                    Exif exif = (Exif) lljTran.getImageInfo();
+                                    if (dateTime != null && !dateTime.trim().isEmpty()) {
+                                        Entry entry = new Entry(Exif.ASCII);
+                                        entry.setValue(0, dateTime.replace('.', ':'));
+                                        exif.setTagValue(Exif.DATETIME, 0, entry, true);
+                                    }
 // TODO: Die GPS write werk nog nie (nie krieties nie, maar sal nice wees as dit kan werk...) Extend dalk Exif.java om die GPS IFD te kan hanteer...
+//       Dalk beter as ek die EXIF data in 'n ExtraData lys stoor en dan van daar af lees tydens bulk import?
 //                                            String latitude = syncBlobMetadata.getLatitude();
 //                                            if (latitude != null && !latitude.trim().isEmpty()) {
 //                                                Entry entry = new Entry(Exif.ASCII);
@@ -1953,27 +2002,14 @@ public class WorkspaceSyncDialog extends JDialog {
 //                                                entry.setValue(0, longitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
 //                                                exif.setTagValue(Exif.GPSINFO, Exif.GPSLongitude, entry, true);
 //                                            }
-                                            lljTran.refreshAppx();
-                                            try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(workspacePath.toFile()))) {
-                                                lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
-                                                //lljTran.xferInfo(null, outputStream, LLJTran.REPLACE, LLJTran.REMOVE);
-                                            }
-                                            finally {
-                                                lljTran.freeMemory();
-                                            }
-                                        }
-                                        catch (IOException | LLJTranException ex) {
-                                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                            logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, visit.getID(), 
-                                                    "Unable to set the file metadata [" + workspacePath + "]", visit), false);
-                                        }
-                                    }
-                                    // Update progess
-                                    inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
-                                            / 3.0 * (double) threadLoopCount.get() / threadFolderTotalSize
-                                            * (double) threadSubLoopCount.incrementAndGet() / threadTotalSize)));
-                                    inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
-                                    syncStashDown.incrementAndGet();
+lljTran.refreshAppx();
+try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(workspacePath.toFile()))) {
+    lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
+    //lljTran.xferInfo(null, outputStream, LLJTran.REPLACE, LLJTran.REMOVE);
+}
+finally {
+    lljTran.freeMemory();
+}
                                 }
                             });
                         }

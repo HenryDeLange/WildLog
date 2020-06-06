@@ -126,6 +126,7 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.dialogs.SelectLocationDialog;
+import wildlog.ui.dialogs.SyncTokenTool;
 import wildlog.ui.dialogs.WorkspaceCloudExportDialog;
 import wildlog.ui.dialogs.WorkspaceCloudImportDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
@@ -274,6 +275,8 @@ public final class WildLogView extends JFrame {
             mnuSyncExport.setVisible(false);
             mnuSyncImport.setEnabled(false);
             mnuSyncImport.setVisible(false);
+            mnuSyncToken.setEnabled(false);
+            mnuSyncToken.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -366,6 +369,8 @@ public final class WildLogView extends JFrame {
             mnuSyncExport.setVisible(false);
             mnuSyncImport.setEnabled(false);
             mnuSyncImport.setVisible(false);
+            mnuSyncToken.setEnabled(false);
+            mnuSyncToken.setVisible(false);
         }
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             mnuBackupDatabase.setEnabled(false);
@@ -555,6 +560,7 @@ public final class WildLogView extends JFrame {
         sprSync = new javax.swing.JPopupMenu.Separator();
         mnuSyncExport = new javax.swing.JMenuItem();
         mnuSyncImport = new javax.swing.JMenuItem();
+        mnuSyncToken = new javax.swing.JMenuItem();
         reportsMenu = new javax.swing.JMenu();
         mnuReportVisitDates = new javax.swing.JMenuItem();
         mnuReportOccupancyModel = new javax.swing.JMenuItem();
@@ -1457,6 +1463,18 @@ public final class WildLogView extends JFrame {
             }
         });
         syncMenu.add(mnuSyncImport);
+
+        mnuSyncToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuSyncToken.setText("Generate Sync Token");
+        mnuSyncToken.setToolTipText("Generate a WildLog Sync Token.");
+        mnuSyncToken.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mnuSyncToken.setName("mnuSyncToken"); // NOI18N
+        mnuSyncToken.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSyncTokenActionPerformed(evt);
+            }
+        });
+        syncMenu.add(mnuSyncToken);
 
         menuBar.add(syncMenu);
 
@@ -4011,6 +4029,11 @@ public final class WildLogView extends JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuSyncImportActionPerformed
 
+    private void mnuSyncTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncTokenActionPerformed
+        SyncTokenTool syncTokenTool = new SyncTokenTool();
+        syncTokenTool.setVisible(true);
+    }//GEN-LAST:event_mnuSyncTokenActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4174,6 +4197,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuSwitchElementNames;
     private javax.swing.JMenuItem mnuSyncExport;
     private javax.swing.JMenuItem mnuSyncImport;
+    private javax.swing.JMenuItem mnuSyncToken;
     private javax.swing.JMenuItem mnuSyncWorkspace;
     private javax.swing.JMenuItem mnuSystemMonitor;
     private javax.swing.JMenuItem mnuUserGuide;

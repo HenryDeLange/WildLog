@@ -1,17 +1,15 @@
-package wildlog.tools;
+package wildlog.ui.dialogs;
 
-import java.awt.Color;
-import java.awt.EventQueue;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
+import wildlog.WildLogApp;
 import wildlog.encryption.TokenEncryptor;
 
 public class SyncTokenTool extends JFrame {
 
     public SyncTokenTool() {
         initComponents();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(WildLogApp.getApplication().getMainFrame());
     }
 
     /**
@@ -23,33 +21,24 @@ public class SyncTokenTool extends JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         btnEncrypt = new javax.swing.JButton();
-        btnDecrypt = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txaSyncToken = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Azure Sync Token Generator");
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Azure Sync Token Generator");
 
         btnEncrypt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnEncrypt.setText("Encrypt");
+        btnEncrypt.setText("Generate WildLog Sync Token");
         btnEncrypt.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEncrypt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEncryptActionPerformed(evt);
-            }
-        });
-
-        btnDecrypt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnDecrypt.setText("Decrypt");
-        btnDecrypt.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDecrypt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDecryptActionPerformed(evt);
             }
         });
 
@@ -74,12 +63,9 @@ public class SyncTokenTool extends JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnEncrypt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnDecrypt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(10, 10, 10))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnEncrypt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))
                         .addGap(10, 10, 10))))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -96,9 +82,7 @@ public class SyncTokenTool extends JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnEncrypt, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addComponent(btnDecrypt, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                .addComponent(btnEncrypt, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
         );
 
@@ -109,37 +93,7 @@ public class SyncTokenTool extends JFrame {
         txaSyncToken.setText(TokenEncryptor.encrypt(txaSyncToken.getText()));
     }//GEN-LAST:event_btnEncryptActionPerformed
 
-    private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
-        txaSyncToken.setText(TokenEncryptor.decrypt(txaSyncToken.getText()));
-    }//GEN-LAST:event_btnDecryptActionPerformed
-
-    public static void main(String args[]) {
-        // Setup the application
-        try {
-            // Set native Look and Feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            // Removes the dotted border around controls which is not consistent with Windows
-            UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("ToggleButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("CheckBox.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("TabbedPane.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("RadioButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("Slider.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("ComboBox.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        // Launch the application
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SyncTokenTool().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDecrypt;
     private javax.swing.JButton btnEncrypt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
