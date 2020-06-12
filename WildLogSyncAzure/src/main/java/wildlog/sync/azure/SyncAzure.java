@@ -20,6 +20,8 @@ import com.microsoft.azure.storage.table.CloudTableClient;
 import com.microsoft.azure.storage.table.TableBatchOperation;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
@@ -68,7 +70,7 @@ public final class SyncAzure {
         dbVersion = inDBVersion;
     }
     
-    // DATA
+    // TABLE
     
     private CloudTableClient getTableClient() 
             throws InvalidKeyException, URISyntaxException {
@@ -353,7 +355,7 @@ public final class SyncAzure {
         return deleteDataBatch(inDataType, null);
     }
     
-    // SYNC LIST - DATA
+    // SYNC LIST - TABLE
     
     public List<SyncTableEntry> getSyncListDataBatch(WildLogDataType inDataType, long inAfterTimestamp) {
         List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
@@ -393,7 +395,7 @@ public final class SyncAzure {
         return lstSyncTableEntries;
     }
     
-    // FILES
+    // BLOB
     
     private BlobContainerClient getBlobContainer(WildLogDataType inDataType) 
             throws InvalidKeyException, MalformedURLException {
@@ -453,12 +455,31 @@ public final class SyncAzure {
         return false;
     }
     
+    public boolean uploadText(WildLogDataType inDataType, String inText, long inParentID, String inRecordID) {
+        try {
+            BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
+            BlobClient blobClient = blobContainerClient.getBlobClient(calculateFullBlobIDForText(inParentID, inRecordID));
+            // Upload the text
+            try (ByteArrayInputStream dataStream = new ByteArrayInputStream(inText.getBytes())) {
+                blobClient.upload(dataStream, inText.length());
+            }
+            catch (UncheckedIOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            return true;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        return false;
+    }
+    
     public SyncBlobMetadata downloadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, String inRecordID) {
         SyncBlobMetadata syncBlobMetadata = new SyncBlobMetadata();
         String blobID = calculateFullBlobID(inParentID, inRecordID, inFilePath);
         try {
             BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
-            BlobClient blobClient = blobContainerClient.getBlobClient(calculateFullBlobID(inParentID, inRecordID, inFilePath));
+            BlobClient blobClient = blobContainerClient.getBlobClient(blobID);
             // Download the file
             if (!Files.exists(inFilePath)) {
                 Files.createDirectories(inFilePath.getParent());
@@ -483,6 +504,23 @@ public final class SyncAzure {
         return syncBlobMetadata;
     }
     
+    public String downloadText(WildLogDataType inDataType, long inParentID, String inRecordID) {
+        String blobID = calculateFullBlobIDForText(inParentID, inRecordID);
+        try {
+            BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
+            BlobClient blobClient = blobContainerClient.getBlobClient(blobID);
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                blobClient.download(outputStream);
+                return new String(outputStream.toByteArray());
+            }
+        }
+        catch (Exception ex) {
+            System.err.println("Failed Download: Blob ID = " + blobID);
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+    
     // Note:
     // RecordID is String want stashed files moet die oorspronklikke naam gebruik, 
     // maar normale files moet hulle Long ID gebruik.
@@ -496,7 +534,12 @@ public final class SyncAzure {
         return blobPath.toLowerCase(); // Extentions might be uppercase or lowercase, so make all lowercase on the cloud
     }
     
-    public boolean deleteFile(WildLogDataType inDataType, String inFullBlobName) {
+    public String calculateFullBlobIDForText(long inParentID, String inRecordID) {
+        String blobPath = Long.toString(workspaceID) + "/" + Long.toString(inParentID) + ".txt";
+        return blobPath.toLowerCase();
+    }
+    
+    public boolean deleteFileOrText(WildLogDataType inDataType, String inFullBlobName) {
         try {
             BlobContainerClient blobContainerClient = getBlobContainer(inDataType);
             BlobClient blobClient = blobContainerClient.getBlobClient(inFullBlobName);
@@ -530,7 +573,7 @@ public final class SyncAzure {
             // Delete maar die blobs een vir een...
             List<SyncBlobEntry> lstBlobs = getSyncListFilesBatch(inDataType);
             for (SyncBlobEntry syncBlobEntry : lstBlobs) {
-                deleteFile(inDataType, syncBlobEntry.getFullBlobID());
+                deleteFileOrText(inDataType, syncBlobEntry.getFullBlobID());
             }
         }
         catch (Exception ex) {
@@ -539,7 +582,7 @@ public final class SyncAzure {
         return false;
     }
     
-    // SYNC LIST - FILES
+    // SYNC LIST - BLOB
     
     /**
      * Lists all the blobs in associated with the workspace

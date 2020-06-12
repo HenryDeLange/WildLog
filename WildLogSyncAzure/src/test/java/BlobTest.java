@@ -30,13 +30,16 @@ public class BlobTest extends JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        btnUpload = new javax.swing.JButton();
-        btnDownload = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
+        btnUploadFile = new javax.swing.JButton();
+        btnDownloadFile = new javax.swing.JButton();
+        btnDeleteFile = new javax.swing.JButton();
         btnSyncListBlobsBatch = new javax.swing.JButton();
         btnSyncListParentsBatch = new javax.swing.JButton();
         btnSyncListChildrenBatch = new javax.swing.JButton();
         btnDeleteWorkspace = new javax.swing.JButton();
+        btnUploadText = new javax.swing.JButton();
+        btnDownloadText = new javax.swing.JButton();
+        btnDeleteText = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Azure Sync Tester");
@@ -45,30 +48,30 @@ public class BlobTest extends JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Azure Blob Sync Tester");
 
-        btnUpload.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnUpload.setText("Upload");
-        btnUpload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpload.addActionListener(new java.awt.event.ActionListener() {
+        btnUploadFile.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUploadFile.setText("Upload File");
+        btnUploadFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUploadFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUploadActionPerformed(evt);
+                btnUploadFileActionPerformed(evt);
             }
         });
 
-        btnDownload.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnDownload.setText("Download");
-        btnDownload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+        btnDownloadFile.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDownloadFile.setText("Download File");
+        btnDownloadFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDownloadFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDownloadActionPerformed(evt);
+                btnDownloadFileActionPerformed(evt);
             }
         });
 
-        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnDelete.setText("Delete");
-        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+        btnDeleteFile.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteFile.setText("Delete File");
+        btnDeleteFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
+                btnDeleteFileActionPerformed(evt);
             }
         });
 
@@ -108,6 +111,33 @@ public class BlobTest extends JFrame {
             }
         });
 
+        btnUploadText.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUploadText.setText("Upload Text");
+        btnUploadText.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUploadText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadTextActionPerformed(evt);
+            }
+        });
+
+        btnDownloadText.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDownloadText.setText("Download Text");
+        btnDownloadText.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDownloadText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadTextActionPerformed(evt);
+            }
+        });
+
+        btnDeleteText.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteText.setText("Delete Text");
+        btnDeleteText.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteTextActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,15 +150,25 @@ public class BlobTest extends JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                                .addComponent(btnUploadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                                 .addGap(20, 20, 20)
-                                .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
+                                .addComponent(btnDownloadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
                             .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnDeleteFile, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnUploadText, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addComponent(btnDownloadText, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnDeleteText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                         .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
@@ -138,39 +178,45 @@ public class BlobTest extends JFrame {
                 .addComponent(jLabel1)
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
-                .addGap(40, 40, 40)
-                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUploadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(btnDownloadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
                 .addGap(20, 20, 20)
-                .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnUploadText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDownloadText, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDeleteFile, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeleteText, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
-                .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
-                .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
+    private void btnUploadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadFileActionPerformed
         syncAzure.uploadFile(WildLogDataType.ELEMENT, new File("C:\\_temp\\mol.jpg").toPath(), 777L, Long.toString(555L), 
                 "2019:07:25 14:27:00", "-33° 45' 0.62\"", "26° 31' 46.68\"");
-        System.out.println("UPLOADED");
-    }//GEN-LAST:event_btnUploadActionPerformed
+        System.out.println("UPLOADED FILE");
+    }//GEN-LAST:event_btnUploadFileActionPerformed
 
-    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+    private void btnDownloadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadFileActionPerformed
         syncAzure.downloadFile(WildLogDataType.ELEMENT, new File("C:\\_temp\\mol.jpg").toPath(), 777L, Long.toString(555L));
-        System.out.println("DOWNLOADED");
-    }//GEN-LAST:event_btnDownloadActionPerformed
+        System.out.println("DOWNLOADED FILE");
+    }//GEN-LAST:event_btnDownloadFileActionPerformed
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        syncAzure.deleteFile(WildLogDataType.ELEMENT, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(55L) + ".jpg");
-        System.out.println("DELETED");
-    }//GEN-LAST:event_btnDeleteActionPerformed
+    private void btnDeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteFileActionPerformed
+        syncAzure.deleteFileOrText(WildLogDataType.ELEMENT, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(55L) + ".jpg");
+        System.out.println("DELETED FILE");
+    }//GEN-LAST:event_btnDeleteFileActionPerformed
 
     private void btnSyncListBlobsBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListBlobsBatchActionPerformed
         List<SyncBlobEntry> lstSyncBlobEntry = syncAzure.getSyncListFilesBatch(WildLogDataType.ELEMENT);
@@ -204,6 +250,22 @@ public class BlobTest extends JFrame {
         System.out.println("DELETED WORKSPACE");
     }//GEN-LAST:event_btnDeleteWorkspaceActionPerformed
 
+    private void btnUploadTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadTextActionPerformed
+        syncAzure.uploadText(WildLogDataType.EXTRA, "test test test", 777L, Long.toString(888L));
+        System.out.println("UPLOADED TEXT");
+    }//GEN-LAST:event_btnUploadTextActionPerformed
+
+    private void btnDownloadTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadTextActionPerformed
+        String text = syncAzure.downloadText(WildLogDataType.EXTRA, 777L, Long.toString(888L));
+        System.out.println("text = " + text);
+        System.out.println("DOWNLOADED TEXT");
+    }//GEN-LAST:event_btnDownloadTextActionPerformed
+
+    private void btnDeleteTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteTextActionPerformed
+        syncAzure.deleteFileOrText(WildLogDataType.EXTRA, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(888L) + ".txt");
+        System.out.println("DELETED TEXT");
+    }//GEN-LAST:event_btnDeleteTextActionPerformed
+
     public static void main(String args[]) {
         // Setup the application
         try {
@@ -230,13 +292,16 @@ public class BlobTest extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeleteFile;
+    private javax.swing.JButton btnDeleteText;
     private javax.swing.JButton btnDeleteWorkspace;
-    private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnDownloadFile;
+    private javax.swing.JButton btnDownloadText;
     private javax.swing.JButton btnSyncListBlobsBatch;
     private javax.swing.JButton btnSyncListChildrenBatch;
     private javax.swing.JButton btnSyncListParentsBatch;
-    private javax.swing.JButton btnUpload;
+    private javax.swing.JButton btnUploadFile;
+    private javax.swing.JButton btnUploadText;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
