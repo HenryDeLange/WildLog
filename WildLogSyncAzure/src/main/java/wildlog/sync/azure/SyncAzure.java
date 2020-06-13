@@ -149,6 +149,8 @@ public final class SyncAzure {
                     batchCounter++;
                 }
                 catch (StorageException ex) {
+                    System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+                    System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
                     ex.printStackTrace(System.out);
                     System.out.println(">>> The upload batch " + batchCounter + " might be too big, it will be split in half...");
                     List<DataObjectWithAudit> lstProblematicBatch = lstAllBatchDataChunks.get(batchCounter);
