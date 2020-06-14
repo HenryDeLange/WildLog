@@ -7,11 +7,14 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
+import wildlog.data.dbi.DBI_JDBC;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
@@ -20,8 +23,8 @@ public class DataTest extends JFrame {
     private static long downCounter = 0L;
     private SyncAzure syncAzure = new SyncAzure(
             "DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-            "", "", 
-            123L, 12);
+            "wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
+            123L, DBI_JDBC.WILDLOG_DB_VERSION);
 
     public DataTest() {
         initComponents();
@@ -44,6 +47,12 @@ public class DataTest extends JFrame {
         btnDeleteBatch = new javax.swing.JButton();
         btnSyncListBatch = new javax.swing.JButton();
         btnDeleteWorkspace = new javax.swing.JButton();
+        btnUploadExtraData = new javax.swing.JButton();
+        btnUploadBatchExtraData = new javax.swing.JButton();
+        btnDownloadExtraData = new javax.swing.JButton();
+        btnDownloadBatchExtraData = new javax.swing.JButton();
+        btnDeleteExtraData = new javax.swing.JButton();
+        btnDeleteBatchExtraData = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Azure Sync Tester");
@@ -124,6 +133,60 @@ public class DataTest extends JFrame {
             }
         });
 
+        btnUploadExtraData.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUploadExtraData.setText("Upload ExtraData");
+        btnUploadExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUploadExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadExtraDataActionPerformed(evt);
+            }
+        });
+
+        btnUploadBatchExtraData.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUploadBatchExtraData.setText("Upload Batch ExtraData");
+        btnUploadBatchExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUploadBatchExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadBatchExtraDataActionPerformed(evt);
+            }
+        });
+
+        btnDownloadExtraData.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDownloadExtraData.setText("Download ExtraData");
+        btnDownloadExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDownloadExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadExtraDataActionPerformed(evt);
+            }
+        });
+
+        btnDownloadBatchExtraData.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDownloadBatchExtraData.setText("Download Batch ExtraData");
+        btnDownloadBatchExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDownloadBatchExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadBatchExtraDataActionPerformed(evt);
+            }
+        });
+
+        btnDeleteExtraData.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteExtraData.setText("Delete ExtraData");
+        btnDeleteExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteExtraDataActionPerformed(evt);
+            }
+        });
+
+        btnDeleteBatchExtraData.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteBatchExtraData.setText("Delete Batch ExtraData");
+        btnDeleteBatchExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteBatchExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteBatchExtraDataActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -136,18 +199,24 @@ public class DataTest extends JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnDeleteBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                                    .addComponent(btnUploadBatch, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
-                                .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnDownloadBatch, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                                    .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)))
                             .addComponent(btnSyncListBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnDownloadBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnDeleteBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnUpload, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                                    .addComponent(btnUploadBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                                    .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnDownloadBatchExtraData, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnDeleteBatchExtraData, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnDeleteExtraData, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnUploadExtraData, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                                    .addComponent(btnUploadBatchExtraData, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                                    .addComponent(btnDownloadExtraData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
@@ -156,22 +225,36 @@ public class DataTest extends JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jLabel1)
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnUploadBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnDownloadBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDeleteBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteBatchExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnUploadExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnUploadBatchExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDownloadExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnDownloadBatchExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDownloadBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUploadBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
-                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(btnDeleteBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(btnSyncListBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(btnSyncListBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -251,6 +334,59 @@ public class DataTest extends JFrame {
         System.out.println("DELETED WORKSPACE");
     }//GEN-LAST:event_btnDeleteWorkspaceActionPerformed
 
+    private void btnUploadExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadExtraDataActionPerformed
+        ExtraData temp = new ExtraData(WildLogExtraDataFieldTypes.WILDLOG, 11L, WildLogDataType.VISIT, 
+                ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), "test test test test test");
+        temp.setID(111L);
+        syncAzure.uploadData(WildLogDataType.EXTRA, temp);
+        System.out.println("UPLOADED EXTRADATA");
+    }//GEN-LAST:event_btnUploadExtraDataActionPerformed
+
+    private void btnUploadBatchExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadBatchExtraDataActionPerformed
+        List<DataObjectWithAudit> lstData = new ArrayList<>();
+        ExtraData temp1 = new ExtraData(WildLogExtraDataFieldTypes.WILDLOG, 44L, WildLogDataType.VISIT, 
+            ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), "test test test test test");
+        temp1.setID(123L);
+        lstData.add(temp1);
+        ExtraData temp2 = new ExtraData(WildLogExtraDataFieldTypes.WILDLOG, 44L, WildLogDataType.VISIT, 
+            ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), "test test test");
+        temp2.setID(456L);
+        lstData.add(temp2);
+        syncAzure.uploadDataBatch(WildLogDataType.EXTRA, lstData);
+        System.out.println("UPLOADED BATCH EXTRADATA");
+    }//GEN-LAST:event_btnUploadBatchExtraDataActionPerformed
+
+    private void btnDownloadExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadExtraDataActionPerformed
+        SyncTableEntry syncTableEntry = syncAzure.downloadData(WildLogDataType.EXTRA, 111L);
+        System.out.println("DOWNLOADED EXTRADATA: ");
+        System.out.println(syncTableEntry);
+    }//GEN-LAST:event_btnDownloadExtraDataActionPerformed
+
+    private void btnDownloadBatchExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadBatchExtraDataActionPerformed
+        List<Long> lstIDs = new ArrayList<>();
+        lstIDs.add(123L);
+        lstIDs.add(456L);
+        List<SyncTableEntry> lstSyncTableEntry = syncAzure.downloadDataBatch(WildLogDataType.EXTRA, 0, lstIDs);
+        System.out.println("DOWNLOADED BATCH EXTRADATA: ");
+        System.out.println(lstSyncTableEntry.size());
+        for (SyncTableEntry entry : lstSyncTableEntry) {
+            System.out.println(entry);
+        }
+    }//GEN-LAST:event_btnDownloadBatchExtraDataActionPerformed
+
+    private void btnDeleteExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteExtraDataActionPerformed
+        syncAzure.deleteData(WildLogDataType.EXTRA, 111L);
+        System.out.println("DELETED EXTRADATA");
+    }//GEN-LAST:event_btnDeleteExtraDataActionPerformed
+
+    private void btnDeleteBatchExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteBatchExtraDataActionPerformed
+        List<Long> lstIDs = new ArrayList<>();
+        lstIDs.add(123L);
+        lstIDs.add(456L);
+        syncAzure.deleteDataBatch(WildLogDataType.EXTRA, lstIDs);
+        System.out.println("DELETED BATCH EXTRADATA");
+    }//GEN-LAST:event_btnDeleteBatchExtraDataActionPerformed
+
     public static void main(String args[]) {
         // Setup the application
         try {
@@ -279,12 +415,18 @@ public class DataTest extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDeleteBatch;
+    private javax.swing.JButton btnDeleteBatchExtraData;
+    private javax.swing.JButton btnDeleteExtraData;
     private javax.swing.JButton btnDeleteWorkspace;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnDownloadBatch;
+    private javax.swing.JButton btnDownloadBatchExtraData;
+    private javax.swing.JButton btnDownloadExtraData;
     private javax.swing.JButton btnSyncListBatch;
     private javax.swing.JButton btnUpload;
     private javax.swing.JButton btnUploadBatch;
+    private javax.swing.JButton btnUploadBatchExtraData;
+    private javax.swing.JButton btnUploadExtraData;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

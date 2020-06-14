@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
+import wildlog.data.dbi.DBI_JDBC;
 import wildlog.data.enums.system.WildLogDataType;
 import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
@@ -15,7 +16,7 @@ public class BlobTest extends JFrame {
     private SyncAzure syncAzure = new SyncAzure(
             "DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
             "wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-            123L, 12);
+            123L, DBI_JDBC.WILDLOG_DB_VERSION);
 
     public BlobTest() {
         initComponents();
@@ -150,25 +151,20 @@ public class BlobTest extends JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(btnUploadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                                .addGap(20, 20, 20)
-                                .addComponent(btnDownloadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
                             .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnDeleteWorkspace, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnDeleteFile, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnUploadText, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
+                                    .addComponent(btnDeleteFile, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                                    .addComponent(btnDownloadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                                    .addComponent(btnUploadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
+                                .addGap(20, 20, 20)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(20, 20, 20)
-                                        .addComponent(btnDownloadText, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnDeleteText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(btnDownloadText, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                                    .addComponent(btnDeleteText, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                                    .addComponent(btnUploadText, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))))
                         .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
@@ -177,14 +173,17 @@ public class BlobTest extends JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jLabel1)
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUploadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                    .addComponent(btnDownloadFile, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnUploadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUploadText, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(btnDownloadText, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(btnDownloadFile, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUploadText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDownloadText, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDeleteFile, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteText, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -196,7 +195,7 @@ public class BlobTest extends JFrame {
                 .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         pack();

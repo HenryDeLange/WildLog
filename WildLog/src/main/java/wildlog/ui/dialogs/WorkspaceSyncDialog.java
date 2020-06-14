@@ -1188,32 +1188,32 @@ public class WorkspaceSyncDialog extends JDialog {
         List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(inDataType, quickSyncTimestamp);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + inDataType.getDescription() + " - Cloud Entries: " + lstCloudEntries.size());
         List<? extends DataObjectWithAudit> lstWorkspaceEntries;
-        if(inDataType == WildLogDataType.ELEMENT) {
+        if (inDataType == WildLogDataType.ELEMENT) {
             lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listElements(null, null, null, false, Element.class);
         }
         else
-        if(inDataType == WildLogDataType.LOCATION) {
+        if (inDataType == WildLogDataType.LOCATION) {
             lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listLocations(null, false, Location.class);
         }
         else
-        if(inDataType == WildLogDataType.VISIT) {
+        if (inDataType == WildLogDataType.VISIT) {
             lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listVisits(null, 0, null, false, Visit.class);
         }
         else
-        if(inDataType == WildLogDataType.SIGHTING) {
+        if (inDataType == WildLogDataType.SIGHTING) {
             lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listSightings(0, 0, 0, false, Sighting.class);
         }
         else
-        if(inDataType == WildLogDataType.WILDLOG_USER) {
+        if (inDataType == WildLogDataType.WILDLOG_USER) {
             lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listUsers(null, WildLogUser.class);
         }
         else
-        if(inDataType == WildLogDataType.WILDLOG_OPTIONS) {
+        if (inDataType == WildLogDataType.WILDLOG_OPTIONS) {
             lstWorkspaceEntries = new ArrayList<>(1);
             ((List<DataObjectWithAudit>) lstWorkspaceEntries).add(WildLogApp.getApplication().getDBI().findWildLogOptions(WildLogOptions.class));
         }
         else
-        if(inDataType == WildLogDataType.EXTRA) {
+        if (inDataType == WildLogDataType.EXTRA) {
             lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listExtraDatas(null, -1, ExtraData.class);
         }
         else {
@@ -1484,7 +1484,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 if (!found) {
                     logIfFailed(inFeedback, new SyncAction("CLOUD_DELETE", WildLogDataType.FILE, 
                             blobEntry.getRecordID(), blobEntry.getDataType().getDescription(), null), 
-                            inSyncAzure.deleteFile(blobEntry.getDataType(), blobEntry.getFullBlobID()));
+                            inSyncAzure.deleteFileOrText(blobEntry.getDataType(), blobEntry.getFullBlobID()));
                 }
                 inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0 * loopCount++ / totalBlobs)));
                 inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
@@ -2059,7 +2059,7 @@ finally {
     private void deleteStashedFilesFromCloud(PrintWriter inFeedback, SyncAzure inSyncAzure, SyncBlobEntry folderBlobEntry, SyncAction syncAction) {
         List<SyncBlobEntry> lstCloudStashedFiles = inSyncAzure.getSyncListFileChildrenBatch(WildLogDataType.STASH, folderBlobEntry.getRecordID());
         for (SyncBlobEntry fileBlobEntry : lstCloudStashedFiles) {
-            logIfFailed(inFeedback, syncAction, inSyncAzure.deleteFile(WildLogDataType.STASH, 
+            logIfFailed(inFeedback, syncAction, inSyncAzure.deleteFileOrText(WildLogDataType.STASH, 
                     fileBlobEntry.getFullBlobID().substring(WildLogDataType.STASH.getDescription().length() + 2)));
             syncDeleteStashUp++;
         }

@@ -56,7 +56,7 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected SecureRandom randomGenerator;
     // Version
-    protected static final int WILDLOG_DB_VERSION = 15;
+    public static final int WILDLOG_DB_VERSION = 15;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS ("
             + "ID bigint PRIMARY KEY NOT NULL, "

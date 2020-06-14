@@ -12,7 +12,6 @@ import wildlog.data.utils.UtilsData;
  * It can also be used to link internal system attributes, such as saving in progress Bulk Imports.
  */
 public class ExtraData extends DataObjectWithAudit {
-    public static enum EXTRA_FIELD_IDS {WILDLOG, USER};
     public static enum EXTRA_KEY_IDS {WL_BULK_IMPORT_TABLE_MODEL, WL_BULK_IMPORT_VISIT_FILES};
     private WildLogExtraDataFieldTypes fieldType;
     private long linkID; // The ID of the linked data object (Element, Location, etc.)
