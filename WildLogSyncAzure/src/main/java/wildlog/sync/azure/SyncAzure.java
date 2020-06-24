@@ -34,8 +34,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 import wildlog.sync.azure.dataobjects.SyncBlobMetadata;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
@@ -53,7 +55,7 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
  */
 public final class SyncAzure {
     private static final int BATCH_LIMIT = 50;
-    private static final int URL_LIMIT = 15000; // Ek dog dis "32684 characters", maar ek kry steeds errors, so ek kies maar iets randomly kleiner
+    private static final int URL_LIMIT = 15000; // Ek dog dis "32684 characters", maar ek kry steeds errors, so ek kies maar iets randomly kleiner (dalk word dit ge-BASE64 of iets?)
     private String storageConnectionString;
     private String accountName;
     private String accountKey;
@@ -110,9 +112,26 @@ public final class SyncAzure {
             if (inData.getSyncIndicator() == 0) {
                 inData.setSyncIndicator(new Date().getTime());
             }
+            // If this is ExtraData with the bulk import table model, then it is likely too big for table storage and needs to be saved as a blob instead
+            boolean blobSuccess = true;
+            if (inDataType == WildLogDataType.EXTRA) {
+                ExtraData extraData = (ExtraData) inData;
+                if (extraData.getFieldType() == WildLogExtraDataFieldTypes.WILDLOG 
+                        && ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
+                    String jsonData = extraData.getDataValue();
+                    blobSuccess = uploadText(inDataType, jsonData, extraData.getLinkID(), Long.toString(extraData.getID()));
+                    extraData.setDataValue(calculateFullBlobIDForText(extraData.getLinkID(), Long.toString(extraData.getID())));
+                }
+            }
+            // Save the table data
             SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, inData.getID(), dbVersion, inData);
             cloudTable.execute(TableOperation.insertOrReplace(syncTableEntry));
-            return true;
+            return blobSuccess && true;
+        }
+        catch (StorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -135,6 +154,7 @@ public final class SyncAzure {
                 lstAllBatchDataChunks.get(dataCounter / BATCH_LIMIT).add(data);
                 dataCounter++;
             }
+            boolean blobSuccess = true;
             int batchCounter = 0;
             final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 5;
             while (batchCounter < lstAllBatchDataChunks.size() && batchCounter < MAX_RETRY_LIMIT) {
@@ -144,6 +164,17 @@ public final class SyncAzure {
                         if (data.getSyncIndicator() == 0) {
                             data.setSyncIndicator(new Date().getTime());
                         }
+                        // If this is ExtraData with the bulk import table model, then it is likely too big for table storage and needs to be saved as a blob instead
+                        if (inDataType == WildLogDataType.EXTRA) {
+                            ExtraData extraData = (ExtraData) data;
+                            if (extraData.getFieldType() == WildLogExtraDataFieldTypes.WILDLOG 
+                                    && ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
+                                String jsonData = extraData.getDataValue();
+                                blobSuccess = uploadText(inDataType, jsonData, extraData.getLinkID(), Long.toString(extraData.getID()));
+                                extraData.setDataValue(calculateFullBlobIDForText(extraData.getLinkID(), Long.toString(extraData.getID())));
+                            }
+                        }
+                        // Create the batch operation
                         SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, data.getID(), dbVersion, data);
                         batchOperation.insertOrReplace(syncTableEntry);
                     }
@@ -151,7 +182,9 @@ public final class SyncAzure {
                     batchCounter++;
                 }
                 catch (StorageException ex) {
-                    ex.printStackTrace(System.out);
+                    System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+                    System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+                    ex.printStackTrace(System.err);
                     System.out.println(">>> The upload batch " + batchCounter + " might be too big, it will be split in half...");
                     List<DataObjectWithAudit> lstProblematicBatch = lstAllBatchDataChunks.get(batchCounter);
                     if (lstProblematicBatch.size() > 2) {
@@ -168,7 +201,12 @@ public final class SyncAzure {
                 System.err.println("The upload batch max retry limit was reached!!!");
                 return false;
             }
-            return true;
+            return true && blobSuccess;
+        }
+        catch (StorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -181,11 +219,25 @@ public final class SyncAzure {
             CloudTable cloudTable = getTable(inDataType);
             // Dis jammer, maar dit lyk my ek moet eers die waarde laai voor ek kan delete.
             // (Dit soek die "etag" waarde, so ek kan nie self 'n nuwe SyncTableEntry skep nie...)
+            boolean blobSuccess = true;
             SyncTableEntry syncTableEntry = downloadData(inDataType, inRecordID);
             if (syncTableEntry != null) {
                 cloudTable.execute(TableOperation.delete(syncTableEntry));
+                // If this is ExtraData with the bulk import table model, then it also needs to delete the blob storage text
+                if (inDataType == WildLogDataType.EXTRA) {
+                    ExtraData extraData = (ExtraData) syncTableEntry.getData();
+                    if (extraData.getFieldType() == WildLogExtraDataFieldTypes.WILDLOG 
+                            && ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
+                        blobSuccess = deleteFileOrText(inDataType, calculateFullBlobIDForText(extraData.getLinkID(), Long.toString(extraData.getID())));
+                    }
+                }
             }
-            return true;
+            return true && blobSuccess;
+        }
+        catch (StorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -210,19 +262,31 @@ public final class SyncAzure {
                 lstAllBatchDataChunks.get(dataCounter / BATCH_LIMIT).add(syncTableEntry);
                 dataCounter++;
             }
+            boolean blobSuccess = true;
             int batchCounter = 0;
             final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 5;
             while (batchCounter < lstAllBatchDataChunks.size() && batchCounter < MAX_RETRY_LIMIT) {
                 try {
                     TableBatchOperation batchOperation = new TableBatchOperation();
                     for (SyncTableEntry syncTableEntry : lstAllBatchDataChunks.get(batchCounter)) {
+                        // If this is ExtraData with the bulk import table model, then it also needs to delete the blob storage text
+                        if (inDataType == WildLogDataType.EXTRA) {
+                            ExtraData extraData = (ExtraData) syncTableEntry.getData();
+                            if (extraData.getFieldType() == WildLogExtraDataFieldTypes.WILDLOG 
+                                    && ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
+                                blobSuccess = deleteFileOrText(inDataType, calculateFullBlobIDForText(extraData.getLinkID(), Long.toString(extraData.getID())));
+                            }
+                        }
+                        // Create the batch operation
                         batchOperation.delete(syncTableEntry);
                     }
                     cloudTable.execute(batchOperation);
                     batchCounter++;
                 }
                 catch (StorageException ex) {
-                    ex.printStackTrace(System.out);
+                    System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+                    System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+                    ex.printStackTrace(System.err);
                     System.out.println(">>> The delete batch " + batchCounter + " might be too big, it will be split in half...");
                     List<SyncTableEntry> lstProblematicBatch = lstAllBatchDataChunks.get(batchCounter);
                     if (lstProblematicBatch.size() > 2) {
@@ -239,7 +303,12 @@ public final class SyncAzure {
                 System.err.println("The delete batch max retry limit was reached!!!");
                 return false;
             }
-            return true;
+            return true && blobSuccess;
+        }
+        catch (StorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -250,8 +319,24 @@ public final class SyncAzure {
     public SyncTableEntry downloadData(WildLogDataType inDataType, long inRecordID) {
         try {
             CloudTable cloudTable = getTable(inDataType);
-            return cloudTable.execute(TableOperation.retrieve(
+            SyncTableEntry syncTableEntry = cloudTable.execute(TableOperation.retrieve(
                     Long.toString(workspaceID), Long.toString(inRecordID), SyncTableEntry.class)).getResultAsType();
+            // If this is ExtraData with the bulk import table model, then it also needs to fetch the blob storage text
+            if (inDataType == WildLogDataType.EXTRA) {
+                ExtraData extraData = (ExtraData) syncTableEntry.getData();
+                if (extraData.getFieldType() == WildLogExtraDataFieldTypes.WILDLOG 
+                        && ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
+                    String jsonText = downloadText(inDataType, extraData.getLinkID(), Long.toString(extraData.getID()));
+                    extraData.setDataValue(jsonText);
+                }
+            }
+            // Return the table data
+            return syncTableEntry;
+        }
+        catch (StorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -342,8 +427,22 @@ public final class SyncAzure {
                 // Run the query
                 for (SyncTableEntry syncTableEntry : cloudTable.execute(query)) {
                     lstSyncTableEntries.add(syncTableEntry);
+                    // If this is ExtraData with the bulk import table model, then it also needs to fetch the blob storage text
+                    if (inDataType == WildLogDataType.EXTRA) {
+                        ExtraData extraData = (ExtraData) syncTableEntry.getData();
+                        if (extraData.getFieldType() == WildLogExtraDataFieldTypes.WILDLOG 
+                                && ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString().equals(extraData.getDataKey())) {
+                            String jsonText = downloadText(inDataType, extraData.getLinkID(), Long.toString(extraData.getID()));
+                            extraData.setDataValue(jsonText);
+                        }
+                    }
                 }
             }
+        }
+        catch (StorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -389,6 +488,11 @@ public final class SyncAzure {
                 lstSyncTableEntries.add(syncTableEntry);
             }
         }
+        catch (StorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ExtendedErrorInformation: " + ex.getExtendedErrorInformation().getErrorMessage());
+            ex.printStackTrace(System.err);
+        }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
@@ -415,6 +519,9 @@ public final class SyncAzure {
             }
             catch (BlobStorageException ex) {
                 if (!ex.getErrorCode().equals(BlobErrorCode.CONTAINER_ALREADY_EXISTS)) {
+                    System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+                    System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+                    ex.printStackTrace(System.err);
                     throw ex;
                 }
             }
@@ -449,6 +556,11 @@ public final class SyncAzure {
             }
             return true;
         }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
+        }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
@@ -461,12 +573,17 @@ public final class SyncAzure {
             BlobClient blobClient = blobContainerClient.getBlobClient(calculateFullBlobIDForText(inParentID, inRecordID));
             // Upload the text
             try (ByteArrayInputStream dataStream = new ByteArrayInputStream(inText.getBytes())) {
-                blobClient.upload(dataStream, inText.length());
+                blobClient.upload(dataStream, inText.length(), true);
             }
             catch (UncheckedIOException ex) {
                 ex.printStackTrace(System.err);
             }
             return true;
+        }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -497,6 +614,11 @@ public final class SyncAzure {
             syncBlobMetadata.setLongitude(blobProperties.getMetadata().get("GPSLongitude"));
             syncBlobMetadata.setSuccess(true);
         }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
+        }
         catch (Exception ex) {
             System.err.println("Failed Download: Blob ID = " + blobID);
             ex.printStackTrace(System.err);
@@ -513,6 +635,11 @@ public final class SyncAzure {
                 blobClient.download(outputStream);
                 return new String(outputStream.toByteArray());
             }
+        }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             System.err.println("Failed Download: Blob ID = " + blobID);
@@ -535,7 +662,7 @@ public final class SyncAzure {
     }
     
     public String calculateFullBlobIDForText(long inParentID, String inRecordID) {
-        String blobPath = Long.toString(workspaceID) + "/" + Long.toString(inParentID) + ".txt";
+        String blobPath = Long.toString(workspaceID) + "/" + Long.toString(inParentID) + "/" + inRecordID + ".txt";
         return blobPath.toLowerCase();
     }
     
@@ -545,6 +672,11 @@ public final class SyncAzure {
             BlobClient blobClient = blobContainerClient.getBlobClient(inFullBlobName);
             blobClient.delete();
             return true;
+        }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -611,6 +743,11 @@ public final class SyncAzure {
                         blobItem.getName()));
             }
         }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
+        }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
@@ -641,6 +778,11 @@ public final class SyncAzure {
                         Long.parseLong(namePieces[namePieces.length - 1]), 
                         blobItem.getUri().getPath()));
             }
+        }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -680,6 +822,11 @@ public final class SyncAzure {
                         recordsID, 
                         blobItem.getUri().getPath()));
             }
+        }
+        catch (BlobStorageException ex) {
+            System.err.println("Azure ErrorCode: " + ex.getErrorCode());
+            System.err.println("Azure ServiceMessage: " + ex.getServiceMessage());
+            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
