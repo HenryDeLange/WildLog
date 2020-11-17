@@ -60,7 +60,7 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.mediaplayer.VideoController;
 import wildlog.mediaplayer.VideoPanel;
 import wildlog.ui.dialogs.GPSDialog;
-import wildlog.ui.dialogs.WorkspaceSyncDialog;
+import wildlog.ui.dialogs.CloudWorkspaceSyncDialog;
 import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.CustomMouseWheelScroller;
@@ -1754,7 +1754,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                            CloudWorkspaceSyncDialog dialog = new CloudWorkspaceSyncDialog();
                             dialog.setVisible(true);
                         }
                     });

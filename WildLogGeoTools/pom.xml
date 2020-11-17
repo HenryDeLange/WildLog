@@ -10,9 +10,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
-        <maven.compiler.release>14</maven.compiler.release>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+        <maven.compiler.release>15</maven.compiler.release>
         <!--<javafx.version>13.0.2</javafx.version>-->
         <geotools.version>21.4</geotools.version>
     </properties>

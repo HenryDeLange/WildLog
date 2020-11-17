@@ -8,9 +8,9 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>14</maven.compiler.source>
-        <maven.compiler.target>14</maven.compiler.target>
-        <maven.compiler.release>14</maven.compiler.release>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+        <maven.compiler.release>15</maven.compiler.release>
     </properties>
     
     <dependencies>
@@ -24,7 +24,7 @@
             <!--https://github.com/Azure/azure-storage-java-->
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-storage</artifactId>
-            <version>8.6.4</version>
+            <version>8.6.5</version>
             <exclusions>
                 <!--Newer versions provided (needed) by azure-storage-blob-->
                 <exclusion>
@@ -41,7 +41,7 @@
             <!--https://github.com/Azure/azure-sdk-for-java/blob/master/sdk/storage/azure-storage-blob/README.md-->
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
-            <version>12.6.1</version>
+            <version>12.9.0</version>
         </dependency>
         <!--<dependency>
             https://github.com/Azure/azure-sdk-for-java/blob/master/sdk/storage/azure-storage-blob-batch/README.md
