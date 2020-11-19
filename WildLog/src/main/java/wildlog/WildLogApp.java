@@ -63,7 +63,7 @@ import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.ui.dialogs.UserLoginDialog;
 import wildlog.ui.dialogs.WorkspacePickerDialog;
-import wildlog.ui.dialogs.WorkspaceSyncDialog;
+import wildlog.ui.dialogs.CloudWorkspaceSyncDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
@@ -84,7 +84,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     private static WildLogApp INSTANCE = null;
-    public static String WILDLOG_VERSION = "6.2.0";
+    public static String WILDLOG_VERSION = "6.2.1";
     public static Class APPLICATION_CLASS = WildLogApp.class;
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
@@ -419,9 +419,11 @@ public class WildLogApp extends Application {
                                         + "<br><b>Wait for the processes to finish before exiting WildLog?</b></html>",
                                 "Warning! Unfinished Processes...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (result != JOptionPane.NO_OPTION) {
+                            // User selected YES, CANCEL or closed the popup (user wants to wait for the processes to finish)
                             doShutdown = false;
                         }
                         else {
+                            // User selected NO (user doesn't want to wait for the processes to finish)
                             WildLogApp.LOGGER.log(Level.INFO, "Trying to stop running processes before exiting...");
                             // Try to stop the running processes before the DB gets closed
                             TaskService taskService = getContext().getTaskService();
@@ -486,7 +488,7 @@ public class WildLogApp extends Application {
                         triggerStartupSync = false;
                     }
                     // Show the sync popup
-                    WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                    CloudWorkspaceSyncDialog dialog = new CloudWorkspaceSyncDialog();
                     dialog.setVisible(true);
                 }
             }

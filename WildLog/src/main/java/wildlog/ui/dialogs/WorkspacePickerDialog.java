@@ -303,7 +303,7 @@ public class WorkspacePickerDialog extends JDialog {
 
     private void btnCloudSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloudSyncActionPerformed
         // Get the workspace ID of the workspace to be synced
-        WorkspaceListSyncDialog workspaceDialog = new WorkspaceListSyncDialog(this);
+        CloudWorkspaceListSyncDialog workspaceDialog = new CloudWorkspaceListSyncDialog(this);
         workspaceDialog.setVisible(true);
         if (workspaceDialog.getWorkspaceID() > 0) {
             workspaceID = workspaceDialog.getWorkspaceID();

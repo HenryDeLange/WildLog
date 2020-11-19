@@ -5,9 +5,9 @@ import javax.swing.JFrame;
 import wildlog.WildLogApp;
 import wildlog.encryption.TokenEncryptor;
 
-public class SyncTokenTool extends JFrame {
+public class CloudSyncTokenTool extends JFrame {
 
-    public SyncTokenTool() {
+    public CloudSyncTokenTool() {
         initComponents();
         setLocationRelativeTo(WildLogApp.getApplication().getMainFrame());
     }

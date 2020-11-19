@@ -111,7 +111,7 @@ import wildlog.ui.dialogs.WildLogWEIGettingStartedRemoteDialog;
 import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
 import wildlog.ui.dialogs.WorkspaceImportDialog;
-import wildlog.ui.dialogs.WorkspaceSyncDialog;
+import wildlog.ui.dialogs.CloudWorkspaceSyncDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -126,9 +126,9 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.dialogs.SelectLocationDialog;
-import wildlog.ui.dialogs.SyncTokenTool;
-import wildlog.ui.dialogs.WorkspaceCloudExportDialog;
-import wildlog.ui.dialogs.WorkspaceCloudImportDialog;
+import wildlog.ui.dialogs.CloudSyncTokenTool;
+import wildlog.ui.dialogs.CloudWorkspaceExportDialog;
+import wildlog.ui.dialogs.CloudWorkspaceImportDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -3905,7 +3905,7 @@ public final class WildLogView extends JFrame {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                    CloudWorkspaceSyncDialog dialog = new CloudWorkspaceSyncDialog();
                     dialog.setVisible(true);
                 }
             });
@@ -4020,17 +4020,17 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuReportOccupancyModelActionPerformed
 
     private void mnuSyncExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncExportActionPerformed
-        WorkspaceCloudExportDialog dialog = new WorkspaceCloudExportDialog(app);
+        CloudWorkspaceExportDialog dialog = new CloudWorkspaceExportDialog(app);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuSyncExportActionPerformed
 
     private void mnuSyncImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncImportActionPerformed
-        WorkspaceCloudImportDialog dialog = new WorkspaceCloudImportDialog(app);
+        CloudWorkspaceImportDialog dialog = new CloudWorkspaceImportDialog(app);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuSyncImportActionPerformed
 
     private void mnuSyncTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncTokenActionPerformed
-        SyncTokenTool syncTokenTool = new SyncTokenTool();
+        CloudSyncTokenTool syncTokenTool = new CloudSyncTokenTool();
         syncTokenTool.setVisible(true);
     }//GEN-LAST:event_mnuSyncTokenActionPerformed
 

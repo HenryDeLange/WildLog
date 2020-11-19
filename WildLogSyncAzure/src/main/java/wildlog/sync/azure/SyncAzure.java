@@ -23,7 +23,6 @@ import com.microsoft.azure.storage.table.TableQuery;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -124,8 +123,10 @@ public final class SyncAzure {
                 }
             }
             // Save the table data
-            SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, inData.getID(), dbVersion, inData);
-            cloudTable.execute(TableOperation.insertOrReplace(syncTableEntry));
+            if (blobSuccess) {
+                SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, inData.getID(), dbVersion, inData);
+                cloudTable.execute(TableOperation.insertOrReplace(syncTableEntry));
+            }
             return blobSuccess && true;
         }
         catch (StorageException ex) {
@@ -154,13 +155,14 @@ public final class SyncAzure {
                 lstAllBatchDataChunks.get(dataCounter / BATCH_LIMIT).add(data);
                 dataCounter++;
             }
-            boolean blobSuccess = true;
+            boolean allBlobsSuccess = true;
             int batchCounter = 0;
             final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 5;
             while (batchCounter < lstAllBatchDataChunks.size() && batchCounter < MAX_RETRY_LIMIT) {
                 try {
                     TableBatchOperation batchOperation = new TableBatchOperation();
                     for (DataObjectWithAudit data : lstAllBatchDataChunks.get(batchCounter)) {
+                        boolean blobSuccess = true;
                         if (data.getSyncIndicator() == 0) {
                             data.setSyncIndicator(new Date().getTime());
                         }
@@ -175,8 +177,13 @@ public final class SyncAzure {
                             }
                         }
                         // Create the batch operation
-                        SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, data.getID(), dbVersion, data);
-                        batchOperation.insertOrReplace(syncTableEntry);
+                        if (blobSuccess) {
+                            SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, data.getID(), dbVersion, data);
+                            batchOperation.insertOrReplace(syncTableEntry);
+                        }
+                        else {
+                            allBlobsSuccess = false;
+                        }
                     }
                     cloudTable.execute(batchOperation);
                     batchCounter++;
@@ -201,7 +208,7 @@ public final class SyncAzure {
                 System.err.println("The upload batch max retry limit was reached!!!");
                 return false;
             }
-            return true && blobSuccess;
+            return true && allBlobsSuccess;
         }
         catch (StorageException ex) {
             System.err.println("Azure ErrorCode: " + ex.getErrorCode());
@@ -262,13 +269,14 @@ public final class SyncAzure {
                 lstAllBatchDataChunks.get(dataCounter / BATCH_LIMIT).add(syncTableEntry);
                 dataCounter++;
             }
-            boolean blobSuccess = true;
+            boolean allBlobsSuccess = true;
             int batchCounter = 0;
             final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 5;
             while (batchCounter < lstAllBatchDataChunks.size() && batchCounter < MAX_RETRY_LIMIT) {
                 try {
                     TableBatchOperation batchOperation = new TableBatchOperation();
                     for (SyncTableEntry syncTableEntry : lstAllBatchDataChunks.get(batchCounter)) {
+                        boolean blobSuccess = true;
                         // If this is ExtraData with the bulk import table model, then it also needs to delete the blob storage text
                         if (inDataType == WildLogDataType.EXTRA) {
                             ExtraData extraData = (ExtraData) syncTableEntry.getData();
@@ -278,7 +286,12 @@ public final class SyncAzure {
                             }
                         }
                         // Create the batch operation
-                        batchOperation.delete(syncTableEntry);
+                        if (blobSuccess) {
+                            batchOperation.delete(syncTableEntry);
+                        }
+                        else {
+                            allBlobsSuccess = false;
+                        }
                     }
                     cloudTable.execute(batchOperation);
                     batchCounter++;
@@ -303,7 +316,7 @@ public final class SyncAzure {
                 System.err.println("The delete batch max retry limit was reached!!!");
                 return false;
             }
-            return true && blobSuccess;
+            return true && allBlobsSuccess;
         }
         catch (StorageException ex) {
             System.err.println("Azure ErrorCode: " + ex.getErrorCode());
@@ -548,12 +561,7 @@ public final class SyncAzure {
                 metadata.put("GPSLongitude", inLongitude.replace('°', 'D').replace('\'', 'M').replace('"', 'S'));
             }
             // Upload the file
-            try {
-                blobClient.uploadFromFile(inFilePath.toString(), null, null, metadata, null, null, null);
-            }
-            catch (UncheckedIOException ex) {
-                ex.printStackTrace(System.err);
-            }
+            blobClient.uploadFromFile(inFilePath.toString(), null, null, metadata, null, null, null);
             return true;
         }
         catch (BlobStorageException ex) {
@@ -574,9 +582,6 @@ public final class SyncAzure {
             // Upload the text
             try (ByteArrayInputStream dataStream = new ByteArrayInputStream(inText.getBytes())) {
                 blobClient.upload(dataStream, inText.length(), true);
-            }
-            catch (UncheckedIOException ex) {
-                ex.printStackTrace(System.err);
             }
             return true;
         }

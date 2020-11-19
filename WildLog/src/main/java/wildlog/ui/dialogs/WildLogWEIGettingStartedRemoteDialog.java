@@ -142,7 +142,7 @@ public class WildLogWEIGettingStartedRemoteDialog extends JDialog {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                CloudWorkspaceSyncDialog dialog = new CloudWorkspaceSyncDialog();
                 dialog.setVisible(true);
             }
         });
