@@ -1455,7 +1455,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 }
             }
             if (!found) {
-                logIfFailed(inFeedback, new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.FILE, 
+                logIfFailed(inFeedback, new SyncAction("SYNC_FIX CLOUD_DELETE_DATA", WildLogDataType.FILE, 
                         cloudEntry.getRecordID(), cloudWildLogFile.getLinkType().getDescription(), null), 
                         inSyncAzure.deleteData(WildLogDataType.FILE, cloudEntry.getRecordID()));
                 reloadData = true;
@@ -2029,7 +2029,7 @@ finally {
                     }
                     else {
                         // This should never happen...
-                        SyncAction syncAction = new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.STASH, folderBlobEntry.getRecordID(), "Orphaned Stash (PT)", null);
+                        SyncAction syncAction = new SyncAction("SYNC_FIX CLOUD_DELETE_FILE", WildLogDataType.STASH, folderBlobEntry.getRecordID(), "Orphaned Stash (PT)", null);
                         // Delete the stashed folder on the cloud
                         deleteStashedFilesFromCloud(inFeedback, inSyncAzure, folderBlobEntry, syncAction);
                     }
@@ -2042,7 +2042,7 @@ finally {
                     }
                     else {
                         // This should never happen...
-                        SyncAction syncAction = new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.STASH, folderBlobEntry.getRecordID(), "Orphaned Stash (DT)", null);
+                        SyncAction syncAction = new SyncAction("SYNC_FIX CLOUD_DELETE_FILE", WildLogDataType.STASH, folderBlobEntry.getRecordID(), "Orphaned Stash (DT)", null);
                         // Delete the stashed folder on the cloud
                         deleteStashedFilesFromCloud(inFeedback, inSyncAzure, folderBlobEntry, syncAction);
                     }
