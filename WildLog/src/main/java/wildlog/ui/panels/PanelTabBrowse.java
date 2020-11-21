@@ -1453,7 +1453,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
                                     ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
                                             + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
-                                            app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class));
+                                            app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, true, Sighting.class));
                                     dialog.setVisible(true);
                                     somethingToReportOn = true;
                                 }
