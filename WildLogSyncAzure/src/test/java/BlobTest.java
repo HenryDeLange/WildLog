@@ -213,7 +213,7 @@ public class BlobTest extends JFrame {
     }//GEN-LAST:event_btnDownloadFileActionPerformed
 
     private void btnDeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteFileActionPerformed
-        syncAzure.deleteFileOrText(WildLogDataType.ELEMENT, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(55L) + ".jpg");
+        syncAzure.deleteFileOrText(WildLogDataType.ELEMENT, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(555L) + ".jpg");
         System.out.println("DELETED FILE");
     }//GEN-LAST:event_btnDeleteFileActionPerformed
 
