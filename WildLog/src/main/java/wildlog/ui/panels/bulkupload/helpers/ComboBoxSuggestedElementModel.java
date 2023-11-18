@@ -20,7 +20,7 @@ public class ComboBoxSuggestedElementModel extends DefaultComboBoxModel<ComboBox
     
     @Override
     public int getSize() {
-        return mapElementSuggestions.size();
+        return Math.min(10, mapElementSuggestions.size());
     }
 
     @Override
@@ -55,15 +55,6 @@ public class ComboBoxSuggestedElementModel extends DefaultComboBoxModel<ComboBox
     public void registerElementSelection(ComboBoxSuggestedElementWrapper inElementWrapper) {
         if (inElementWrapper != null) {
             mapElementSuggestions.put(inElementWrapper, mapElementSuggestions.getOrDefault(inElementWrapper, -1) + 1);
-            if (mapElementSuggestions.size() >= 10) {
-                // Remove the least often used value
-                List<Map.Entry<ComboBoxSuggestedElementWrapper, Integer>> lstSortedData = getSortedData();
-                ComboBoxSuggestedElementWrapper elementWrapperToRemove = lstSortedData.get(mapElementSuggestions.size() - 1).getKey();
-                if (elementWrapperToRemove.equals(inElementWrapper)) {
-                    elementWrapperToRemove = lstSortedData.get(mapElementSuggestions.size() - 2).getKey();
-                }
-                mapElementSuggestions.remove(elementWrapperToRemove);
-            }
         }
     }
     

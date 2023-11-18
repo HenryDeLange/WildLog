@@ -221,7 +221,7 @@ public class InfoBox extends JPanel {
         btnChooseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseElement.setDoubleBuffered(true);
         btnChooseElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnChooseElement.setMargin(new java.awt.Insets(2, 4, 2, 2));
+        btnChooseElement.setMargin(new java.awt.Insets(2, 3, 2, 1));
         btnChooseElement.setName("btnChooseElement"); // NOI18N
         btnChooseElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -233,7 +233,7 @@ public class InfoBox extends JPanel {
                 btnChooseElementActionPerformed(evt);
             }
         });
-        add(btnChooseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 85, 82, 45));
+        add(btnChooseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 43));
 
         btnGPS.setBackground(new java.awt.Color(229, 241, 212));
         btnGPS.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
@@ -242,7 +242,7 @@ public class InfoBox extends JPanel {
         btnGPS.setToolTipText("Select a GPS point for this Observation. You can RIGHT-CLICK to select the previously saved GPS point or MIDDLE-CLICK to load the GPS point from the images (if present).");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGPS.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnGPS.setMargin(new java.awt.Insets(2, 3, 2, 1));
         btnGPS.setName("btnGPS"); // NOI18N
         btnGPS.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -322,7 +322,7 @@ public class InfoBox extends JPanel {
                 cmbChooseElementActionPerformed(evt);
             }
         });
-        add(cmbChooseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 86, 98, 43));
+        add(cmbChooseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 86, 19, 41));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel6.setText("Gen");
@@ -396,7 +396,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnChooseElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseElementActionPerformed
-        SelectElementDialog dialog = new SelectElementDialog(app.getMainFrame(), app, sightingWrapper.getElementID());
+        SelectElementDialog dialog = new SelectElementDialog(app.getMainFrame(), app, sightingWrapper.getElementID(), sightingWrapper.getLocationID());
         dialog.setVisible(true);
         // Set the label to the selected text
         table.getCellEditor().stopCellEditing();

@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
-import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -141,12 +140,13 @@ public final class UtilsUI {
                     sorter = new TableRowSorter<>(inTable.getModel());
                 }
                 // Note: The regexFilter method seems to be able to take optional parameters...
-                // The (?i) makes the matching ignore case...
+                // The (?i) makes the matching ignore case, and the .* will match partial words, I think...
+                String regex = "(?i).*" + inTxtSearch.getText().replaceAll("\\s+", ".*") + ".*";
                 if (inColumnsToSearch == null || inColumnsToSearch.length == 0) {
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inTxtSearch.getText()), new int[] {1}));
+                    sorter.setRowFilter(RowFilter.regexFilter(regex, new int[] {1}));
                 }
                 else {
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inTxtSearch.getText()), inColumnsToSearch));
+                    sorter.setRowFilter(RowFilter.regexFilter(regex, inColumnsToSearch));
                 }
                 // Kan dit ook glo so doen:
                 //sorter.setRowFilter(RowFilter.regexFilter(Pattern.compile(txtSearchField.getText(), Pattern.CASE_INSENSITIVE).toString()));

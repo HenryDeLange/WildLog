@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ElementType;
@@ -51,12 +52,14 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
     private long selectedElementID;
     private String selectedElementName;
     private Dimension originalSize = null;
+    private long activeLocationID;
 
 
-    public SelectElementDialog(JFrame inParent, WildLogApp inApp, final long inSelectedElementID) {
+    public SelectElementDialog(JFrame inParent, WildLogApp inApp, final long inSelectedElementID, final long inActiveLocationID) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[SelectElementDialog]");
         app = inApp;
+        activeLocationID = inActiveLocationID;
         initComponents();
         ComboBoxFixer.configureComboBoxes(cmbElementType);
         // Setup the escape key
@@ -120,7 +123,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         setPreferredSize(originalSize);
         setSize(originalSize);
         // Refresh the grid
-        generateGrid();
+        generateInfoPanel();
     }
 
     /** This method is called from within the constructor to
@@ -150,6 +153,8 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         txtIdentification = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         pnlGridView = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        lblCount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Creature");
@@ -168,9 +173,9 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         pnlWrapper.setPreferredSize(new java.awt.Dimension(945, 600));
 
         pnlMain.setBackground(new java.awt.Color(230, 237, 220));
-        pnlMain.setMinimumSize(new java.awt.Dimension(555, 460));
+        pnlMain.setMinimumSize(new java.awt.Dimension(556, 460));
         pnlMain.setName("pnlMain"); // NOI18N
-        pnlMain.setPreferredSize(new java.awt.Dimension(555, 460));
+        pnlMain.setPreferredSize(new java.awt.Dimension(556, 460));
 
         txtSearch.setName("txtSearch"); // NOI18N
         txtSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -270,9 +275,10 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
 
         btnToggleInfo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnToggleInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
-        btnToggleInfo.setText("More Info");
+        btnToggleInfo.setText("View Info");
         btnToggleInfo.setToolTipText("Show more information about the selected Creature.");
         btnToggleInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnToggleInfo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         btnToggleInfo.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnToggleInfo.setName("btnToggleInfo"); // NOI18N
         btnToggleInfo.addActionListener(new java.awt.event.ActionListener() {
@@ -295,20 +301,20 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                         .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPreviousElement, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnToggleInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                    .addComponent(btnPreviousElement, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                    .addComponent(lblElementImage, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                    .addComponent(btnSelect, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMainLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addComponent(jLabel2)
                         .addGap(5, 5, 5)
                         .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,9 +323,8 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                                 .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlMainLayout.createSequentialGroup()
                                 .addGap(20, 20, 20)
-                                .addComponent(jScrollPane2))))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE))))
                     .addGroup(pnlMainLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnPreviousElement, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -328,7 +333,8 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                         .addGap(15, 15, 15)
                         .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
-                        .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
         );
 
@@ -358,21 +364,32 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         pnlGridView.setName("pnlGridView"); // NOI18N
         pnlGridView.setLayout(new java.awt.BorderLayout());
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("Count:");
+        jLabel4.setName("jLabel4"); // NOI18N
+
+        lblCount.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblCount.setText("Loading...");
+        lblCount.setName("lblCount"); // NOI18N
+
         javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
         pnlInfo.setLayout(pnlInfoLayout);
         pnlInfoLayout.setHorizontalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInfoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnlGridView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlInfoLayout.createSequentialGroup()
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlGridView, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane21, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                    .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlInfoLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblCount))
                             .addComponent(jLabel1)
                             .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(0, 0, 0))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         pnlInfoLayout.setVerticalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -380,8 +397,12 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                 .addGap(10, 10, 10)
                 .addComponent(jLabel1)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(lblCount))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addGap(2, 2, 2)
                 .addComponent(pnlGridView, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
@@ -393,7 +414,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         pnlWrapperLayout.setHorizontalGroup(
             pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWrapperLayout.createSequentialGroup()
-                .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlMain, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
@@ -506,7 +527,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
             txtIdentification.setText("");
         }
         // Refresh the grid
-        generateGrid();
+        generateInfoPanel();
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void tblElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseClicked
@@ -534,7 +555,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
         txtIdentification.setText("");
         // Refresh the grid
-        generateGrid();
+        generateInfoPanel();
     }//GEN-LAST:event_cmbElementTypeActionPerformed
 
     private void tblElementKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyReleased
@@ -576,7 +597,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         pnlInfo.setVisible(!pnlInfo.isVisible());
         if (pnlInfo.isVisible()) {
             setPreferredSize(new Dimension(935, (int) getPreferredSize().getHeight()));
-            generateGrid();
+            generateInfoPanel();
         }
         else {
             pnlGridView.removeAll();
@@ -594,7 +615,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
         txtIdentification.setText("");
         // Refresh the grid
-        generateGrid();
+        generateInfoPanel();
         pack();
         // Refresh the UI
         setupUI(selectedElementID);
@@ -624,8 +645,16 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         previousElementName = inPreviousElementName;
     }
     
-    private void generateGrid() {
+    private void generateInfoPanel() {
         if (pnlInfo.isVisible()) {
+            // Get new counts
+            lblCount.setText("");
+            if (!tblElement.getSelectionModel().isSelectionEmpty()) {
+                long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
+                lblCount.setText(app.getDBI().countSightings(0L, selectedID, activeLocationID, 0L) + " Observations at " 
+                        + app.getDBI().findLocation(activeLocationID, null, false, Location.class));
+            }
+            // Draw new grid
             pnlGridView.removeAll();
             pnlGridView.revalidate();
             pnlGridView.repaint();
@@ -707,8 +736,10 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane21;
+    private javax.swing.JLabel lblCount;
     private javax.swing.JLabel lblElementImage;
     private javax.swing.JPanel pnlGridView;
     private javax.swing.JPanel pnlInfo;

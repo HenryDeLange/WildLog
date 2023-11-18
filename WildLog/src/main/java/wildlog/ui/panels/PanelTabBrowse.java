@@ -35,6 +35,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
@@ -84,6 +85,7 @@ import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
+import wildlog.ui.panels.inaturalist.dialogs.INatSightingDialog;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
@@ -1207,14 +1209,21 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             if (!treBrowsePhoto.isSelectionEmpty()) {
                 JPopupMenu popup = new JPopupMenu();
                 // View
-                JMenuItem mnuView = new JMenuItem("View", new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif")));
-                mnuView.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        btnGoBrowseSelectionActionPerformed(null);
+                if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location
+                            || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element
+                            || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit
+                            || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                        JMenuItem mnuView = new JMenuItem("View", new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif")));
+                        mnuView.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                btnGoBrowseSelectionActionPerformed(null);
+                            }
+                        });
+                        popup.add(mnuView);
                     }
-                });
-                popup.add(mnuView);
+                }
                 // Add
                 if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                     if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
@@ -1377,129 +1386,165 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                     }
                     // Map
-                    JMenuItem mnuMap = new JMenuItem("Map", new ImageIcon(WildLogApp.class.getResource("resources/icons/Map_Small.gif")));
-                    mnuMap.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-                                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                                    Location location = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                    MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + location.getDisplayName(), 
-                                            app.getDBI().listSightings(0, location.getID(), 0, true, Sighting.class), 0);
-                                    dialog.setVisible(true);
+                    if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location
+                                || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element
+                                || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit
+                                || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                            JMenuItem mnuMap = new JMenuItem("Map", new ImageIcon(WildLogApp.class.getResource("resources/icons/Map_Small.gif")));
+                            mnuMap.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                                            Location location = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + location.getDisplayName(), 
+                                                    app.getDBI().listSightings(0, location.getID(), 0, true, Sighting.class), 0);
+                                            dialog.setVisible(true);
+                                        }
+                                        else
+                                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                                            Element element = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(), 
+                                                    app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class), 
+                                                    element.getID());
+                                            dialog.setVisible(true);
+                                        }
+                                        else
+                                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                                            Visit visit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
+                                                    app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class), 0);
+                                            dialog.setVisible(true);
+                                        }
+                                        else
+                                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                                            Sighting sighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
+                                            List<Sighting> lstSightings = new ArrayList<>(1);
+                                            lstSightings.add(sighting);
+                                            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + sighting.getDisplayName(), lstSightings, 0);
+                                            dialog.setVisible(true);
+                                        }
+                                    }
                                 }
-                                else
-                                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                                    Element element = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                    MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(), 
-                                            app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class), 
-                                            element.getID());
-                                    dialog.setVisible(true);
+                            });
+                            popup.add(mnuMap);
+                        }
+                    }
+                    // Report
+                    if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                                || (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER 
+                                    && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER)) {
+                            JMenuItem mnuReport = new JMenuItem("Charts", new ImageIcon(WildLogApp.class.getResource("resources/icons/Report_Small.png")));
+                            AtomicBoolean somethingToReportOn = new AtomicBoolean(false);
+                            mnuReport.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                                            Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                            ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempLocation.getName(), 
+                                                    app.getDBI().listSightings(0, tempLocation.getID(), 0, true, Sighting.class));
+                                            dialog.setVisible(true);
+                                            somethingToReportOn.set(true);
+                                        }
+                                        else
+                                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                                            Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                            ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempElement.getPrimaryName(), 
+                                                    app.getDBI().listSightings(tempElement.getID(), 0, 0, true, Sighting.class));
+                                            dialog.setVisible(true);
+                                            somethingToReportOn.set(true);
+                                        }
+                                        else
+                                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                                            Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                            ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempVisit.getName(), 
+                                                    app.getDBI().listSightings(0, 0, tempVisit.getID(), true, Sighting.class));
+                                            dialog.setVisible(true);
+                                            somethingToReportOn.set(true);
+                                        }
+                                    }
+                                    if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
+                                        Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
+                                        ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
+                                                + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
+                                                app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, true, Sighting.class));
+                                        dialog.setVisible(true);
+                                        somethingToReportOn.set(true);
+                                    }
+                                    if (somethingToReportOn.get() == false) {
+                                        WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                                "Please select a Place, Period or Creature in the tree to the left, or specifiy a valid date range.",
+                                                "No Chart Available", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                    }
                                 }
-                                else
-                                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                                    Visit visit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                    MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
-                                            app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class), 0);
-                                    dialog.setVisible(true);
-                                }
-                                else
-                                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                                    Sighting sighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                                    List<Sighting> lstSightings = new ArrayList<>(1);
-                                    lstSightings.add(sighting);
-                                    MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + sighting.getDisplayName(), lstSightings, 0);
-                                    dialog.setVisible(true);
-                                }
+                            });
+                            if (somethingToReportOn.get()) {
+                                popup.add(mnuReport);
                             }
                         }
-                    });
-                    popup.add(mnuMap);
-                    // Report
-                    if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
-                            || (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER 
-                                && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER)) {
-                        JMenuItem mnuReport = new JMenuItem("Charts", new ImageIcon(WildLogApp.class.getResource("resources/icons/Report_Small.png")));
-                        mnuReport.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                boolean somethingToReportOn = false;
-                                if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-                                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                                        Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                        ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempLocation.getName(), 
-                                                app.getDBI().listSightings(0, tempLocation.getID(), 0, true, Sighting.class));
-                                        dialog.setVisible(true);
-                                        somethingToReportOn = true;
-                                    }
-                                    else
-                                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                                        Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                        ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempElement.getPrimaryName(), 
-                                                app.getDBI().listSightings(tempElement.getID(), 0, 0, true, Sighting.class));
-                                        dialog.setVisible(true);
-                                        somethingToReportOn = true;
-                                    }
-                                    else
-                                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                                        Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                        ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempVisit.getName(), 
-                                                app.getDBI().listSightings(0, 0, tempVisit.getID(), true, Sighting.class));
-                                        dialog.setVisible(true);
-                                        somethingToReportOn = true;
-                                    }
-                                }
-                                if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-                                    Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
-                                    ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
-                                            + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
-                                            app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, true, Sighting.class));
-                                    dialog.setVisible(true);
-                                    somethingToReportOn = true;
-                                }
-                                if (somethingToReportOn == false) {
-                                    WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                                            "Please select a Place, Period or Creature in the tree to the left, or specifiy a valid date range.",
-                                            "No Chart Available", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                }
-                            }
-                        });
-                        popup.add(mnuReport);
                     }
                     // Export
-                    if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                        JMenuItem mnuExport = new JMenuItem("Export", new ImageIcon(WildLogApp.class.getResource("resources/icons/Export.png")));
-                        mnuExport.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-                                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                                        Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                        ExportDialog exportDialog = new ExportDialog(app, tempLocation, null, null, null, null);
-                                        exportDialog.setVisible(true);
+                    if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                        if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location
+                                || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element
+                                || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit
+                                || ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                            if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                                JMenuItem mnuExport = new JMenuItem("Export", new ImageIcon(WildLogApp.class.getResource("resources/icons/Export.png")));
+                                mnuExport.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                                            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                                                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                                ExportDialog exportDialog = new ExportDialog(app, tempLocation, null, null, null, null);
+                                                exportDialog.setVisible(true);
+                                            }
+                                            else
+                                            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                                                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                                ExportDialog exportDialog = new ExportDialog(app, null, tempElement, null, null, null);
+                                                exportDialog.setVisible(true);
+                                            }
+                                            else
+                                            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                                                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                                ExportDialog exportDialog = new ExportDialog(app, null, null, tempVisit, null, null);
+                                                exportDialog.setVisible(true);
+                                            }
+                                            else
+                                            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                                                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
+                                                ExportDialog exportDialog = new ExportDialog(app, null, null, null, tempSighting, null);
+                                                exportDialog.setVisible(true);
+                                            }
+                                        }
                                     }
-                                    else
-                                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                                        Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                        ExportDialog exportDialog = new ExportDialog(app, null, tempElement, null, null, null);
-                                        exportDialog.setVisible(true);
-                                    }
-                                    else
-                                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                                        Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                        ExportDialog exportDialog = new ExportDialog(app, null, null, tempVisit, null, null);
-                                        exportDialog.setVisible(true);
-                                    }
-                                    else
-                                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                                });
+                                popup.add(mnuExport);
+                            }
+                        }
+                    }
+                    // iNaturalist
+                    if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                                && ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                            JMenuItem mnuExport = new JMenuItem("iNaturalist", new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png")));
+                            mnuExport.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                                         Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                                        ExportDialog exportDialog = new ExportDialog(app, null, null, null, tempSighting, null);
-                                        exportDialog.setVisible(true);
+                                        INatSightingDialog dialog = new INatSightingDialog(app.getMainFrame(), tempSighting);
+                                        dialog.setVisible(true);
                                     }
                                 }
-                            }
-                        });
-                        popup.add(mnuExport);
+                            });
+                            popup.add(mnuExport);
+                        }
                     }
                 }
                 // Wrap up and show up the popup

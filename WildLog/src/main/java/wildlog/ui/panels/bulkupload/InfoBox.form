@@ -231,7 +231,7 @@
         <Property name="doubleBuffered" type="boolean" value="true"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 4, 2, 2]"/>
+          <Insets value="[2, 3, 2, 1]"/>
         </Property>
         <Property name="name" type="java.lang.String" value="btnChooseElement" noResource="true"/>
       </Properties>
@@ -241,7 +241,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="135" y="85" width="82" height="45"/>
+          <AbsoluteConstraints x="155" y="85" width="80" height="43"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -263,7 +263,7 @@
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 4, 2, 4]"/>
+          <Insets value="[2, 3, 2, 1]"/>
         </Property>
         <Property name="name" type="java.lang.String" value="btnGPS" noResource="true"/>
       </Properties>
@@ -415,7 +415,7 @@
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="135" y="86" width="98" height="43"/>
+          <AbsoluteConstraints x="135" y="86" width="19" height="41"/>
         </Constraint>
       </Constraints>
     </Component>
