@@ -15,10 +15,10 @@
   <manifest></manifest>
   <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WildLog.ico</icon>
   <jre>
-    <path>jre-15.0.1-full</path>
+    <path>jre-21.0.1-full</path>
     <bundledJre64Bit>true</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
-    <minVersion>15</minVersion>
+    <minVersion>21</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
@@ -33,12 +33,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>6.2.1.0</fileVersion>
-    <txtFileVersion>WildLog v6.2.1 Launcher</txtFileVersion>
+    <fileVersion>6.3.0.0</fileVersion>
+    <txtFileVersion>WildLog v6.3.0 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
-    <copyright>2020</copyright>
-    <productVersion>6.2.1.0</productVersion>
-    <txtProductVersion>WildLog v6.2.1</txtProductVersion>
+    <copyright>2023</copyright>
+    <productVersion>6.3.0.0</productVersion>
+    <txtProductVersion>WildLog v6.3.0</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>
