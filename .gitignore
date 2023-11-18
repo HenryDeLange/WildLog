@@ -5,7 +5,7 @@
 /WildLogDataCore/target/
 /WildLogGeoTools/target/
 /WildLogHTMLTemplates/target/
-/WildLogINaturalist/WildLogINaturalistAPI/target/
+/WildLogINaturalistAPI/target/
 /WildLogMapData/target/
 /WildLog/target/
 /WildLogMediaUtilWrapper/target/
@@ -14,7 +14,7 @@ WildLogMediaUtilWrapper/nb-configuration.xml
 WildLogMapData/nb-configuration.xml
 WildLogHTMLTemplates/nb-configuration.xml
 WildLogDataCore/nb-configuration.xml
-WildLogINaturalist/WildLogINaturalistAPI/nb-configuration.xml
+/WildLogINaturalistAPI/nb-configuration.xml
 /WildLog/AppProperties/WildLogSettings/
 /WildLog/StableReleases/Installer Config Files/WildLog
 /WildLogSyncAzure/target/

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>mywild</groupId>
+    <parent>
+        <groupId>mywild</groupId>
+        <artifactId>WildLogParent</artifactId>
+        <version>1.0</version>
+    </parent>
     <artifactId>WildLogGeoTools</artifactId>
     <version>1.2</version>
     <packaging>jar</packaging>
@@ -9,11 +13,6 @@
 (It is also easier to use GeoTools with Maven and I don't want to move WildLog to Maven at this point in time.)</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
-        <maven.compiler.release>15</maven.compiler.release>
-        <!--<javafx.version>13.0.2</javafx.version>-->
         <geotools.version>21.4</geotools.version>
     </properties>
     

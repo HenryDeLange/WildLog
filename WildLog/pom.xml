@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>mywild</groupId>
+    <parent>
+        <groupId>mywild</groupId>
+        <artifactId>WildLogParent</artifactId>
+        <version>1.0</version>
+    </parent>
     <artifactId>WildLog</artifactId>
-    <version>6.2.1</version>
+    <version>6.3.0</version>
     <packaging>jar</packaging>
-    
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
-        <maven.compiler.release>15</maven.compiler.release>
-        <!--<javafx.version>13.0.2</javafx.version>-->
-    </properties>
     
     <repositories>
         <repository>
@@ -83,64 +79,42 @@
             <artifactId>WildLogMediaPlayer</artifactId>
             <version>1.1</version>
         </dependency>
-        <!--Java: JavaFX-->
-        <!--NOTE: Instead using a JDK with JavaFX bundled with it (Liberica)-->
-        <!--<dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-web</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>-->
         <!--Java: JAXB-->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
+            <version>2.4.0-b180830.0359</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-core</artifactId>
-            <version>2.3.0.1</version>
+            <version>4.0.4</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.3.0.1</version>
+            <version>4.0.4</version>
         </dependency>
         <!--Third Party-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
-            <version>2.13.3</version>
+            <version>2.21.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.13.3</version>
+            <version>2.21.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.13.3</version>
+            <version>2.21.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.30</version>
+            <version>2.0.9</version>
         </dependency>
         <dependency>
             <groupId>org.jdesktop</groupId>
@@ -150,7 +124,7 @@
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
-            <version>RELEASE112</version>
+            <version>RELEASE190</version>
         </dependency>
         <dependency>
             <groupId>org.swinglabs.swingx</groupId>
@@ -160,27 +134,27 @@
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>2.0.19</version>
+            <version>2.0.30</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>4.1.2</version>
+            <version>5.2.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
-            <version>4.1.2</version>
+            <version>5.2.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>4.1.2</version>
+            <version>5.2.4</version>
         </dependency>
         <dependency>
             <groupId>com.drewnoakes</groupId>
             <artifactId>metadata-extractor</artifactId>
-            <version>2.13.0</version>
+            <version>2.18.0</version>
         </dependency>
         <dependency>
             <groupId>javax.media</groupId>
@@ -190,12 +164,12 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.6</version>
+            <version>2.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-dist</artifactId>
-            <version>3.13.4</version>
+            <version>3.13.6</version>
             <type>pom</type>
         </dependency>
         <dependency>
@@ -211,7 +185,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -228,7 +202,7 @@
             <!--Copy dependencies to target/lib folder-->
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <phase>install</phase>
@@ -240,7 +214,7 @@
                             <!--JavaFX libraries will be provided by the JRE (see Liberica JRE)-->
                             <!--Note: Even if the JavaFX JARs are included in the /lib folder it still won't be able to run on a "normal" Java 13 JRE, 
                                       because it needs SwingInterOpUtils which is only in the JDK or the bigger Liberica JRE...-->
-                            <excludeGroupIds>org.openjfx</excludeGroupIds>
+                            <!--<excludeGroupIds>org.openjfx</excludeGroupIds>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -249,7 +223,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.5.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>xjc</id>
@@ -259,28 +233,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--JavaFX plugins-->
-<!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <release>${maven.compiler.release}</release>
-                </configuration>
-            </plugin>-->
-            <!--See https://github.com/openjfx/javafx-maven-plugin-->
-            <!--To run add a new Maven Action with command "mvn javafx:run"-->
-<!--            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.3</version>
-                <configuration>
-                    <release>${maven.compiler.release}</release>
-                    <mainClass>com.stuff.teststuff.App</mainClass>
-                    See https://openjfx.io/openjfx-docs/#IDE-NetBeans
-                    <executable>C:\Program Files\AdoptOpenJDK\jdk-13.0.1.9-hotspot\bin\java</executable>
-                </configuration>
-            </plugin>-->
         </plugins>
     </build>
     
