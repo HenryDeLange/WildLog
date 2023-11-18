@@ -142,12 +142,12 @@
           <Color blue="dc" green="f6" red="eb" type="rgb"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="10" style="0"/>
+          <Font name="Tahoma" size="10" style="2"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Delete_Small.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Remove&lt;/u&gt;&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="Remove"/>
         <Property name="toolTipText" type="java.lang.String" value="Remove the file from this Observation. RIGHT-CLICK to remove the file from the Observation, but move it to the Period."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -195,12 +195,12 @@
           <Color blue="dc" green="f6" red="eb" type="rgb"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="10" style="0"/>
+          <Font name="Tahoma" size="10" style="2"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Duplicate&lt;/u&gt;&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="Duplicate"/>
         <Property name="toolTipText" type="java.lang.String" value="Duplicate the file for this Observation. You can RIGHT-CLICK to duplicate and move the file."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>

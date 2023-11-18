@@ -139,9 +139,9 @@ public class ImageBox extends JPanel {
         });
 
         btnRemove.setBackground(new java.awt.Color(235, 246, 220));
-        btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnRemove.setFont(new java.awt.Font("Tahoma", 2, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
-        btnRemove.setText("<html><u>Remove</u></html>");
+        btnRemove.setText("Remove");
         btnRemove.setToolTipText("Remove the file from this Observation. RIGHT-CLICK to remove the file from the Observation, but move it to the Period.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setIconTextGap(2);
@@ -174,9 +174,9 @@ public class ImageBox extends JPanel {
         });
 
         btnClone.setBackground(new java.awt.Color(235, 246, 220));
-        btnClone.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnClone.setFont(new java.awt.Font("Tahoma", 2, 10)); // NOI18N
         btnClone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
-        btnClone.setText("<html><u>Duplicate</u></html>");
+        btnClone.setText("Duplicate");
         btnClone.setToolTipText("Duplicate the file for this Observation. You can RIGHT-CLICK to duplicate and move the file.");
         btnClone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClone.setIconTextGap(2);

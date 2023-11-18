@@ -492,8 +492,9 @@ public class GPSDialog extends JDialog {
             }
         });
 
+        btnUseImage.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         btnUseImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
-        btnUseImage.setText("<html><u>From Image</u></html>");
+        btnUseImage.setText("From Image");
         btnUseImage.setToolTipText("Browse to an image with GPS data, or drag-and-drop the image onto this button.");
         btnUseImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -506,7 +507,7 @@ public class GPSDialog extends JDialog {
         });
 
         btnUseGPX.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPX.png"))); // NOI18N
-        btnUseGPX.setText("<html><u>From GPX</u></html>");
+        btnUseGPX.setText("From GPX");
         btnUseGPX.setToolTipText("Browse to a GPX file, or drag-and-drop the file onto the button.");
         btnUseGPX.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseGPX.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -624,9 +625,9 @@ public class GPSDialog extends JDialog {
             .addGroup(pnlMapToolsLayout.createSequentialGroup()
                 .addGroup(pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMapToolsLayout.createSequentialGroup()
-                        .addComponent(btnUpdateGPSOnMap, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                        .addComponent(btnUpdateGPSOnMap, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
                         .addGap(1, 1, 1)
-                        .addComponent(btnUpdateGPSFromMap, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
+                        .addComponent(btnUpdateGPSFromMap, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
                     .addComponent(lblOfflineTip, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
@@ -884,8 +885,8 @@ public class GPSDialog extends JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnUsePrevious, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnUseImage)
-                            .addComponent(btnUseGPX)
+                            .addComponent(btnUseImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnUseGPX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnUseRelated, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnRemoveGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(5, 5, 5))
@@ -918,7 +919,7 @@ public class GPSDialog extends JDialog {
                     .addComponent(btnUseOnlineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUseOfflineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
-                .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 

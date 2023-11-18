@@ -679,9 +679,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
 
         btnUploadImage.setBackground(new java.awt.Color(208, 204, 181));
-        btnUploadImage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnUploadImage.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
-        btnUploadImage.setText("<html><u>Upload Files</u></html>");
+        btnUploadImage.setText("Upload Files");
         btnUploadImage.setToolTipText("<html>Upload a file for this Observation. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
@@ -993,7 +993,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     .addComponent(btnAddNewVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblVisit))
                 .addGap(3, 3, 3)
-                .addComponent(sclVisit, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                .addComponent(sclVisit, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 
@@ -1267,7 +1267,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbWeather.setEnabled(!disableEditing);
         cmbWeather.setName("cmbWeather"); // NOI18N
 
-        cmbTimeOfDay.setMaximumRowCount(15);
         cmbTimeOfDay.setModel(new DefaultComboBoxModel(ActiveTimeSpesific.values()));
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbTimeOfDay.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1490,7 +1489,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         .addGap(5, 5, 5)
                         .addComponent(txtTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jScrollPane2)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
                         .addGap(5, 5, 5))))
         );
 
@@ -1538,7 +1537,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
-        btnGetDateFromImage.setText("<html>Use File Date</html>");
+        btnGetDateFromImage.setText("Use File Date");
         btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
@@ -1554,7 +1553,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnGetGPSFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetGPSFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS_Small.png"))); // NOI18N
-        btnGetGPSFromImage.setText("<html>Use File GPS</html>");
+        btnGetGPSFromImage.setText("Use File GPS");
         btnGetGPSFromImage.setToolTipText("Attempt to load the GPS from the image's EXIF data.");
         btnGetGPSFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetGPSFromImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
@@ -1570,7 +1569,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnCalculateDuration.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration_Small.png"))); // NOI18N
-        btnCalculateDuration.setText("<html>Get Duration from Files</html>");
+        btnCalculateDuration.setText("File Duration");
         btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
         btnCalculateDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
@@ -1586,7 +1585,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnCalculateSunAndMoon.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
-        btnCalculateSunAndMoon.setText("<html>Calculate Time of Day and Moon Phase</html>");
+        btnCalculateSunAndMoon.setText("Day / Moon");
         btnCalculateSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon phase based on the date and GPS co-ordinates.");
         btnCalculateSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateSunAndMoon.setEnabled(!disableEditing && !bulkEditMode);
@@ -1602,7 +1601,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnINaturalist.setBackground(new java.awt.Color(208, 204, 181));
         btnINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist.png"))); // NOI18N
-        btnINaturalist.setText("<html>iNaturalist</html>");
+        btnINaturalist.setText("iNaturalist");
         btnINaturalist.setToolTipText("Link this Observatin with an iNaturalist account.");
         btnINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnINaturalist.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
@@ -1639,17 +1638,17 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 .addGap(2, 2, 2)
                 .addComponent(btnUpdateSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
-                .addComponent(btnExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addComponent(btnExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addComponent(btnGetDateFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnGetGPSFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(btnCalculateDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(btnINaturalist, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCalculateDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(btnINaturalist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -1697,13 +1696,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                                 .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
                                 .addComponent(lblLocationImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(pnlVisitControls, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)))
+                            .addComponent(pnlVisitControls, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)))
                     .addGroup(sightingIncludesLayout.createSequentialGroup()
                         .addComponent(pnlSightingFields, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addGroup(sightingIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlLocationControls, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
-                            .addComponent(pnlElementControls, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))))
+                            .addComponent(pnlLocationControls, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                            .addComponent(pnlElementControls, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
         );
 

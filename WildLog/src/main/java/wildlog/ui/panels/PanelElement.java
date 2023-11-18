@@ -395,9 +395,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
 
         btnUploadImage.setBackground(new java.awt.Color(227, 240, 227));
-        btnUploadImage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnUploadImage.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
-        btnUploadImage.setText("<html><u>Upload Files</u></html>");
+        btnUploadImage.setText("Upload Files");
         btnUploadImage.setToolTipText("<html>Upload a file for this Creature. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setIconTextGap(2);
@@ -711,7 +711,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
-        btnINaturalist.setBackground(new java.awt.Color(255, 255, 255));
         btnINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
         btnINaturalist.setToolTipText("Try to view this Creature on the iNaturalist website.");
         btnINaturalist.setBorder(null);

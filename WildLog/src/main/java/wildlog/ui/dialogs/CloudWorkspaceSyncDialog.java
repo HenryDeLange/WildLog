@@ -379,7 +379,6 @@ public class CloudWorkspaceSyncDialog extends JDialog {
             }
         });
 
-        cmbThumbnailSize.setMaximumRowCount(15);
         cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0300_NORMAL);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -475,7 +474,7 @@ public class CloudWorkspaceSyncDialog extends JDialog {
         );
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnDelete.setText("<html>Delete from the Cloud</html>");
+        btnDelete.setText("Cloud Delete");
         btnDelete.setToolTipText("Delete all data and files associaed with this Workspace from the Cloud.");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelete.setMargin(new java.awt.Insets(2, 4, 2, 4));

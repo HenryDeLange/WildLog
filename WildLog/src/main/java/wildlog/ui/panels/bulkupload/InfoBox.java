@@ -214,8 +214,9 @@ public class InfoBox extends JPanel {
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 80, 125, 125));
 
         btnChooseElement.setBackground(new java.awt.Color(229, 241, 212));
+        btnChooseElement.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         btnChooseElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.png"))); // NOI18N
-        btnChooseElement.setText("<html><u>Creature</u></html>");
+        btnChooseElement.setText("Creature");
         btnChooseElement.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature.");
         btnChooseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseElement.setDoubleBuffered(true);
@@ -235,8 +236,9 @@ public class InfoBox extends JPanel {
         add(btnChooseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 85, 82, 45));
 
         btnGPS.setBackground(new java.awt.Color(229, 241, 212));
+        btnGPS.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnGPS.setText("<html><u>GPS</u></html>");
+        btnGPS.setText("GPS");
         btnGPS.setToolTipText("Select a GPS point for this Observation. You can RIGHT-CLICK to select the previously saved GPS point or MIDDLE-CLICK to load the GPS point from the images (if present).");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -311,7 +313,6 @@ public class InfoBox extends JPanel {
         cmbChooseElement.setDoubleBuffered(true);
         cmbChooseElement.setFocusable(false);
         cmbChooseElement.setName("cmbChooseElement"); // NOI18N
-        cmbChooseElement.setOpaque(false);
         cmbChooseElement.setPreferredSize(new java.awt.Dimension(240, 22));
         cmbChooseElement.setRenderer(new wildlog.ui.panels.bulkupload.helpers.ComboBoxSuggestedElementRenderer<>());
         cmbChooseElement.setRequestFocusEnabled(false);

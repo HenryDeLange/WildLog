@@ -30,8 +30,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
@@ -136,7 +134,6 @@ import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import static wildlog.ui.utils.UtilsUI.doClipboardCopy;
 import wildlog.utils.UtilsCheckAndClean;
-import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsEchoBackup;
@@ -609,7 +606,6 @@ public final class WildLogView extends JFrame {
         sprHelp = new javax.swing.JPopupMenu.Separator();
         mnuUserGuide = new javax.swing.JMenuItem();
         jSeparator17 = new javax.swing.JPopupMenu.Separator();
-        mnuCheckUpdates = new javax.swing.JMenuItem();
         mnuAboutWildLog = new javax.swing.JMenuItem();
         mnuAboutWEI = new javax.swing.JMenuItem();
 
@@ -712,14 +708,14 @@ public final class WildLogView extends JFrame {
         lblWorkspaceName.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceName.setText("...workspace...");
-        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Workspace Name", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Workspace Name", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceName.setName("lblWorkspaceName"); // NOI18N
 
         lblWorkspaceID.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblWorkspaceID.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceID.setText("...workspace id...");
-        lblWorkspaceID.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Workspace ID", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceID.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Workspace ID", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceID.setName("lblWorkspaceID"); // NOI18N
         lblWorkspaceID.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -778,7 +774,7 @@ public final class WildLogView extends JFrame {
         lblWorkspaceUser.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceUser.setText(WildLogApp.WILDLOG_USER_NAME + " (" + WildLogApp.WILDLOG_USER_TYPE.getDescription() + ")");
-        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceUser.setName("lblWorkspaceUser"); // NOI18N
 
         jSeparator26.setBackground(new java.awt.Color(57, 68, 43));
@@ -908,7 +904,7 @@ public final class WildLogView extends JFrame {
                         .addComponent(lblEdition)
                         .addGap(15, 15, 15)
                         .addComponent(btnGettingStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblWorkspacePath)
@@ -1955,18 +1951,6 @@ public final class WildLogView extends JFrame {
 
         jSeparator17.setName("jSeparator17"); // NOI18N
         helpMenu.add(jSeparator17);
-
-        mnuCheckUpdates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuCheckUpdates.setText("Check for Updates");
-        mnuCheckUpdates.setToolTipText("Check online whether there is a newer version of WildLog available.");
-        mnuCheckUpdates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        mnuCheckUpdates.setName("mnuCheckUpdates"); // NOI18N
-        mnuCheckUpdates.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuCheckUpdatesActionPerformed(evt);
-            }
-        });
-        helpMenu.add(mnuCheckUpdates);
 
         mnuAboutWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuAboutWildLog.setText("About WildLog");
@@ -3401,24 +3385,6 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_mnuUserGuideActionPerformed
 
-    private void mnuCheckUpdatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckUpdatesActionPerformed
-        ExecutorService executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("WL_CheckForUpdates"));
-        // Try to check the latest version
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                String latestVersion = app.checkForUpdates();
-                // The checkForUpdates() call will show a popup if the versions are out of sync
-                if (WildLogApp.WILDLOG_VERSION.equalsIgnoreCase(latestVersion)) {
-                    WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
-                        "You are using the latest official release of WildLog (v" + latestVersion + ").", 
-                        "WildLog is up to date", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
-        executor.shutdown();
-    }//GEN-LAST:event_mnuCheckUpdatesActionPerformed
-
     private void lblBlogMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBlogMousePressed
         try {
             Desktop.getDesktop().browse(URI.create(lblBlog.getText().trim()));
@@ -4155,7 +4121,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuCalcDuration;
     private javax.swing.JMenuItem mnuCalcSunMoon;
     private javax.swing.JMenuItem mnuChangeWorkspaceName;
-    private javax.swing.JMenuItem mnuCheckUpdates;
     private javax.swing.JMenuItem mnuCleanWorkspace;
     private javax.swing.JMenuItem mnuConvertCoordinates;
     private javax.swing.JMenuItem mnuCreateGIF;

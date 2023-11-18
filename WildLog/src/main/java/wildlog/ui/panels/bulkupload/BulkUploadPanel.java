@@ -709,7 +709,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel3.setText("Start Date:");
         jLabel3.setName("jLabel3"); // NOI18N
 
-        cmbVisitType.setMaximumRowCount(15);
         cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.valuesForDroplist()));
         cmbVisitType.setSelectedItem(VisitType.OTHER);
         cmbVisitType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -811,7 +810,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         btnReload.setBackground(new java.awt.Color(153, 180, 115));
         btnReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
-        btnReload.setText("<html>Reload Settings</html>");
+        btnReload.setText("Reload");
         btnReload.setToolTipText("<html>Reload the Bulk Import using the provided settings. <br/>Warning: All changes will be lost.</html>");
         btnReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReload.setIconTextGap(6);

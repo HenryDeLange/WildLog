@@ -106,7 +106,7 @@
                   <Component id="btnUseOfflineMap" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-              <Component id="pnlMap" pref="336" max="32767" attributes="0"/>
+              <Component id="pnlMap" pref="366" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -170,10 +170,13 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnUseImage">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="2"/>
+        </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;From Image&lt;/u&gt;&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="From Image"/>
         <Property name="toolTipText" type="java.lang.String" value="Browse to an image with GPS data, or drag-and-drop the image onto this button."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -193,7 +196,7 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/GPX.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;From GPX&lt;/u&gt;&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="From GPX"/>
         <Property name="toolTipText" type="java.lang.String" value="Browse to a GPX file, or drag-and-drop the file onto the button."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -339,9 +342,9 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="btnUpdateGPSOnMap" pref="252" max="32767" attributes="0"/>
+                              <Component id="btnUpdateGPSOnMap" pref="357" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                              <Component id="btnUpdateGPSFromMap" pref="252" max="32767" attributes="0"/>
+                              <Component id="btnUpdateGPSFromMap" pref="358" max="32767" attributes="0"/>
                           </Group>
                           <Component id="lblOfflineTip" max="32767" attributes="0"/>
                       </Group>

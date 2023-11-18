@@ -115,7 +115,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;Calculate using GPS&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="Calculate using GPS"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -129,7 +129,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;Calculate using Pentad&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="Calculate using Pentad"/>
         <Property name="toolTipText" type="java.lang.String" value="A Pentad is a block of 5 minutes latitude and 5 minutes longitude."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -144,7 +144,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;Calculate using QDGC&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="Calculate using QDGC"/>
         <Property name="toolTipText" type="java.lang.String" value="A QDS splits each block of 1 degree latitude and 1 degree longitude into 4 quarters."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>

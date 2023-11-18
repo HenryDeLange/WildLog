@@ -288,7 +288,7 @@ public class INatSightingDialog extends JDialog {
         });
 
         btnRemoveFromINat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnRemoveFromINat.setText("<html>Delete from iNaturalist</html>");
+        btnRemoveFromINat.setText("Delete iNat");
         btnRemoveFromINat.setToolTipText("Delete this Observation from iNaturalist.");
         btnRemoveFromINat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemoveFromINat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -316,7 +316,7 @@ public class INatSightingDialog extends JDialog {
         rdbGPSPrivate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         btnUnlinkFromWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnUnlinkFromWildLog.setText("<html>Unlink from WildLog</html>");
+        btnUnlinkFromWildLog.setText("Unlink WildLog");
         btnUnlinkFromWildLog.setToolTipText("Unlink this Observation from iNaturalist.");
         btnUnlinkFromWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUnlinkFromWildLog.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -336,10 +336,10 @@ public class INatSightingDialog extends JDialog {
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnViewWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnOK, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnRemoveFromINat, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnUnlinkFromWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
+                            .addComponent(btnViewWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnOK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRemoveFromINat, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnUnlinkFromWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(rdbGPSOpen))

@@ -408,7 +408,6 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbThumbnailSize">
           <Properties>
-            <Property name="maximumRowCount" type="int" value="15"/>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new DefaultComboBoxModel(WildLogThumbnailSizes.values())" type="code"/>
             </Property>
@@ -479,7 +478,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Delete.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;Delete from the Cloud&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="Cloud Delete"/>
         <Property name="toolTipText" type="java.lang.String" value="Delete all data and files associaed with this Workspace from the Cloud."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>

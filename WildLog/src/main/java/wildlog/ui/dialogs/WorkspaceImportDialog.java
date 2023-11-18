@@ -268,7 +268,7 @@ public class WorkspaceImportDialog extends JDialog {
         rdbConflictAsk.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the user will be asked which record to use in the active Workspace.</html>");
         rdbConflictAsk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        btnCheckConflicts.setText("<html>Check for Conflicts</html>");
+        btnCheckConflicts.setText("Check for Conflicts");
         btnCheckConflicts.setToolTipText("Checks how many conflicts there will be when importing using the selected records.");
         btnCheckConflicts.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCheckConflicts.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -278,7 +278,6 @@ public class WorkspaceImportDialog extends JDialog {
             }
         });
 
-        cmbThumbnailSize.setMaximumRowCount(15);
         cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0700_VERY_LARGE);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

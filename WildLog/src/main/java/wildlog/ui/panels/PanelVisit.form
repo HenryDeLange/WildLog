@@ -237,12 +237,12 @@
                   <Color blue="ed" green="f0" red="e4" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="12" style="1"/>
+                  <Font name="Tahoma" size="12" style="3"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/UploadImage.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Upload Files&lt;/u&gt;&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="Upload Files"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Upload a file for this Period. &lt;br/&gt;You can also drag-and-drop files onto the above box to upload it. &lt;br/&gt;(Note: Drag-and-drop only works on supported platforms.)&lt;/html&gt;"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -480,10 +480,13 @@
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="f0" green="e4" red="e6" type="rgb"/>
                     </Property>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Segoe UI" size="12" style="2"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Bulk Import.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Bulk Import&lt;/u&gt;&lt;/html&gt;"/>
+                    <Property name="text" type="java.lang.String" value="Bulk Import"/>
                     <Property name="toolTipText" type="java.lang.String" value="Open a Bulk Import tab for this Period. You can drag-and-drop a folder on the button to quickly start the Bulk Import process."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
@@ -750,7 +753,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
-                                              <Component id="txtName" pref="307" max="32767" attributes="0"/>
+                                              <Component id="txtName" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel52" min="-2" max="-2" attributes="0"/>
@@ -888,7 +891,6 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbType">
               <Properties>
-                <Property name="maximumRowCount" type="int" value="15"/>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new DefaultComboBoxModel(VisitType.valuesForDroplist())" type="code"/>
                 </Property>
@@ -992,7 +994,7 @@
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="lblNumberOfSightings" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" pref="573" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>

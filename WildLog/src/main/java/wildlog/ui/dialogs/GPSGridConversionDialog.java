@@ -55,7 +55,7 @@ public class GPSGridConversionDialog extends JFrame {
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/GPS.png")).getImage());
 
         btnFromGPS.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnFromGPS.setText("<html>Calculate using GPS</html>");
+        btnFromGPS.setText("Calculate using GPS");
         btnFromGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFromGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,7 +64,7 @@ public class GPSGridConversionDialog extends JFrame {
         });
 
         btnFromPentad.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnFromPentad.setText("<html>Calculate using Pentad</html>");
+        btnFromPentad.setText("Calculate using Pentad");
         btnFromPentad.setToolTipText("A Pentad is a block of 5 minutes latitude and 5 minutes longitude.");
         btnFromPentad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFromPentad.addActionListener(new java.awt.event.ActionListener() {
@@ -74,7 +74,7 @@ public class GPSGridConversionDialog extends JFrame {
         });
 
         btnFromQDS.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnFromQDS.setText("<html>Calculate using QDGC</html>");
+        btnFromQDS.setText("Calculate using QDGC");
         btnFromQDS.setToolTipText("A QDS splits each block of 1 degree latitude and 1 degree longitude into 4 quarters.");
         btnFromQDS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFromQDS.addActionListener(new java.awt.event.ActionListener() {
@@ -142,9 +142,9 @@ public class GPSGridConversionDialog extends JFrame {
                                 .addComponent(txtPentad, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnFromGPS)
+                            .addComponent(btnFromGPS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnFromPentad, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                            .addComponent(btnFromQDS))))
+                            .addComponent(btnFromQDS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(

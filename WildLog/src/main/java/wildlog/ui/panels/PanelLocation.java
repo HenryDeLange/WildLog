@@ -398,9 +398,9 @@ public class PanelLocation extends PanelCanSetupHeader {
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
 
         btnUploadImage.setBackground(new java.awt.Color(233, 239, 244));
-        btnUploadImage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnUploadImage.setFont(new java.awt.Font("Tahoma", 3, 12)); // NOI18N
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
-        btnUploadImage.setText("<html><u>Upload Files</u></html>");
+        btnUploadImage.setText("Upload Files");
         btnUploadImage.setToolTipText("<html>Upload a file for this Place. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setIconTextGap(2);
@@ -747,8 +747,9 @@ public class PanelLocation extends PanelCanSetupHeader {
         });
 
         btnBulkImport.setBackground(new java.awt.Color(233, 239, 244));
+        btnBulkImport.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
-        btnBulkImport.setText("<html><u>Bulk Import</u></html>");
+        btnBulkImport.setText("Bulk Import");
         btnBulkImport.setToolTipText("Open a Bulk Import tab for this Place. You can drag-and-drop a folder on the button to quickly start the Bulk Import process.");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
