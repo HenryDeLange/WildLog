@@ -45,6 +45,7 @@ import wildlog.ui.dialogs.CropDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.inaturalist.helpers.INatProgressbarTask;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsCompression;
@@ -64,12 +65,14 @@ public class INatSightingDialog extends JDialog {
     private INaturalistLinkedData linkedData = null;
     private int imageCounterWL = 0;
     private int imageCounterINat = 0;
+    private PanelNeedsRefreshWhenDataChanges panelToRefresh;
     
     
-    public INatSightingDialog(JFrame inParent, Sighting inSighting) {
+    public INatSightingDialog(JFrame inParent, Sighting inSighting, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
         sighting = inSighting;
+        panelToRefresh = inPanelToRefresh;
         initComponents();
         setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
@@ -79,10 +82,11 @@ public class INatSightingDialog extends JDialog {
         UtilsUI.attachClipboardPopup(txtInfo, true, false);
     }
     
-    public INatSightingDialog(JDialog inParent, Sighting inSighting) {
+    public INatSightingDialog(JDialog inParent, Sighting inSighting, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
         sighting = inSighting;
+        panelToRefresh = inPanelToRefresh;
         initComponents();
         setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
@@ -260,6 +264,11 @@ public class INatSightingDialog extends JDialog {
         setMinimumSize(new java.awt.Dimension(680, 700));
         setModal(true);
         setPreferredSize(new java.awt.Dimension(720, 700));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1238,6 +1247,12 @@ public class INatSightingDialog extends JDialog {
     private void btnRefreshImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshImagesActionPerformed
         btnDownloadActionPerformed(evt);
     }//GEN-LAST:event_btnRefreshImagesActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if (panelToRefresh != null) {
+            panelToRefresh.doTheRefresh(this);
+        }
+    }//GEN-LAST:event_formWindowClosed
 
     public void showMessageForNoINatID() throws HeadlessException {
         WLOptionPane.showMessageDialog(this,

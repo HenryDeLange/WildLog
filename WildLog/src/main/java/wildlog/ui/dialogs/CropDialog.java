@@ -121,8 +121,19 @@ public class CropDialog extends JDialog {
                     else {
                         dragging = false;
                         cropped = true;
-                        endX = e.getX();
-                        endY = e.getY();
+                        if (e.isControlDown() || e.isShiftDown()) {
+                            int firstX = Math.min(beginX, dragX);
+                            int firstY = Math.min(beginY, dragY);
+                            int lastX = Math.max(beginX, dragX);
+                            int lastY = Math.max(beginY, dragY);
+                            int boxSize = Math.min(lastX - firstX, lastY - firstY);
+                            endX = dragX > beginX ? beginX + boxSize : beginX - boxSize;
+                            endY = dragY > beginY ? beginY + boxSize : beginY - boxSize;
+                        }
+                        else {
+                            endX = e.getX();
+                            endY = e.getY();
+                        }
                     }
                     repaint();
                 }
@@ -132,8 +143,19 @@ public class CropDialog extends JDialog {
                 public void mouseDragged(MouseEvent e) {
                     dragging = true;
                     cropped = false;
-                    dragX = e.getX();
-                    dragY = e.getY();
+                    if (e.isControlDown() || e.isShiftDown()) {
+                        int firstX = Math.min(beginX, e.getX());
+                        int firstY = Math.min(beginY, e.getY());
+                        int lastX = Math.max(beginX, e.getX());
+                        int lastY = Math.max(beginY, e.getY());
+                        int boxSize = Math.min(lastX - firstX, lastY - firstY);
+                        dragX = e.getX() > beginX ? beginX + boxSize : beginX - boxSize;
+                        dragY = e.getY() > beginY ? beginY + boxSize : beginY - boxSize;
+                    }
+                    else {
+                        dragX = e.getX();
+                        dragY = e.getY();
+                    }
                     repaint();
                 }
             });

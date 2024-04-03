@@ -1532,18 +1532,18 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
                                 && ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                            JMenuItem mnuExport = new JMenuItem("iNaturalist", new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png")));
-                            mnuExport.addActionListener(new ActionListener() {
+                            JMenuItem mnuINat = new JMenuItem("iNaturalist", new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png")));
+                            mnuINat.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                                         Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                                        INatSightingDialog dialog = new INatSightingDialog(app.getMainFrame(), tempSighting);
+                                        INatSightingDialog dialog = new INatSightingDialog(app.getMainFrame(), tempSighting, PanelTabBrowse.this);
                                         dialog.setVisible(true);
                                     }
                                 }
                             });
-                            popup.add(mnuExport);
+                            popup.add(mnuINat);
                         }
                     }
                 }

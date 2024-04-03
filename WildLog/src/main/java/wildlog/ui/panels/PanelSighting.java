@@ -1647,8 +1647,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnCalculateDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnINaturalist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnINaturalist, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -2361,7 +2361,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (!bulkUploadMode) {
             btnUpdateSightingActionPerformed(null);
         }
-        INatSightingDialog dialog = new INatSightingDialog(this, sighting);
+        INatSightingDialog dialog = new INatSightingDialog(this, sighting, null);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnINaturalistActionPerformed
 
