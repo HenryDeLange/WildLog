@@ -53,7 +53,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         String primaryName = cachedElementName;
         Element element = null;
         if (primaryName == null || inNameChoice > 0) {
-            element = WildLogApp.getApplication().getDBI().findElement(id, null, false, Element.class);
+            element = WildLogApp.getApplication().getDBI().findElement(elementID, null, false, Element.class);
             primaryName = element.getPrimaryName();
         }
         // Primary name
@@ -67,7 +67,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
                 return element.getOtherName();
             }
         }
-        else 
+        else
         if (inNameChoice == 2) {
             // Scientific name
             if (element.getScientificName()!= null && !element.getScientificName().isEmpty()) {

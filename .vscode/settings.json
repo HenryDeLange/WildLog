@@ -1,0 +1,15 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-25",
+            "path": "C:\\CODE\\Tools\\jdk-25.0.1-full"
+        }
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "cSpell.words": [
+        "MyWild",
+        "Netbeans",
+        "WildLog"
+    ]
+}

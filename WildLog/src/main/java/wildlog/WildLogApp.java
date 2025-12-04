@@ -63,7 +63,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     private static WildLogApp INSTANCE = null;
-    public static String WILDLOG_VERSION = "6.3.1";
+    public static String WILDLOG_VERSION = "6.3.2";
     public static Class APPLICATION_CLASS = WildLogApp.class;
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
@@ -95,8 +95,8 @@ public class WildLogApp extends Application {
             if (useNimbusLF) {
                 // Try to set the Nimbus look and feel
                 // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
-                // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
-                // Note: Seems like the Application framework already does UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()), so I dont have to do it here.
+                // look that is fairly consistent over different OSes. Thus this should be the default for Linux (Ubuntu) and I guess Mac.
+                // Note: Seems like the Application framework already does UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()), so I don't have to do it here.
                 try {
                     for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                         if ("Nimbus".equals(info.getName())) {
@@ -151,7 +151,7 @@ public class WildLogApp extends Application {
             triggerStartupSyncWorkspaceID = workspacePicker.getWorkspaceID();
             // Proceed to open the selected workspace
             WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
-            // Get the threadcount
+            // Get the thread count
             threadCount = Runtime.getRuntime().availableProcessors();
             if (threadCount < 3) {
                 threadCount = 3;
