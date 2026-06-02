@@ -53,6 +53,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
     private String selectedElementName;
     private Dimension originalSize = null;
     private long activeLocationID;
+    private int imageIndex;
 
 
     public SelectElementDialog(JFrame inParent, WildLogApp inApp, final long inSelectedElementID, final long inActiveLocationID) {
@@ -105,7 +106,8 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                 }
             }
         });
-        UtilsImageProcessing.setupFoto(inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
+        imageIndex = 0;
+        UtilsImageProcessing.setupFoto(inSelectedElementID, imageIndex, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
         if (inSelectedElementID > 0) {
             Element element = app.getDBI().findElement(inSelectedElementID, null, false, Element.class);
             if (element != null) {
@@ -147,6 +149,9 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         tblElement = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
         btnToggleInfo = new javax.swing.JButton();
+        btnPreviousImage = new javax.swing.JButton();
+        btnNextImage = new javax.swing.JButton();
+        lblNumberOfImages = new javax.swing.JLabel();
         pnlInfo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane21 = new javax.swing.JScrollPane();
@@ -287,6 +292,32 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
             }
         });
 
+        btnPreviousImage.setBackground(new java.awt.Color(230, 237, 220));
+        btnPreviousImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
+        btnPreviousImage.setToolTipText("Load the previous file.");
+        btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPreviousImage.setName("btnPreviousImage"); // NOI18N
+        btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousImageActionPerformed(evt);
+            }
+        });
+
+        btnNextImage.setBackground(new java.awt.Color(230, 237, 220));
+        btnNextImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
+        btnNextImage.setToolTipText("Load the next file.");
+        btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextImage.setName("btnNextImage"); // NOI18N
+        btnNextImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextImageActionPerformed(evt);
+            }
+        });
+
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
+
         javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
         pnlMain.setLayout(pnlMainLayout);
         pnlMainLayout.setHorizontalGroup(
@@ -300,14 +331,24 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                         .addGap(0, 0, 0)
                         .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnToggleInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                    .addComponent(btnPreviousElement, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                    .addComponent(lblElementImage, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                    .addComponent(btnSelect, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlMainLayout.createSequentialGroup()
+                                .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(2, 2, 2)
+                                .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnPreviousElement, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblElementImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSelect, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(15, 15, 15))
         );
         pnlMainLayout.setVerticalGroup(
             pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,7 +373,12 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                         .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
+                        .addGap(5, 5, 5)
+                        .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnNextImage, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                            .addComponent(btnPreviousImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
                         .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
@@ -495,7 +541,8 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
                     }
                 }
                 // Update the icon
-                UtilsImageProcessing.setupFoto(previousElementID, 0, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
+                imageIndex = 0;
+                UtilsImageProcessing.setupFoto(previousElementID, imageIndex, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
                 Element element = app.getDBI().findElement(previousElementID, null, false, Element.class);
                 if (element != null) {
                     txtIdentification.setText(element.getDiagnosticDescription());
@@ -515,7 +562,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
             long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
             // Change the image
-            UtilsImageProcessing.setupFoto(selectedID, 0, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedID, imageIndex, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
             Element element = app.getDBI().findElement(selectedID, null, false, Element.class);
             if (element != null) {
                 txtIdentification.setText(element.getDiagnosticDescription());
@@ -607,6 +654,20 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
         }
         pack();
     }//GEN-LAST:event_btnToggleInfoActionPerformed
+
+    private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
+        if (!tblElement.getSelectionModel().isSelectionEmpty()) {
+            long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
+            imageIndex = UtilsImageProcessing.previousImage(selectedID, imageIndex, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
+        }
+    }//GEN-LAST:event_btnPreviousImageActionPerformed
+
+    private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
+        if (!tblElement.getSelectionModel().isSelectionEmpty()) {
+            long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
+            imageIndex = UtilsImageProcessing.nextImage(selectedID, imageIndex, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
+        }
+    }//GEN-LAST:event_btnNextImageActionPerformed
 
     @Override
     public void doTheRefresh(Object inIndicator) {
@@ -729,7 +790,9 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousElement;
+    private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnSelect;
     private javax.swing.JButton btnToggleInfo;
     private javax.swing.JComboBox cmbElementType;
@@ -741,6 +804,7 @@ public class SelectElementDialog extends JDialog implements PanelNeedsRefreshWhe
     private javax.swing.JScrollPane jScrollPane21;
     private javax.swing.JLabel lblCount;
     private javax.swing.JLabel lblElementImage;
+    private javax.swing.JLabel lblNumberOfImages;
     private javax.swing.JPanel pnlGridView;
     private javax.swing.JPanel pnlInfo;
     private javax.swing.JPanel pnlMain;

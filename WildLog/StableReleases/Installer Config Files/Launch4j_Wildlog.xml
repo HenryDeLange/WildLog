@@ -3,7 +3,7 @@
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
   <jar>.\WildLog.jar</jar>
-  <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog.exe</outfile>
+  <outfile>C:\CODE\MyWild\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog.exe</outfile>
   <errTitle>WildLog Startup Error</errTitle>
   <cmdLine>properties=./wildlog.properties</cmdLine>
   <chdir></chdir>
@@ -13,32 +13,30 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WildLog.ico</icon>
+  <icon>C:\CODE\MyWild\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WildLog.ico</icon>
   <jre>
-    <path>jre-21.0.1-full</path>
-    <bundledJre64Bit>true</bundledJre64Bit>
-    <bundledJreAsFallback>false</bundledJreAsFallback>
-    <minVersion>21</minVersion>
+    <path>jre-26.0.1-full</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>true</requires64Bit>
+    <minVersion>26</minVersion>
     <maxVersion></maxVersion>
-    <jdkPreference>preferJre</jdkPreference>
-    <runtimeBits>64/32</runtimeBits>
     <initialHeapSize>512</initialHeapSize>
-    <maxHeapSize>2048</maxHeapSize>
+    <maxHeapSize>4096</maxHeapSize>
     <maxHeapPercent>80</maxHeapPercent>
   </jre>
   <splash>
-    <file>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\LaunchScreen.bmp</file>
+    <file>C:\CODE\MyWild\WildLog\WildLog\StableReleases\Installer Config Files\misc files\LaunchScreen.bmp</file>
     <waitForWindow>true</waitForWindow>
     <timeout>600</timeout>
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>6.3.1.0</fileVersion>
-    <txtFileVersion>WildLog v6.3.1 Launcher</txtFileVersion>
+    <fileVersion>6.3.2.0</fileVersion>
+    <txtFileVersion>WildLog v6.3.2 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
-    <copyright>2024</copyright>
-    <productVersion>6.3.1.0</productVersion>
-    <txtProductVersion>WildLog v6.3.1</txtProductVersion>
+    <copyright>2026</copyright>
+    <productVersion>6.3.2.0</productVersion>
+    <txtProductVersion>WildLog v6.3.2</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>

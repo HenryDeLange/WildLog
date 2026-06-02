@@ -155,50 +155,6 @@ public final class UtilsCharts {
 //        }
     }
     
-//    public static PieChart createPieChartWithStyleIndexReset(ObservableList<PieChart.Data> inLstData) {
-        // FIXME: FOKKEN BELAGLIKKE HACK: Ek moet reflection gebruik om te kry dat elke nuwe donnerse chart se stylesheet index weer by 0 begin, 
-        // andersins begin dit die default kleure gebruik nadat ek 'n paar keer 'n pie chart laai...
-//        PieChart chart = new PieChart();
-//        try {
-//            Class<PieChart> cls = PieChart.class;
-//            Field field = cls.getDeclaredField("uniqueId");
-//            field.setAccessible(true);
-//            field.setInt(chart, 0);
-//        } 
-//        catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//        chart.setData(inLstData);
-//        return chart;
-//    }
-
-// TODO: Nie seker of hierdie hack nog werk in Java 13 nie?
-    public static StackedBarChart createStackedBarChartWithStyleIndexBiggerThanEight(CategoryAxis inCategoryAxis, NumberAxis inNumberAxis,
-            ObservableList<StackedBarChart.Series<String, Number>> inLstData) {
-        // FIXME: FOKKEN BELAGLIKKE HACK: Die legend se style kleure word gehardcode na mod 8, nou moet ek met reflection dit fix...
-        StackedBarChart chart = new StackedBarChart(inCategoryAxis, inNumberAxis, inLstData) {
-            private int fixer = 0;
-            @Override
-            protected void seriesAdded(XYChart.Series series, int seriesIndex) {
-                super.seriesAdded(series, seriesIndex);
-                // Overwrite the default style that was added
-                String fixedDefaultColorStyleClass = "data" + (fixer % 30);
-                fixer++;
-                try {
-                    Class<StackedBarChart> cls = StackedBarChart.class;
-                    Field field = cls.getDeclaredField("seriesDefaultColorMap");
-                    field.setAccessible(true);
-                    Map<XYChart.Series, String> seriesDefaultColorMap = (Map<XYChart.Series, String>) field.get(this);
-                    seriesDefaultColorMap.put(series, fixedDefaultColorStyleClass);
-                } 
-                catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                }
-            }
-        };
-        return chart;
-    }
-    
     public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate) {
         setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, false, true, false, -1);
     }

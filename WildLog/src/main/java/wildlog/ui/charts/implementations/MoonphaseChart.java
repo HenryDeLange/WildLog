@@ -240,7 +240,7 @@ public class MoonphaseChart extends AbstractChart<Sighting> {
         CategoryAxis catAxis = new CategoryAxis();
         UtilsCharts.setupCategoryAxis(catAxis, 3, true);
         catAxis.setCategories(FXCollections.<String>observableArrayList(new String[]{"Half Moon 0-50%", "Full Moon 50-100%", "Unknown"}));
-        StackedBarChart<String, Number> chart = UtilsCharts.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
+        StackedBarChart<String, Number> chart = new StackedBarChart(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
         UtilsCharts.setupChartTooltips(chart, true, false, true);

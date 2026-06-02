@@ -17,7 +17,6 @@
             showMapControls = isShowMapControls;
             map.setOptions({
                 zoomControl: showMapControls,
-                mapTypeControl: showMapControls,
                 scaleControl: showMapControls
             });
         }
@@ -38,8 +37,9 @@
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 disableDefaultUI: true,
                 zoomControl: showMapControls,
-                mapTypeControl: showMapControls,
-                scaleControl: showMapControls
+                scaleControl: showMapControls,
+                mapTypeControl: false,
+                streetViewControl: false
             })
             var pointArray = new google.maps.MVCArray(lstGPSPoints);
             var heatmap = new google.maps.visualization.HeatmapLayer({

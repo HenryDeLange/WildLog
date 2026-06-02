@@ -587,7 +587,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnCrop.setBackground(new java.awt.Color(204, 213, 186));
         btnCrop.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnCrop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Crop.png"))); // NOI18N
-        btnCrop.setToolTipText("Rotate the image clockwise.");
+        btnCrop.setToolTipText("Crop image.");
         btnCrop.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCrop.setIconTextGap(0);
         btnCrop.setMargin(new java.awt.Insets(2, 2, 2, 2));

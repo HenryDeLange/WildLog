@@ -34,7 +34,9 @@
             var map = new google.maps.Map(document.getElementById('map-canvas'), {
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 center: {lat: -30, lng: 24},
-                zoom: 6
+                zoom: 6,
+                mapTypeControl: false,
+                streetViewControl: false
             });
             // Add rectangle
             var bounds = {

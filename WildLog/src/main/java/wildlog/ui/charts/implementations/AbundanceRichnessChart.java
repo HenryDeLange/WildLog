@@ -215,7 +215,7 @@ public class AbundanceRichnessChart extends AbstractChart<Sighting> {
         UtilsCharts.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         UtilsCharts.setupCategoryAxis(catAxis, mapChartDataGroupedForSeries.size(), true);
-        StackedBarChart<String, Number> chart = UtilsCharts.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
+        StackedBarChart<String, Number> chart = new StackedBarChart(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
         chart.setTitle("Ratio of Observations over the Duration for each Period, per Creature");
         UtilsCharts.setupChartTooltips(chart, true, false);

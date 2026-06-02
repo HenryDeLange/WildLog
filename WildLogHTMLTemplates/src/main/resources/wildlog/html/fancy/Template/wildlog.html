@@ -109,7 +109,11 @@
         <script type="text/javascript">
             function initializeMap() {
                 // Inititalize map, spiderfier and bounds
-                var map = new google.maps.Map(document.getElementById('map-canvas'), {mapTypeId: google.maps.MapTypeId.SATELLITE});
+                var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                    mapTypeId: google.maps.MapTypeId.SATELLITE,
+                    mapTypeControl: false,
+                    streetViewControl: false
+                });
                 var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true});
                 var bounds = new google.maps.LatLngBounds();
                 // Create the single info window that will display the content

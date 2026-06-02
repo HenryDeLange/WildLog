@@ -27,7 +27,11 @@
     
         function initializeMap() {
             // Inititalize map, spiderfier and bounds
-            var map = new google.maps.Map(document.getElementById('map-canvas'), {mapTypeId: google.maps.MapTypeId.SATELLITE});
+            var map = new google.maps.Map(document.getElementById("map-canvas"), {
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
+                mapTypeControl: false,
+                streetViewControl: false
+            });
             var bounds = new google.maps.LatLngBounds();
             // Add markers
 //___MAP_CLICKABLE_DATA_POINTS_START___
